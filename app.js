@@ -19,13 +19,13 @@ const translations = {
     // Header & Navigation
     brand_title: "โรงเรียนเต้าหมิง",
     brand_sub: "DAO MING · TAKUA PA HUB",
-    nav_story: "ประวัติ & สถาปัตยกรรม",
+    nav_story: "ประวัติศาสตร์",
     nav_gable: "ปรัชญาหน้าจั่ว",
     nav_archive: "คลังภาพเก่า",
-    nav_vision: "วิสัยทัศน์บริบทใหม่",
-    nav_spaces: "แผนผัง & โซน",
+    nav_vision: "วิสัยทัศน์",
+    nav_spaces: "ผังพื้นที่",
     nav_events: "กิจกรรม",
-    nav_ideas: "ร่วมออกไอเดีย",
+    nav_ideas: "ไอเดีย",
     nav_visit: "การเดินทาง",
     btn_book_space: "ขอใช้พื้นที่",
     btn_book_space_full: "ขอใช้พื้นที่จัดกิจกรรม",
@@ -50,7 +50,6 @@ const translations = {
     hero_btn_story: "อ่านประวัติ 120 ปี",
     hero_stat_1: "ปี นับแต่เริ่มก่อตั้ง พ.ศ. 2448 (โต๊ะเบ๋ง)",
     hero_stat_2: "ปีสร้างอาคารอั้งม่อเหลา โดยนายผาว",
-    hero_stat_3: "มรดกชุมชน ดูแลโดยมูลนิธิฯ เพื่อสาธารณะ",
     tag_status: "🏆 สมาคมสถาปนิกสยามฯ 2569",
     tag_location: "📍 ย่านเมืองเก่าศรีตะกั่วป่า",
     caption_title: '"เต้าหมิง (導明) แปลว่า หนทางแห่งแสงสว่างและปัญญา"',
@@ -81,10 +80,12 @@ const translations = {
     gable_tag: "COSMIC FACADE PHILOSOPHY",
     gable_title: 'ถอดรหัสปรัชญาหน้าจั่ว: "ภาพจำลองจักรวาล ฟ้า-ดิน-คน"',
     gable_subtitle: "หน้าจั่วอาคารเต้าหมิงได้รับการออกแบบอย่างลึกซึ้งตามคติเต๋าและปรัชญาจีนโบราณ สื่อถึงพลังงาน ปัญญา และการศึกษา",
-    gable_hint: "✦ เลือกคลิกศึกษาความหมายเชิงสัญลักษณ์ทั้ง ๖ ได้จากรายการด้านข้าง",
+    gable_hint: "✦ เลือกคลิกศึกษาความหมายเชิงสัญลักษณ์ทั้ง ๕ ได้จากรายการด้านข้าง",
     gable_meaning_lbl: "ความหมายต่อการศึกษา:",
     gable_logo_badge: "อัตลักษณ์สถาปัตยกรรมเต้าหมิง",
     gable_logo_desc: "ตราสัญลักษณ์จำลองรูปทรงหน้าจั่วและปรัชญาจักรวาล ๓ ภพ 'ฟ้า - ดิน - คน'",
+    btn_zoom_overview: "ดูภาพรวมทั้งอาคาร (Overview)",
+    zoom_hint_pill: "✦ คลิกเลือก ๕ หัวข้อด้านขวาเพื่อซูมส่องจุดสัญลักษณ์",
 
     // Archive Section
     archive_tag: "HISTORICAL PHOTO ARCHIVE",
@@ -209,25 +210,33 @@ const translations = {
     visit_title: "การเดินทาง & เส้นทางเชื่อมต่อเมืองเก่า",
     visit_subtitle: "โรงเรียนเต้าหมิงตั้งอยู่ใจกลางย่านเมืองเก่าตะกั่วป่า สามารถเดินเชื่อมต่อไปยังจุดสำคัญทางประวัติศาสตร์ได้อย่างสะดวก",
     map_badge: "🗺️ แผนที่วัฒนธรรมตะกั่วป่า",
-    map_title: "เส้นทางเดินเท้าวัฒนธรรมกั่วป่าโพ้",
+    map_title: "เส้นทางเดินเท้าวัฒนธรรมเมืองเก่าตะกั่วป่า",
     node_1_title: "โรงเรียนเต้าหมิง (Dao Ming Hub)",
-    node_1_desc: "ศูนย์กลางความคิดสร้างสรรค์ นิทรรศการ และเวิร์กช็อป",
-    node_2_title: "ถนนวัฒนธรรมศรีตะกั่วป่า (Walking Street)",
-    node_2_desc: "ห่างเพียง 150 ม. (เดิน 2 นาที) · ตลาดนัดวันอาทิตย์ ขนมโบราณ อาคารชิโนฯ",
-    node_3_title: "ศาลเจ้ากวนอู (กวนเต้กุ้น)",
-    node_3_desc: "ห่าง 300 ม. (เดิน 4 นาที) · ศาลเจ้าเก่าแก่อายุกว่า 150 ปี",
-    node_4_title: "สะพานเหล็กบุญสูง (Boon Soong Iron Bridge)",
-    node_4_desc: "ห่าง 850 ม. (เดิน 10 นาที) · สะพานประวัติศาสตร์สร้างจากชิ้นส่วนเรือขุดแร่ดีบุก",
+    node_1_desc: "จุดศูนย์กลางมรดกมีชีวิต นิทรรศการประวัติศาสตร์ และพื้นที่สร้างสรรค์",
+    node_2_title: "ศาลเจ้าพ่อกวนอู (ซิ่นใช่ตึ๋ง / กวนเต้กุ้น)",
+    node_2_desc: "ห่าง 650 ม. (เดิน ~8 นาที) · ศาลเจ้าจีนฮกเกี้ยนเก่าแก่อายุกว่า 150 ปี ศูนย์รวมจิตวิญญาณชุมชน",
+    node_3_title: "ถนนวัฒนธรรมศรีตะกั่วป่า (ถนนคนเดินหลาดใหญ่)",
+    node_3_desc: "ห่าง 700 ม. (เดิน ~9 นาที / ปั่นจักรยาน 2 นาที) · ย่านตึกแถวชิโน-โปรตุกีส ตลาดวันอาทิตย์ ขนมเต้าส้อ",
+    node_4_title: "วัดเสนานุชรังสรรค์ & กำแพงเมืองเก่าตะกั่วป่า",
+    node_4_desc: "ห่าง 750 ม. (เดิน ~10 นาที) · พระอารามหลวงประวัติศาสตร์สมัย ร.๕ และโบราณสถานค่ายคูเมือง",
+    node_5_title: "สะพานเหล็กโคกขนุน / บุญสูง (Boon Soong Iron Bridge)",
+    node_5_desc: "ห่าง 2.9 กม. (ขับรถ ~5 นาที / ปั่นจักรยาน 10 นาที) · สะพานประวัติศาสตร์สร้างจากชิ้นส่วนเรือขุดแร่ดีบุกข้ามแม่น้ำ",
     practical_title: "ข้อมูลการเข้าชม & การติดต่อ",
     info_address_lbl: "ที่ตั้ง",
-    info_address_val: "ถนนศรีตะกั่วป่า ตำบลตลาดใหญ่ อำเภอตะกั่วป่า จังหวัดพังงา 82110",
+    info_address_val: "ย่านเมืองเก่าตะกั่วป่า (ใกล้ศาลเจ้าพ่อกวนอู ซิ่นใช่ตึ๋ง) ตำบลตลาดใหญ่ อำเภอตะกั่วป่า จังหวัดพังงา 82110",
     info_hours_lbl: "เวลาเปิดทำการ",
     info_hours_val: "วันอังคาร - วันอาทิตย์: 09:00 - 18:00 น.<br>(วันที่มีกิจกรรม/ตลาด เปิดถึง 21:00 น. · ปิดวันจันทร์)",
     info_parking_lbl: "การจอดรถ",
     info_parking_val: "มีจุดจอดรถรองรับบริเวณลานวัดใกล้เคียงและริมถนนศรีตะกั่วป่า",
     info_admission_lbl: "ค่าเข้าชมพื้นที่ทั่วไป",
     info_admission_val: "เข้าชมฟรี (Free Admission)",
+    btn_open_gmaps: "เปิด Google Maps นำทางสู่โรงเรียนเต้าหมิง",
     social_follow_lbl: "ติดตามข่าวสาร:",
+    dock_maps: "นำทาง",
+    dock_events: "กิจกรรม",
+    dock_ideas: "ไอเดีย",
+    dock_book: "ใช้พื้นที่",
+    dock_top: "บนสุด",
 
     // Footer
     footer_tagline: '"สืบสานรากเหง้าเมืองเหมืองแร่ เติมพลังความคิดสร้างสรรค์สู่อนาคตอย่างยั่งยืน"',
@@ -262,14 +271,14 @@ const translations = {
     // Header & Navigation
     brand_title: "Dao Ming School",
     brand_sub: "DAO MING · TAKUA PA HUB",
-    nav_story: "History & Heritage",
-    nav_gable: "Cosmic Gable",
-    nav_archive: "Photo Archive",
-    nav_vision: "New Context Vision",
-    nav_spaces: "Spaces & Zones",
+    nav_story: "History",
+    nav_gable: "Pediment",
+    nav_archive: "Archive",
+    nav_vision: "Vision",
+    nav_spaces: "Spaces",
     nav_events: "Events",
     nav_ideas: "Idea Wall",
-    nav_visit: "Visit & Map",
+    nav_visit: "Visit",
     btn_book_space: "Book Space",
     btn_book_space_full: "Propose Event / Book Space",
 
@@ -293,7 +302,6 @@ const translations = {
     hero_btn_story: "Read 120-Year History",
     hero_stat_1: "Years since 1905 Founding (Toh Beng)",
     hero_stat_2: "Year Ang Mor Lao Built by Master Phao",
-    hero_stat_3: "Community Heritage Owned by Foundation",
     tag_status: "🏆 ASA Conservation Award 2026",
     tag_location: "📍 Sri Takua Pa Old Town District",
     caption_title: '"Dao Ming (導明) signifies The Path to Enlightenment & Wisdom."',
@@ -324,10 +332,12 @@ const translations = {
     gable_tag: "COSMIC FACADE PHILOSOPHY",
     gable_title: 'Decoding the Facade: "Microcosm of Heaven, Earth & Human"',
     gable_subtitle: "The front pediment was masterfully designed following Taoist and ancient Chinese cosmology, symbolizing celestial energy, moral wisdom, and education.",
-    gable_hint: "✦ Select any of the 6 cosmic symbols to explore its architectural meaning",
+    gable_hint: "✦ Select any of the 5 cosmic symbols to explore its architectural meaning",
     gable_meaning_lbl: "Significance to Education:",
     gable_logo_badge: "Dao Ming Architectural Identity",
     gable_logo_desc: "Emblem evoking the historic gable facade and 3 cosmic realms: Heaven, Earth & Human",
+    btn_zoom_overview: "Full Building Overview (Reset)",
+    zoom_hint_pill: "✦ Select any of the 5 symbols on the right to zoom in",
 
     // Archive Section
     archive_tag: "HISTORICAL PHOTO ARCHIVE",
@@ -452,25 +462,33 @@ const translations = {
     visit_title: "Visit & Old Town Heritage Walking Map",
     visit_subtitle: "Dao Ming School sits in the historic heart of Takua Pa, seamlessly connected on foot to famous heritage landmarks.",
     map_badge: "🗺️ TAKUA PA HERITAGE MAP",
-    map_title: "Kua Pa Pho Cultural Walking Trail",
+    map_title: "Takua Pa Old Town Cultural Walking Trail",
     node_1_title: "Dao Ming School (Dao Ming Hub)",
-    node_1_desc: "Creative epicenter, living exhibitions, and craft studios",
-    node_2_title: "Sri Takua Pa Walking Street",
-    node_2_desc: "150m away (2 min walk) · Sunday street market, Sino architecture, sweets",
-    node_3_title: "Guan Yu Shrine (Guan Te Gun)",
-    node_3_desc: "300m away (4 min walk) · Historic 150-year-old sacred Chinese shrine",
-    node_4_title: "Boon Soong Iron Bridge",
-    node_4_desc: "850m away (10 min walk) · Historic bridge constructed from tin dredge steel",
+    node_1_desc: "Epicenter of living heritage, historic exhibitions, and creative studios",
+    node_2_title: "Guan Yu Shrine (Sin Chai Tueng)",
+    node_2_desc: "650m away (~8 min walk) · 150-year-old sacred Hokkien ancestral shrine",
+    node_3_title: "Sri Takua Pa Cultural Street (Walking Street)",
+    node_3_desc: "700m away (~9 min walk / 2 min bike) · Sino-Portuguese shophouses & Sunday street market",
+    node_4_title: "Wat Senanuchrangsan & Ancient City Moat",
+    node_4_desc: "750m away (~10 min walk) · Historic royal monastery built in King Rama V's reign",
+    node_5_title: "Boon Soong Iron Bridge (Khok Khanun)",
+    node_5_desc: "2.9km away (~5 min drive / 10 min bike) · Historic bridge constructed from tin dredge steel",
     practical_title: "Visiting Information & Inquiries",
     info_address_lbl: "Address",
-    info_address_val: "Sri Takua Pa Road, Talat Yai Sub-district, Takua Pa, Phang Nga 82110",
+    info_address_val: "Takua Pa Old Town (near Guan Yu Shrine), Talat Yai, Takua Pa, Phang Nga 82110",
     info_hours_lbl: "Opening Hours",
     info_hours_val: "Tuesday - Sunday: 09:00 - 18:00<br>(Until 21:00 on Market & Event days · Closed on Mondays)",
     info_parking_lbl: "Parking",
     info_parking_val: "Designated parking available at neighboring temple grounds and along Sri Takua Pa Rd.",
     info_admission_lbl: "General Admission",
     info_admission_val: "Free Admission",
+    btn_open_gmaps: "Open in Google Maps Navigation",
     social_follow_lbl: "Follow Updates:",
+    dock_maps: "Maps",
+    dock_events: "Events",
+    dock_ideas: "Ideas",
+    dock_book: "Spaces",
+    dock_top: "Top",
 
     // Footer
     footer_tagline: '"Preserving tin mining heritage roots while empowering a sustainable creative future."',
@@ -508,20 +526,20 @@ const translations = {
 const gableData = {
   th: {
     "tiangong": {
-      badge: "สัญลักษณ์ที่ ๑ · ยอดเสาหน้าจั่ว",
+      badge: "สัญลักษณ์ที่ ๑ · ยอดเสาหน้าจั่ว (เสาสวรรค์)",
       title: "เสาเทียนกง (Tiangong Pillar)",
       desc: "เสายอดบนสุดของหน้าจั่ว เปรียบเสมือน 'เสาสวรรค์' จุดที่ฟ้าส่งพลังงานบริสุทธิ์จากเบื้องบนลงมาสู่โลก เป็นสัญลักษณ์ของการเชื่อมโยงระหว่างจักรวาลกับมนุษย์",
       meaning: "แสงสว่างแห่งปัญญาและความรู้ชั้นสูงที่หลั่งไหลลงมาสู่ผู้เรียน"
     },
     "cloud": {
-      badge: "สัญลักษณ์ที่ ๒ · ฐานเสา",
-      title: "ลวดลายฐานเสา ลายเมฆ (Cloud Base Motif)",
-      desc: "ลวดลายปูนปั้นรูปเมฆมงคลที่ฐานเสา ทำหน้าที่ประคองพลังงานที่ได้รับจากฟากฟ้า แล้วค่อยๆ แผ่กระจายความร่มเย็นและสมดุลลงสู่ฐานอาคาร",
+      badge: "สัญลักษณ์ที่ ๒ · ฐานเสายอดจั่ว",
+      title: "ลวดลายฐานเสา ลายเมฆ (Cloud Motif Base)",
+      desc: "ลวดลายปูนปั้นรูปเมฆมงคลที่ฐานเสายอดจั่ว ทำหน้าที่ประคองพลังงานที่ได้รับจากฟากฟ้า แล้วค่อยๆ แผ่กระจายความร่มเย็นและสมดุลลงสู่ฐานอาคาร",
       meaning: "การหล่อเลี้ยงจิตใจ สมาธิ และความสงบร่มเย็นในการศึกษาหาความรู้"
     },
     "triangle": {
-      badge: "สัญลักษณ์ที่ ๓ · โครงสร้างจั่ว",
-      title: "สามเหลี่ยมฐานรองฟ้า (Cosmic Triangle)",
+      badge: "สัญลักษณ์ที่ ๓ · กรอบโครงสร้างจั่ว",
+      title: "สามเหลี่ยมเชื่อมฟ้า-ดิน (Cosmic Triangle)",
       desc: "โครงสร้างทรงสามเหลี่ยมของหน้าจั่ว ทำหน้าที่เป็นจุดเชื่อมประสานระหว่างฟ้า (จักรวาล) และดิน (โลกมนุษย์) รองรับพลังงานจากดวงอาทิตย์",
       meaning: "ความมั่นคงแข็งแกร่งของรากฐานการศึกษา และการเชื่อมต่อผู้คนในชุมชน"
     },
@@ -532,29 +550,23 @@ const gableData = {
       meaning: "ความสว่างไสวแห่งปัญญาที่ส่องสว่างตลอดกาลเวลาไม่มีวันดับสูญ"
     },
     "circles": {
-      badge: "สัญลักษณ์ที่ ๕ · กึ่งกลางเสา",
-      title: "ลายปูนปั้นวงกลม ๓ ชั้น ฟ้า-ดิน-คน (Three Realms)",
-      desc: "ลายปูนปั้นนูนต่ำแนวตั้ง มีวงกลมซ้อนกัน 3 วง ตามคติเต๋าเรื่อง 3 ภพ 'ฟ้า - ดิน - คน' ซึ่งเชื่อว่าพลังชีวิตจะสมบูรณ์สูงสุดเมื่อทั้ง 3 ภพอยู่ในดุลยภาพ",
-      meaning: "การพัฒนาผู้เรียนให้สมบูรณ์พร้อม ทั้งจิตวิญญาณ (ฟ้า) กายภาพ (ดิน) และคุณธรรม (คน)"
-    },
-    "sun8double": {
-      badge: "สัญลักษณ์ที่ ๖ · เสาปีกข้าง",
-      title: "พระอาทิตย์ ๘ รัศมี ซ้อนกัน ๒ ดวง (Double 8-Ray Sun)",
-      desc: "สัญลักษณ์พระอาทิตย์ 8 แฉกซ้อนกัน สื่อถึง 'ฟ้าอยู่ในดิน' การรวมแก่นแท้ภายในและการแสดงออกสู่ภายนอก การถ่ายทอดคุณค่าจากข้างในสู่สังคม",
-      meaning: "หัวใจของการศึกษา — การบ่มเพาะปัญญาจากภายในเพื่อนำไปสร้างประโยชน์ให้ชุมชนและสังคม"
+      badge: "สัญลักษณ์ที่ ๕ · สัญลักษณ์โดมหัวเสาปีกข้าง",
+      title: "สัญลักษณ์โดมหัวเสา (Pilaster Spherical Finial)",
+      desc: "ลวดลายปูนปั้นทรงกลมประดับบนยอดเสาปีกข้างทั้งสองฝั่ง สื่อถึงความสมบูรณ์ ดุลยภาพของธาตุ และการโอบอุ้มปกป้องคุ้มครองสถานที่ศึกษา",
+      meaning: "ความหนักแน่น มั่นคง และการพัฒนาผู้เรียนให้สมบูรณ์พร้อมรอบด้าน"
     }
   },
   en: {
     "tiangong": {
-      badge: "Symbol 1 · Pinnacle Pillar",
+      badge: "Symbol 1 · Pinnacle Spire (Celestial Pillar)",
       title: "Tiangong Pillar (Celestial Sky Pillar)",
       desc: "The uppermost vertical spire at the pediment apex represents the Celestial Pillar — the sacred focal point where cosmic heaven channels spiritual energy down to earth.",
       meaning: "The divine illumination of higher wisdom streaming into students' minds."
     },
     "cloud": {
-      badge: "Symbol 2 · Pillar Base",
-      title: "Auspicious Cloud Motif (Pillar Base)",
-      desc: "The ornate stucco cloud motif at the column base cradles the celestial energy from heaven, softly dispersing equilibrium and harmony across the structure.",
+      badge: "Symbol 2 · Spire Base",
+      title: "Auspicious Cloud Motif (Spire Base)",
+      desc: "The ornate stucco cloud motif at the base of the pinnacle spire cradles the celestial energy from heaven, softly dispersing equilibrium and harmony across the structure.",
       meaning: "Cultivating mental clarity, mindfulness, and serenity in academic pursuit."
     },
     "triangle": {
@@ -570,16 +582,10 @@ const gableData = {
       meaning: "Enduring wisdom illuminating lives across generations without fading."
     },
     "circles": {
-      badge: "Symbol 5 · Pillar Center",
-      title: "Three Concentric Circles: Heaven, Earth & Human",
-      desc: "Vertical low-relief stucco featuring three overlapping circles depicting the Taoist cosmology of Heaven, Earth, and Humanity thriving in perfect equilibrium.",
-      meaning: "Holistic development nurturing spirit (Heaven), physical health (Earth), and moral character (Human)."
-    },
-    "sun8double": {
-      badge: "Symbol 6 · Flanking Pilasters",
-      title: "Double 8-Ray Sun (Inner Wisdom into Society)",
-      desc: "Two concentric 8-ray sun emblems represent 'Heaven embodied in Earth', signifying the harmonious flow of inner knowledge expressed into the outer world.",
-      meaning: "The very essence of education: nurturing knowledge within to uplift society."
+      badge: "Symbol 5 · Pilaster Finial",
+      title: "Spherical Pilaster Finial Cap",
+      desc: "The rounded stucco finials crowning the flanking pilasters represent cosmic wholeness, elemental balance, and the enduring guardianship of the house of learning.",
+      meaning: "Holistic student development cultivating resilience, intellect, and virtue."
     }
   }
 };
@@ -911,8 +917,8 @@ const initialCommunityIdeas = [
     title_en: "Living Archive: Youth Oral History Recording Project",
     desc_th: "ชวนเยาวชนตะกั่วป่าถือกล้องและเครื่องอัดเสียง สัมภาษณ์เรื่องเล่าชาวเหมืองดีบุกและวิถีชีวิตดั้งเดิม แล้วนำมาแสดงในเว็บและนิทรรศการ",
     desc_en: "Equip local youth with cameras and voice recorders to interview tin mine elders, preserving oral histories in living exhibits.",
-    author_th: "กลุ่มเยาวชนกั่วป่าโพ้",
-    author_en: "Kua Pa Pho Youth Guild",
+    author_th: "กลุ่มเยาวชนตะกั่วป่า",
+    author_en: "Takua Pa Youth Collective",
     date_th: "8 ส.ค. 2569",
     date_en: "8 Aug 2026",
     votes: 39,
@@ -933,6 +939,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initIdeaBoard();
   initBookingForm();
   initMobileDrawer();
+  initScrollSpy();
 
   const btn360 = document.getElementById('btn360Preview');
   if (btn360) {
@@ -1048,14 +1055,77 @@ function updateTimelineDisplay() {
 }
 
 /* ==========================================================================
-   COSMIC GABLE EXPLORER
+   COSMIC GABLE ARCHITECTURAL CAMERA COORDINATES & ZOOM
+   ========================================================================== */
+const gableCoordinates = {
+  "tiangong": {
+    name_th: "โฟกัส: ๑. เสาเทียนกง (ยอดจั่วรับพลังฟ้า)",
+    name_en: "Focus: 1. Tiangong Pillar (Apex)",
+    origin: "49.3% 10.2%",
+    scale: 4.2,
+    reticleTop: "10.2%",
+    reticleLeft: "49.3%",
+    scaleLabel: "4.2x"
+  },
+  "cloud": {
+    name_th: "โฟกัส: ๒. ลายเมฆฐานเสา (ฐานยอดจั่ว)",
+    name_en: "Focus: 2. Cloud Motif (Base)",
+    origin: "49.3% 14.5%",
+    scale: 3.8,
+    reticleTop: "14.5%",
+    reticleLeft: "49.3%",
+    scaleLabel: "3.8x"
+  },
+  "triangle": {
+    name_th: "โฟกัส: ๓. สามเหลี่ยมเชื่อมฟ้า-ดิน (โครงสร้างจั่ว)",
+    name_en: "Focus: 3. Cosmic Triangle Frame",
+    origin: "43.8% 18.5%",
+    scale: 3.2,
+    reticleTop: "18.5%",
+    reticleLeft: "43.8%",
+    scaleLabel: "3.2x"
+  },
+  "sun12": {
+    name_th: "โฟกัส: ๔. พระอาทิตย์ ๑๒ รัศมี (กึ่งกลางจั่ว)",
+    name_en: "Focus: 4. 12-Ray Solar Center",
+    origin: "49.3% 18.3%",
+    scale: 3.8,
+    reticleTop: "18.3%",
+    reticleLeft: "49.3%",
+    scaleLabel: "3.8x"
+  },
+  "circles": {
+    name_th: "โฟกัส: ๕. สัญลักษณ์โดมหัวเสาปีกข้าง",
+    name_en: "Focus: 5. Spherical Pilaster Finial",
+    origin: "37.4% 20.2%",
+    scale: 3.6,
+    reticleTop: "20.2%",
+    reticleLeft: "37.4%",
+    scaleLabel: "3.6x"
+  },
+  "overview": {
+    name_th: "ภาพรวมทั้งอาคาร (Overview)",
+    name_en: "Full Building Overview",
+    origin: "50% 50%",
+    scale: 1,
+    reticleTop: "50%",
+    reticleLeft: "50%",
+    scaleLabel: "1.0x"
+  }
+};
+
+/* ==========================================================================
+   COSMIC GABLE EXPLORER WITH INTERACTIVE ZOOM CAMERA
    ========================================================================== */
 function initGableExplorer() {
   const itemBtns = document.querySelectorAll('.gable-item-btn');
+  const hotspotPins = document.querySelectorAll('.zoom-hotspot-pin');
+  const resetBtn = document.getElementById('btnResetGableZoom');
 
   function selectGable(key) {
     currentSelectedGableKey = key;
 
+    // Update list buttons
     itemBtns.forEach(btn => {
       if (btn.getAttribute('data-gable') === key) {
         btn.classList.add('active');
@@ -1064,14 +1134,42 @@ function initGableExplorer() {
       }
     });
 
+    // Update hotspot pins
+    hotspotPins.forEach(pin => {
+      if (pin.getAttribute('data-gable') === key) {
+        pin.classList.add('active');
+      } else {
+        pin.classList.remove('active');
+      }
+    });
+
     updateGableDisplay();
   }
 
+  // Bind side list buttons
   itemBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       selectGable(btn.getAttribute('data-gable'));
     });
   });
+
+  // Bind hotspot pins directly on photo
+  hotspotPins.forEach(pin => {
+    pin.addEventListener('click', (e) => {
+      e.stopPropagation();
+      selectGable(pin.getAttribute('data-gable'));
+    });
+  });
+
+  // Bind Reset / Overview button
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      selectGable('overview');
+    });
+  }
+
+  // Initial display: focus on Tiangong Spire
+  selectGable('tiangong');
 }
 
 function updateGableDisplay() {
@@ -1079,15 +1177,58 @@ function updateGableDisplay() {
   const titleEl = document.getElementById('gableTitle');
   const descEl = document.getElementById('gableDesc');
   const meaningEl = document.getElementById('gableMeaning');
+  const imgEl = document.getElementById('gableZoomImg');
+  const reticleEl = document.getElementById('gableFocusRing');
+  const statusTextEl = document.getElementById('zoomStatusText');
+  const scaleBadgeEl = document.getElementById('zoomScaleLabel');
 
   const langSet = gableData[currentLang] || gableData.th;
-  const data = langSet[currentSelectedGableKey] || langSet["tiangong"];
+  const isOverview = currentSelectedGableKey === 'overview';
+  const dataKey = isOverview ? 'tiangong' : currentSelectedGableKey;
+  const data = langSet[dataKey] || langSet["tiangong"];
+  const coord = gableCoordinates[currentSelectedGableKey] || gableCoordinates["tiangong"];
 
   if (data && badgeEl && titleEl && descEl && meaningEl) {
-    badgeEl.textContent = data.badge;
-    titleEl.textContent = data.title;
-    descEl.textContent = data.desc;
-    meaningEl.textContent = data.meaning;
+    if (isOverview) {
+      badgeEl.textContent = currentLang === 'en' ? "Full Facade Overview" : "ภาพรวมสถาปัตยกรรมทั้งหลัง";
+      titleEl.textContent = currentLang === 'en' ? "Dao Ming Schoolhouse & Front Porch" : "อาคารโรงเรียนเต้าหมิง & มุขหน้าสถาปัตยกรรม";
+      descEl.textContent = currentLang === 'en' 
+        ? "Constructed in 1922 by Hokkien master builder Master Phao, featuring colonial Ang Mor Lao verandas and classical pilasters embodying Chinese cosmology."
+        : "อาคาร ๒ ชั้นสร้างขึ้นในปี ๒๔๖๕ โดยนายผาว ช่างฝีมือชาวจีนฮกเกี้ยน ผสานสถาปัตยกรรมโคโลเนียลอั้งม่อเหลาและปรัชญาจักรวาลจีนโบราณ";
+      meaningEl.textContent = currentLang === 'en'
+        ? "Tap any numbered pin (1 to 6) or button on the right to zoom into specific cosmic symbols."
+        : "คลิกเลือกหมายเลข ๑ - ๖ บนตัวอาคาร หรือเลือกรายการด้านขวาเพื่อซูมส่องจุดสัญลักษณ์";
+    } else {
+      badgeEl.textContent = data.badge;
+      titleEl.textContent = data.title;
+      descEl.textContent = data.desc;
+      meaningEl.textContent = data.meaning;
+    }
+  }
+
+  // Apply Camera Smooth Zoom on Photo
+  if (imgEl && coord) {
+    imgEl.style.transformOrigin = coord.origin;
+    imgEl.style.transform = `scale(${coord.scale})`;
+  }
+
+  // Update Reticle / Ring Position
+  if (reticleEl && coord) {
+    if (isOverview) {
+      reticleEl.classList.remove('active');
+    } else {
+      reticleEl.style.top = coord.reticleTop;
+      reticleEl.style.left = coord.reticleLeft;
+      reticleEl.classList.add('active');
+    }
+  }
+
+  // Update Status Text & Scale Badge
+  if (statusTextEl && coord) {
+    statusTextEl.textContent = currentLang === 'en' ? coord.name_en : coord.name_th;
+  }
+  if (scaleBadgeEl && coord) {
+    scaleBadgeEl.textContent = coord.scaleLabel;
   }
 }
 
@@ -1465,5 +1606,75 @@ function escapeHtml(string) {
       '"': '&quot;',
       "'": '&#39;'
     }[s];
+  });
+}
+
+/* ==========================================================================
+   SCROLL-SPY & MOBILE DOCK DYNAMICS
+   ========================================================================== */
+function initScrollSpy() {
+  const sections = document.querySelectorAll('section[id], header[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+  const mLinks = document.querySelectorAll('.m-link');
+  const dock = document.getElementById('mobileActionDock');
+  let lastScrollY = window.scrollY;
+
+  // 1. Intersection Observer for active nav highlighting
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        
+        navLinks.forEach(link => {
+          if (link.getAttribute('href') === `#${id}`) {
+            link.classList.add('active-nav');
+          } else {
+            link.classList.remove('active-nav');
+          }
+        });
+
+        mLinks.forEach(link => {
+          if (link.getAttribute('href') === `#${id}`) {
+            link.classList.add('active-nav');
+          } else {
+            link.classList.remove('active-nav');
+          }
+        });
+      }
+    });
+  }, {
+    rootMargin: '-15% 0px -65% 0px',
+    threshold: 0
+  });
+
+  sections.forEach(sec => observer.observe(sec));
+
+  // 2. Mobile Dock auto-hide on fast scroll down, reveal on scroll up
+  window.addEventListener('scroll', () => {
+    const currentScrollY = window.scrollY;
+    if (dock) {
+      if (currentScrollY > 200 && currentScrollY > lastScrollY + 10) {
+        dock.style.transform = 'translate(-50%, 100px)';
+        dock.style.opacity = '0';
+      } else if (currentScrollY < lastScrollY - 5 || currentScrollY <= 200) {
+        dock.style.transform = 'translate(-50%, 0)';
+        dock.style.opacity = '1';
+      }
+    }
+    lastScrollY = currentScrollY;
+  }, { passive: true });
+
+  // 3. Global ESC key listener
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closePhotoLightbox();
+      const drawer = document.getElementById('mobileDrawer');
+      const backdrop = document.getElementById('drawerBackdrop');
+      if (drawer && drawer.classList.contains('open')) {
+        drawer.classList.remove('open');
+        if (backdrop) backdrop.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+    }
   });
 }

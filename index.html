@@ -21,6 +21,42 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600;700&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+  <!-- Structured Data / JSON-LD for Google Search & Maps -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TouristAttraction",
+    "name": "โรงเรียนเต้าหมิง ตะกั่วป่า (Dao Ming School)",
+    "alternateName": "Dao Ming Living Heritage & Creative Hub",
+    "description": "โรงเรียนจีนแห่งแรกและแห่งเดียวของจังหวัดพังงา (พ.ศ. 2448/2465) สู่พื้นที่สร้างสรรค์และมรดกมีชีวิตแห่งเมืองเก่าตะกั่วป่า รางวัลอนุรักษ์ศิลปสถาปัตยกรรม ประจำปี 2569 สมาคมสถาปนิกสยามฯ",
+    "url": "https://daoming-takuapa-hub.pages.dev",
+    "image": "https://daoming-takuapa-hub.pages.dev/img/อาคารปัจจุบัน.jpg",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "ถนนศรีตะกั่วป่า ตำบลตลาดใหญ่",
+      "addressLocality": "ตะกั่วป่า",
+      "addressRegion": "พังงา",
+      "postalCode": "82110",
+      "addressCountry": "TH"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 8.833573,
+      "longitude": 98.365061
+    },
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+        "opens": "09:00",
+        "closes": "18:00"
+      }
+    ],
+    "isAccessibleForFree": true,
+    "award": "รางวัลอนุรักษ์ศิลปสถาปัตยกรรม ประจำปี 2569 สมาคมสถาปนิกสยาม ในพระบรมราชูปถัมภ์ (ASA)"
+  }
+  </script>
+
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -38,13 +74,13 @@
 
       <!-- Desktop Nav -->
       <nav class="main-nav" id="mainNav">
-        <a href="#story" class="nav-link" data-i18n="nav_story">ประวัติ & สถาปัตยกรรม</a>
+        <a href="#story" class="nav-link" data-i18n="nav_story">ประวัติศาสตร์</a>
         <a href="#gable" class="nav-link" data-i18n="nav_gable">ปรัชญาหน้าจั่ว</a>
         <a href="#archive" class="nav-link" data-i18n="nav_archive">คลังภาพเก่า</a>
-        <a href="#vision" class="nav-link" data-i18n="nav_vision">วิสัยทัศน์พื้นที่</a>
-        <a href="#spaces" class="nav-link" data-i18n="nav_spaces">แผนผัง & โซน</a>
+        <a href="#vision" class="nav-link" data-i18n="nav_vision">วิสัยทัศน์</a>
+        <a href="#spaces" class="nav-link" data-i18n="nav_spaces">ผังพื้นที่</a>
         <a href="#events" class="nav-link" data-i18n="nav_events">กิจกรรม</a>
-        <a href="#ideas" class="nav-link" data-i18n="nav_ideas">ร่วมออกไอเดีย</a>
+        <a href="#ideas" class="nav-link" data-i18n="nav_ideas">ไอเดีย</a>
         <a href="#visit" class="nav-link" data-i18n="nav_visit">การเดินทาง</a>
       </nav>
 
@@ -139,10 +175,6 @@
             <div class="stat-card">
               <span class="stat-number">2465</span>
               <span class="stat-label" data-i18n="hero_stat_2">ปีสร้างอาคารอั้งม่อเหลา โดยนายผาว</span>
-            </div>
-            <div class="stat-card">
-              <span class="stat-number">100%</span>
-              <span class="stat-label" data-i18n="hero_stat_3">มรดกชุมชน ดูแลโดยมูลนิธิฯ เพื่อสาธารณะ</span>
             </div>
           </div>
         </div>
@@ -281,22 +313,39 @@
         </div>
 
         <div class="gable-explorer-layout">
-          <!-- Gable Graphic Motif Pane -->
+          <!-- Interactive Architecture Zoom Viewport -->
           <div class="gable-visual-pane">
-            <div class="gable-logo-showcase-box">
-              <img src="assets/logo-305.jpg" alt="ตราสัญลักษณ์และลวดลายหน้าจั่วโรงเรียนเต้าหมิง" class="gable-logo-hero-img">
-              <div class="gable-logo-caption">
-                <span class="logo-sub-badge" data-i18n="gable_logo_badge">อัตลักษณ์สถาปัตยกรรมเต้าหมิง</span>
-                <p data-i18n="gable_logo_desc">ตราสัญลักษณ์จำลองรูปทรงหน้าจั่วและปรัชญาจักรวาล ๓ ภพ "ฟ้า - ดิน - คน"</p>
+            <div class="gable-zoom-viewport" id="gableZoomViewport">
+              <div class="zoom-status-bar">
+                <span class="zoom-live-badge"><span class="pulsing-dot"></span> <span id="zoomStatusText">โฟกัส: ๑. เสาเทียนกง (ยอดจั่ว)</span></span>
+                <span class="zoom-scale-badge" id="zoomScaleLabel">3.8x</span>
+              </div>
+              <div class="gable-zoom-stage" id="gableZoomStage">
+                <img src="img/อาคารกับชุมชน.jpg" alt="อาคารโรงเรียนเต้าหมิงและการซูมส่องจุดสัญลักษณ์" id="gableZoomImg" class="gable-interactive-img">
+                <div class="gable-focus-ring" id="gableFocusRing"></div>
+                
+                <!-- Interactive Hotspot Pins (Hollow Translucent Reticle) -->
+                <button class="zoom-hotspot-pin pin-1 active" data-gable="tiangong" data-number="1" aria-label="จุดที่ 1 เสาเทียนกง"></button>
+                <button class="zoom-hotspot-pin pin-2" data-gable="cloud" data-number="2" aria-label="จุดที่ 2 ลายเมฆฐานเสา"></button>
+                <button class="zoom-hotspot-pin pin-3" data-gable="triangle" data-number="3" aria-label="จุดที่ 3 สามเหลี่ยมฐานรองฟ้า"></button>
+                <button class="zoom-hotspot-pin pin-4" data-gable="sun12" data-number="4" aria-label="จุดที่ 4 พระอาทิตย์ 12 รัศมี"></button>
+                <button class="zoom-hotspot-pin pin-5" data-gable="circles" data-number="5" aria-label="จุดที่ 5 สัญลักษณ์โดมหัวเสา"></button>
+              </div>
+              
+              <!-- Zoom Viewport Controls -->
+              <div class="zoom-viewport-controls">
+                <button class="btn-zoom-ctrl" id="btnResetGableZoom" title="ดูภาพรวมทั้งอาคาร">
+                  <span>🔍</span> <span data-i18n="btn_zoom_overview">ดูภาพรวมทั้งอาคาร</span>
+                </button>
+                <div class="zoom-hint-pill" data-i18n="zoom_hint_pill">✦ คลิกเลือกหัวข้อด้านขวาเพื่อซูมส่องจุดสัญลักษณ์</div>
               </div>
             </div>
-            <p class="gable-hint-note" data-i18n="gable_hint">✦ เลือกคลิกศึกษาความหมายเชิงสัญลักษณ์ทั้ง ๖ จากรายการด้านข้าง</p>
           </div>
 
           <!-- Gable Symbol Details -->
           <div class="gable-details-pane">
             <div class="gable-symbol-card" id="gableSymbolCard">
-              <div class="gable-symbol-badge" id="gableBadge">สัญลักษณ์ที่ 1 / 6</div>
+              <div class="gable-symbol-badge" id="gableBadge">สัญลักษณ์ที่ 1 / 5</div>
               <h3 id="gableTitle">เสาเทียนกง (Tiangong Pillar)</h3>
               <p id="gableDesc" class="gable-desc-text">
                 เสายอดบนสุดของหน้าจั่ว เปรียบเสมือน "เสาสวรรค์" จุดที่ฟ้าส่งพลังงานบริสุทธิ์จากเบื้องบนลงมาสู่โลก เป็นสัญลักษณ์ของการเชื่อมโยงระหว่างจักรวาลกับมนุษย์
@@ -309,12 +358,11 @@
 
             <!-- Quick Selector List -->
             <div class="gable-selector-list">
-              <button class="gable-item-btn active" data-gable="tiangong">๑. เสาเทียนกง (จุดรับพลังฟ้า)</button>
+              <button class="gable-item-btn active" data-gable="tiangong">๑. เสาเทียนกง (ยอดเสาจุดรับพลังฟ้า)</button>
               <button class="gable-item-btn" data-gable="cloud">๒. ลายเมฆฐานเสา (ประคองพลังฟ้าสู่ฐาน)</button>
-              <button class="gable-item-btn" data-gable="triangle">๓. สามเหลี่ยมเชื่อมฟ้า-ดิน (โลกและผู้คน)</button>
-              <button class="gable-item-btn" data-gable="sun12">๔. พระอาทิตย์ 12 รัศมี (วัฏจักรกาลเวลา & ปัญญา)</button>
-              <button class="gable-item-btn" data-gable="circles">๕. วงกลม 3 ชั้น (ฟ้า ดิน คน ในคติเต๋า)</button>
-              <button class="gable-item-btn" data-gable="sun8double">๖. พระอาทิตย์ 8 รัศมีซ้อน (ฟ้าอยู่ในดิน & การถ่ายทอดความรู้)</button>
+              <button class="gable-item-btn" data-gable="triangle">๓. สามเหลี่ยมเชื่อมฟ้า-ดิน (กรอบโครงสร้างจั่ว)</button>
+              <button class="gable-item-btn" data-gable="sun12">๔. พระอาทิตย์ ๑๒ รัศมี (วัฏจักรกาลเวลา & ปัญญา)</button>
+              <button class="gable-item-btn" data-gable="circles">๕. สัญลักษณ์โดมหัวเสา (ความมั่นคงและดุลยภาพ)</button>
             </div>
           </div>
         </div>
@@ -801,7 +849,7 @@
           <div class="walking-map-card">
             <div class="map-header">
               <div class="map-title-badge" data-i18n="map_badge">🗺️ TAKUA PA HERITAGE MAP</div>
-              <h3 data-i18n="map_title">เส้นทางเดินเท้าวัฒนธรรมกั่วป่าโพ้</h3>
+              <h3 data-i18n="map_title">เส้นทางเดินเท้าวัฒนธรรมเมืองเก่าตะกั่วป่า</h3>
             </div>
 
             <div class="route-nodes-list">
@@ -809,31 +857,39 @@
                 <div class="node-icon">📍</div>
                 <div class="node-info">
                   <strong data-i18n="node_1_title">โรงเรียนเต้าหมิง (Dao Ming Hub)</strong>
-                  <span data-i18n="node_1_desc">ศูนย์กลางความคิดสร้างสรรค์ นิทรรศการ และเวิร์กช็อป</span>
-                </div>
-              </div>
-
-              <div class="route-node">
-                <div class="node-icon">🏮</div>
-                <div class="node-info">
-                  <strong data-i18n="node_2_title">ถนนวัฒนธรรมศรีตะกั่วป่า (Walking Street)</strong>
-                  <span data-i18n="node_2_desc">ห่างเพียง 150 ม. (เดิน 2 นาที) · ตลาดนัดวันอาทิตย์ ขนมโบราณ อาคารชิโนฯ</span>
+                  <span data-i18n="node_1_desc">จุดศูนย์กลางมรดกมีชีวิต นิทรรศการประวัติศาสตร์ และพื้นที่สร้างสรรค์</span>
                 </div>
               </div>
 
               <div class="route-node">
                 <div class="node-icon">⛩️</div>
                 <div class="node-info">
-                  <strong data-i18n="node_3_title">ศาลเจ้ากวนอู (กวนเต้กุ้น)</strong>
-                  <span data-i18n="node_3_desc">ห่าง 300 ม. (เดิน 4 นาที) · ศาลเจ้าเก่าแก่อายุกว่า 150 ปี</span>
+                  <strong data-i18n="node_2_title">ศาลเจ้าพ่อกวนอู (ซิ่นใช่ตึ๋ง / กวนเต้กุ้น)</strong>
+                  <span data-i18n="node_2_desc">ห่าง 650 ม. (เดิน ~8 นาที) · ศาลเจ้าจีนฮกเกี้ยนเก่าแก่อายุกว่า 150 ปี ศูนย์รวมจิตวิญญาณชุมชน</span>
+                </div>
+              </div>
+
+              <div class="route-node">
+                <div class="node-icon">🏮</div>
+                <div class="node-info">
+                  <strong data-i18n="node_3_title">ถนนวัฒนธรรมศรีตะกั่วป่า (ถนนคนเดินหลาดใหญ่)</strong>
+                  <span data-i18n="node_3_desc">ห่าง 700 ม. (เดิน ~9 นาที / ปั่นจักรยาน 2 นาที) · ย่านตึกแถวชิโน-โปรตุกีส ตลาดวันอาทิตย์ ขนมเต้าส้อ</span>
+                </div>
+              </div>
+
+              <div class="route-node">
+                <div class="node-icon">🏛️</div>
+                <div class="node-info">
+                  <strong data-i18n="node_4_title">วัดเสนานุชรังสรรค์ & กำแพงเมืองเก่าตะกั่วป่า</strong>
+                  <span data-i18n="node_4_desc">ห่าง 750 ม. (เดิน ~10 นาที) · พระอารามหลวงประวัติศาสตร์สมัย ร.๕ และโบราณสถานค่ายคูเมือง</span>
                 </div>
               </div>
 
               <div class="route-node">
                 <div class="node-icon">🌉</div>
                 <div class="node-info">
-                  <strong data-i18n="node_4_title">สะพานเหล็กบุญสูง (Boon Soong Iron Bridge)</strong>
-                  <span data-i18n="node_4_desc">ห่าง 850 ม. (เดิน 10 นาที) · สะพานประวัติศาสตร์สร้างจากชิ้นส่วนเรือขุดแร่ดีบุก</span>
+                  <strong data-i18n="node_5_title">สะพานเหล็กโคกขนุน / บุญสูง (Boon Soong Iron Bridge)</strong>
+                  <span data-i18n="node_5_desc">ห่าง 2.9 กม. (ขับรถ ~5 นาที / ปั่นจักรยาน 10 นาที) · สะพานประวัติศาสตร์สร้างจากชิ้นส่วนเรือขุดแร่ดีบุกข้ามแม่น้ำ</span>
                 </div>
               </div>
             </div>
@@ -847,7 +903,7 @@
                 <span class="info-icon">📍</span>
                 <div>
                   <strong data-i18n="info_address_lbl">ที่ตั้ง</strong>
-                  <p data-i18n="info_address_val">ถนนศรีตะกั่วป่า ตำบลตลาดใหญ่ อำเภอตะกั่วป่า จังหวัดพังงา 82110</p>
+                  <p data-i18n="info_address_val">ย่านเมืองเก่าตะกั่วป่า (ใกล้ศาลเจ้าพ่อกวนอู ซิ่นใช่ตึ๋ง) ตำบลตลาดใหญ่ อำเภอตะกั่วป่า จังหวัดพังงา 82110</p>
                 </div>
               </div>
 
@@ -875,6 +931,11 @@
                 </div>
               </div>
             </div>
+
+            <a href="https://maps.google.com/?q=8.833573397970662,98.36506109469767" target="_blank" rel="noopener" class="btn btn-primary btn-block" style="margin: 18px 0 14px; justify-content: center; gap: 8px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+              <span data-i18n="btn_open_gmaps">เปิด Google Maps นำทางสู่โรงเรียนเต้าหมิง</span>
+            </a>
 
             <div class="social-share-strip">
               <span data-i18n="social_follow_lbl">ติดตามข่าวสาร:</span>
@@ -952,6 +1013,30 @@
     <span class="toast-icon">✓</span>
     <span class="toast-message" id="toastMessage">ส่งไอเดียสำเร็จแล้ว! ขอบคุณที่ร่วมสร้างสรรค์</span>
   </div>
+
+  <!-- Mobile Floating Quick Action Dock -->
+  <nav class="mobile-action-dock" id="mobileActionDock" aria-label="แถบนำทางด่วนสำหรับมือถือ">
+    <a href="https://maps.google.com/?q=8.833573397970662,98.36506109469767" target="_blank" rel="noopener" class="dock-btn" id="dockMapBtn" title="เปิดแผนที่ Google Maps">
+      <span class="dock-icon">📍</span>
+      <span class="dock-label" data-i18n="dock_maps">นำทาง</span>
+    </a>
+    <a href="#events" class="dock-btn" id="dockEventsBtn" title="ปฏิทินกิจกรรม">
+      <span class="dock-icon">📅</span>
+      <span class="dock-label" data-i18n="dock_events">กิจกรรม</span>
+    </a>
+    <a href="#ideas" class="dock-btn" id="dockIdeasBtn" title="ร่วมออกไอเดีย">
+      <span class="dock-icon">💬</span>
+      <span class="dock-label" data-i18n="dock_ideas">ไอเดีย</span>
+    </a>
+    <a href="#booking" class="dock-btn dock-btn-highlight" id="dockBookBtn" title="ขอใช้พื้นที่">
+      <span class="dock-icon">🏛️</span>
+      <span class="dock-label" data-i18n="dock_book">ใช้พื้นที่</span>
+    </a>
+    <button class="dock-btn" id="dockTopBtn" title="กลับสู่ด้านบน" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+      <span class="dock-icon">⬆️</span>
+      <span class="dock-label" data-i18n="dock_top">บนสุด</span>
+    </button>
+  </nav>
 
   <script src="app.js"></script>
 </body>

@@ -1375,91 +1375,259 @@ button, input, select, textarea {
 
 .pillars-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 28px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
 }
 
 .pillar-card {
-  background-color: var(--bg-surface);
-  border: 1px solid var(--border-light);
+  background: linear-gradient(180deg, #FFFFFF 0%, #FAF6ED 100%);
+  border: 1.5px solid rgba(229, 163, 30, 0.22);
   border-radius: var(--radius-lg);
-  padding: 36px;
-  box-shadow: var(--shadow-sm);
+  padding: 24px 20px 18px;
+  box-shadow: 0 4px 18px rgba(18, 36, 33, 0.05), 0 1px 3px rgba(0, 0, 0, 0.03);
   position: relative;
-  transition: var(--transition);
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+/* Shimmer light sweep across card */
+.pillar-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  transform: skewX(-22deg);
+  transition: left 0.75s ease;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.pillar-card:hover::before {
+  left: 150%;
 }
 
 .pillar-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--color-celadon);
+  transform: translateY(-6px);
+  box-shadow: 0 18px 38px rgba(18, 36, 33, 0.12), 0 0 0 1.5px var(--pillar-accent, var(--color-ochre-building-dark));
+  border-color: transparent;
 }
 
-.pillar-card.highlight-card {
-  border-color: var(--color-ochre-building-dark);
+/* Individual Pillar Color Themes */
+.pillar-card-ochre {
+  --pillar-accent: var(--color-ochre-building-dark);
+}
+.pillar-card-terracotta {
+  --pillar-accent: var(--color-terracotta);
+}
+.pillar-card-wood {
+  --pillar-accent: var(--color-wood);
+}
+.pillar-card-celadon {
+  --pillar-accent: var(--color-celadon);
 }
 
-.pillar-badge {
+.pillar-top-stripe {
   position: absolute;
-  top: 20px;
-  right: 20px;
-  background-color: var(--color-celadon);
-  color: #FFF;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  font-weight: 700;
-  padding: 4px 10px;
-  border-radius: var(--radius-pill);
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--pillar-accent, var(--color-ochre-building-dark));
+  z-index: 2;
+}
+
+/* Authentic Cultural Pattern Watermark */
+.pillar-bg-pattern {
+  position: absolute;
+  top: 8px;
+  right: 6px;
+  width: 105px;
+  height: 105px;
+  color: var(--pillar-accent);
+  opacity: 0.08;
+  pointer-events: none;
+  z-index: 1;
+  transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.pillar-card:hover .pillar-bg-pattern {
+  opacity: 0.2;
+  transform: scale(1.18) rotate(6deg);
+}
+
+.pillar-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 2;
+}
+
+.pillar-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(229, 163, 30, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  border: 1px solid rgba(229, 163, 30, 0.25);
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.pillar-card:hover .pillar-icon-box {
+  transform: scale(1.1) rotate(-3deg);
+  background-color: #FFF;
+}
+
+.pillar-index-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .pillar-number {
   font-family: var(--font-mono);
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   font-weight: 700;
-  color: var(--color-ochre-building-dark);
-  margin-bottom: 8px;
+  color: var(--pillar-accent, var(--color-ochre-building-dark));
+  line-height: 1;
 }
 
-.pillar-icon {
-  font-size: 2.2rem;
-  margin-bottom: 16px;
+.pillar-zone-tag {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+.pillar-badge {
+  position: absolute;
+  top: 14px;
+  right: 74px;
+  background-color: var(--color-terracotta);
+  color: #FFF;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 2px 6px rgba(196, 77, 39, 0.3);
+  z-index: 2;
+}
+
+/* Subhead Row: Seal & Motif Tag */
+.pillar-subhead-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 2;
+}
+
+.pillar-seal {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #FFF;
+  background-color: var(--pillar-accent);
+  padding: 1px 6px;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  line-height: 1.3;
+}
+
+.pillar-motif-tag {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 600;
 }
 
 .pillar-title {
   font-family: var(--font-display);
-  font-size: 1.35rem;
+  font-size: 1.12rem;
   font-weight: 700;
-  margin-bottom: 12px;
+  line-height: 1.4;
+  margin-bottom: 8px;
+  color: var(--text-main);
+  min-height: 2.8em;
+  position: relative;
+  z-index: 2;
 }
 
 .pillar-desc {
-  font-size: 0.95rem;
+  font-size: 0.86rem;
   color: var(--text-muted);
-  line-height: 1.7;
-  margin-bottom: 20px;
+  line-height: 1.6;
+  margin-bottom: 14px;
+  flex-grow: 1;
+  position: relative;
+  z-index: 2;
 }
 
-.pillar-features {
-  list-style: none;
-  border-top: 1px dashed var(--border-light);
-  padding-top: 16px;
+.pillar-features-wrap {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border-light);
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 2;
 }
 
-.pillar-features li {
-  font-size: 0.88rem;
+.pillar-chip {
+  font-size: 0.78rem;
   color: var(--text-main);
-  display: flex;
+  line-height: 1.4;
+  display: block;
+}
+
+.pillar-card-action {
+  margin-top: auto;
+  padding-top: 6px;
+  position: relative;
+  z-index: 2;
+}
+
+.pillar-action-link {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--pillar-accent, var(--color-terracotta));
+  display: inline-flex;
   align-items: center;
+  gap: 4px;
+  transition: gap 0.2s ease;
+}
+
+.pillar-card:hover .pillar-action-link {
   gap: 8px;
 }
 
-.pillar-features li::before {
-  content: '✦';
-  color: var(--color-terracotta);
-  font-size: 0.8rem;
+@media (max-width: 1100px) {
+  .pillars-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+}
+
+@media (max-width: 600px) {
+  .pillars-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
 }
 
 /* ==========================================================================

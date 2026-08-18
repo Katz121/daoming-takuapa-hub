@@ -117,6 +117,14 @@ const translations = {
     p4_f1: "ตลาดนัดเต้าหมิง ครีเอทีฟ มาร์เก็ต สุดสัปดาห์",
     p4_f2: "โรงฉายภาพยนตร์กลางแปลงใต้แสงดาว",
     p4_f3: "เวทีเสวนาเมืองและศิลปะร่วมสมัย",
+    pillar_action_explore_a: "ดูแผนผังโซน A (โถงอาคาร) →",
+    pillar_action_explore_b: "ดูแผนผังโซน C (สตูดิโอคราฟต์) →",
+    pillar_action_explore_c: "ดูแผนผังโซน D (คาเฟ่ชุมชน) →",
+    pillar_action_explore_d: "ดูแผนผังโซน B (ลานกลางแจ้ง) →",
+    p1_motif: "ลายพระอาทิตย์ ๑๒ รัศมี",
+    p2_motif: "ลายฉลุผ้าบาติก & คราฟต์",
+    p3_motif: "ลายบานหน้าต่างอั้งม่อเหลา",
+    p4_motif: "ลายคลื่นน้ำแม่น้ำเมืองแร่",
 
     // Spaces Section
     spaces_tag: "SPACES & FACILITIES",
@@ -369,6 +377,14 @@ const translations = {
     p4_f1: "Dao Ming Creative Weekend Market",
     p4_f2: "Starlight Heritage Cinema Nights",
     p4_f3: "City Dialogue & Contemporary Art Forum",
+    pillar_action_explore_a: "Explore Zone A (Main Hall) →",
+    pillar_action_explore_b: "Explore Zone C (Craft Studio) →",
+    pillar_action_explore_c: "Explore Zone D (Community Cafe) →",
+    pillar_action_explore_d: "Explore Zone B (Courtyard) →",
+    p1_motif: "12-Ray Solar Stucco Motif",
+    p2_motif: "Peranakan Batik Craft Motif",
+    p3_motif: "Ang Mor Lao Fretwork Lattice",
+    p4_motif: "Mining River Waves Motif",
 
     // Spaces Section
     spaces_tag: "SPACES & FACILITIES",
@@ -1274,6 +1290,26 @@ function initSpaceExplorer() {
     });
   });
 }
+
+function selectZoneAndScroll(zoneKey) {
+  const zoneItems = document.querySelectorAll('.zone-item');
+  zoneItems.forEach(item => {
+    if (item.getAttribute('data-zone') === zoneKey) {
+      item.classList.add('active');
+    } else {
+      item.classList.remove('active');
+    }
+  });
+
+  currentSelectedZoneKey = zoneKey;
+  updateZoneDisplay();
+
+  const spacesSection = document.getElementById('spaces');
+  if (spacesSection) {
+    spacesSection.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+window.selectZoneAndScroll = selectZoneAndScroll;
 
 function updateZoneDisplay() {
   const badgeEl = document.getElementById('zoneBadge');

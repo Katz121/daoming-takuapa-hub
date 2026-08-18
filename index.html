@@ -57,7 +57,7 @@
   }
   </script>
 
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=2.1">
 </head>
 <body>
 
@@ -469,64 +469,160 @@
 
         <div class="pillars-grid">
           <!-- Pillar 1 -->
-          <div class="pillar-card">
-            <div class="pillar-number">01</div>
-            <div class="pillar-icon">🏛️</div>
+          <div class="pillar-card pillar-card-ochre" onclick="selectZoneAndScroll('hall')">
+            <div class="pillar-top-stripe"></div>
+            <!-- Authentic Motif: 12-Ray Sunburst & Cloud Stucco -->
+            <svg class="pillar-bg-pattern" viewBox="0 0 120 120" aria-hidden="true">
+              <circle cx="60" cy="60" r="24" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="4 2"/>
+              <circle cx="60" cy="60" r="14" fill="currentColor" fill-opacity="0.12" stroke="currentColor" stroke-width="2"/>
+              <g stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                <line x1="60" y1="24" x2="60" y2="32"/><line x1="60" y1="88" x2="60" y2="96"/>
+                <line x1="24" y1="60" x2="32" y2="60"/><line x1="88" y1="60" x2="96" y2="60"/>
+                <line x1="34" y1="34" x2="40" y2="40"/><line x1="80" y1="80" x2="86" y2="86"/>
+                <line x1="34" y1="86" x2="40" y2="80"/><line x1="80" y1="40" x2="86" y2="34"/>
+                <line x1="46" y1="27" x2="50" y2="35"/><line x1="70" y1="85" x2="74" y2="93"/>
+                <line x1="27" y1="46" x2="35" y2="50"/><line x1="85" y1="70" x2="93" y2="74"/>
+              </g>
+              <path d="M30,102 Q45,90 60,102 T90,102" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+
+            <div class="pillar-card-header">
+              <div class="pillar-icon-box">🏛️</div>
+              <div class="pillar-index-badge">
+                <span class="pillar-number">01</span>
+                <span class="pillar-zone-tag">ZONE A</span>
+              </div>
+            </div>
+            <div class="pillar-subhead-row">
+              <span class="pillar-seal">歷史</span>
+              <span class="pillar-motif-tag" data-i18n="p1_motif">ลายพระอาทิตย์ ๑๒ รัศมี</span>
+            </div>
             <h3 class="pillar-title" data-i18n="pillar_1_title">พิพิธภัณฑ์มีชีวิต & บันทึกเมือง (Living Archive)</h3>
             <p class="pillar-desc" data-i18n="pillar_1_desc">
-              จัดแสดงนิทรรศการประวัติศาสตร์ยุคทองดีบุก ภาพถ่ายโบราณ เครื่องใช้ในอดีต บันทึกประวัติศาสตร์คำบอกเล่า (Oral History) ของคนเฒ่าคนแก่ และเปิดชั้นล่างให้อาคารเป็นพื้นที่เรียนรู้มีชีวิต
+              จัดแสดงนิทรรศการยุคทองดีบุก ภาพถ่ายโบราณ เครื่องใช้ในอดีต และบันทึกประวัติศาสตร์คำบอกเล่า (Oral History) ของคนเฒ่าคนแก่
             </p>
-            <ul class="pillar-features">
-              <li data-i18n="p1_f1">นิทรรศการประวัติศาสตร์เหมืองแร่ & ครอบครัวชาวจีน</li>
-              <li data-i18n="p1_f2">ศูนย์ข้อมูลและห้องสมุดประวัติศาสตร์เมืองเก่า</li>
-              <li data-i18n="p1_f3">ชั้นบน: สถานปฏิบัติธรรมอันสงบเงียบ</li>
-            </ul>
+            <div class="pillar-features-wrap">
+              <span class="pillar-chip" data-i18n="p1_f1">✦ นิทรรศการประวัติศาสตร์เหมืองแร่ & ครอบครัวชาวจีน</span>
+              <span class="pillar-chip" data-i18n="p1_f2">✦ ศูนย์ข้อมูลและห้องสมุดประวัติศาสตร์เมืองเก่า</span>
+              <span class="pillar-chip" data-i18n="p1_f3">✦ ชั้นบน: สถานปฏิบัติธรรมอันสงบเงียบ</span>
+            </div>
+            <div class="pillar-card-action">
+              <span class="pillar-action-link" data-i18n="pillar_action_explore_a">ดูแผนผังโซน A (โถงอาคาร) →</span>
+            </div>
           </div>
 
           <!-- Pillar 2 -->
-          <div class="pillar-card highlight-card">
+          <div class="pillar-card pillar-card-terracotta highlight-card" onclick="selectZoneAndScroll('studio')">
+            <div class="pillar-top-stripe"></div>
+            <!-- Authentic Motif: Peranakan Batik Floral & Craft Mandala -->
+            <svg class="pillar-bg-pattern" viewBox="0 0 120 120" aria-hidden="true">
+              <circle cx="60" cy="60" r="42" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 3"/>
+              <path d="M60,24 C70,42 70,50 60,60 C50,50 50,42 60,24 Z" fill="currentColor" fill-opacity="0.12" stroke="currentColor" stroke-width="2"/>
+              <path d="M60,96 C70,78 70,70 60,60 C50,70 50,78 60,96 Z" fill="currentColor" fill-opacity="0.12" stroke="currentColor" stroke-width="2"/>
+              <path d="M24,60 C42,70 50,70 60,60 C50,50 42,50 24,60 Z" fill="currentColor" fill-opacity="0.12" stroke="currentColor" stroke-width="2"/>
+              <path d="M96,60 C78,70 70,70 60,60 C70,50 78,50 96,60 Z" fill="currentColor" fill-opacity="0.12" stroke="currentColor" stroke-width="2"/>
+              <circle cx="60" cy="60" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
+            </svg>
+
             <div class="pillar-badge" data-i18n="pillar_2_badge">POPULAR</div>
-            <div class="pillar-number">02</div>
-            <div class="pillar-icon">🎨</div>
+            <div class="pillar-card-header">
+              <div class="pillar-icon-box">🎨</div>
+              <div class="pillar-index-badge">
+                <span class="pillar-number">02</span>
+                <span class="pillar-zone-tag">ZONE C</span>
+              </div>
+            </div>
+            <div class="pillar-subhead-row">
+              <span class="pillar-seal">創藝</span>
+              <span class="pillar-motif-tag" data-i18n="p2_motif">ลายฉลุผ้าบาติก & คราฟต์</span>
+            </div>
             <h3 class="pillar-title" data-i18n="pillar_2_title">สตูดิโอคราฟต์ & เวิร์กช็อปศิลปะ (Creative Studio)</h3>
             <p class="pillar-desc" data-i18n="pillar_2_desc">
-              ห้องเรียนสร้างสรรค์ที่ชวนคนทุกวัยมาลงมือทำ เปลี่ยนภูมิปัญญาท้องถิ่นให้เป็นผลิตภัณฑ์ร่วมสมัย สอนโดยช่างฝีมือ ปราชญ์ชาวบ้าน และศิลปินรุ่นใหม่
+              ห้องเรียนสร้างสรรค์ชวนคนทุกวัยลงมือทำ เปลี่ยนภูมิปัญญาท้องถิ่นเป็นผลิตภัณฑ์ร่วมสมัย สอนโดยช่างฝีมือและศิลปินรุ่นใหม่
             </p>
-            <ul class="pillar-features">
-              <li data-i18n="p2_f1">เวิร์กช็อปพิมพ์ลายผ้าบาติกเมืองเก่า</li>
-              <li data-i18n="p2_f2">คลาสทำขนมเต้าส้อ & อาหารเปอรานากันโบราณ</li>
-              <li data-i18n="p2_f3">การปั้นเซรามิก & วาดภาพสีน้ำสถาปัตยกรรม</li>
-            </ul>
+            <div class="pillar-features-wrap">
+              <span class="pillar-chip" data-i18n="p2_f1">✦ เวิร์กช็อปพิมพ์ลายผ้าบาติกเมืองเก่า</span>
+              <span class="pillar-chip" data-i18n="p2_f2">✦ คลาสทำขนมเต้าส้อ & อาหารเปอรานากัน</span>
+              <span class="pillar-chip" data-i18n="p2_f3">✦ การปั้นเซรามิก & วาดภาพสีน้ำสถาปัตยกรรม</span>
+            </div>
+            <div class="pillar-card-action">
+              <span class="pillar-action-link" data-i18n="pillar_action_explore_b">ดูแผนผังโซน C (สตูดิโอคราฟต์) →</span>
+            </div>
           </div>
 
           <!-- Pillar 3 -->
-          <div class="pillar-card">
-            <div class="pillar-number">03</div>
-            <div class="pillar-icon">☕</div>
+          <div class="pillar-card pillar-card-wood" onclick="selectZoneAndScroll('cafe')">
+            <div class="pillar-top-stripe"></div>
+            <!-- Authentic Motif: Sino Wooden Window Geometry / Chinese Key Fret -->
+            <svg class="pillar-bg-pattern" viewBox="0 0 120 120" aria-hidden="true">
+              <rect x="22" y="22" width="76" height="76" rx="6" fill="none" stroke="currentColor" stroke-width="2"/>
+              <path d="M34,34 H86 V86 H34 Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 2"/>
+              <path d="M46,46 H74 V74 H46 Z" fill="currentColor" fill-opacity="0.09" stroke="currentColor" stroke-width="2"/>
+              <line x1="22" y1="60" x2="46" y2="60" stroke="currentColor" stroke-width="2"/>
+              <line x1="74" y1="60" x2="98" y2="60" stroke="currentColor" stroke-width="2"/>
+              <line x1="60" y1="22" x2="60" y2="46" stroke="currentColor" stroke-width="2"/>
+              <line x1="60" y1="74" x2="60" y2="98" stroke="currentColor" stroke-width="2"/>
+            </svg>
+
+            <div class="pillar-card-header">
+              <div class="pillar-icon-box">☕</div>
+              <div class="pillar-index-badge">
+                <span class="pillar-number">03</span>
+                <span class="pillar-zone-tag">ZONE D</span>
+              </div>
+            </div>
+            <div class="pillar-subhead-row">
+              <span class="pillar-seal">聚場</span>
+              <span class="pillar-motif-tag" data-i18n="p3_motif">ลายบานหน้าต่างอั้งม่อเหลา</span>
+            </div>
             <h3 class="pillar-title" data-i18n="pillar_3_title">คาเฟ่ชุมชน & Co-Working Space (Community Lounge)</h3>
             <p class="pillar-desc" data-i18n="pillar_3_desc">
-              พื้นที่นั่งทำงาน นัดพบปะ และคุยโปรเจกต์ใหม่ๆ สำหรับคนทำงานอิสระ คนในท้องถิ่น และนักท่องเที่ยว พร้อมเสิร์ฟเครื่องดื่มจากเมล็ดกาแฟท้องถิ่นพังงาและขนมพื้นเมือง
+              พื้นที่นั่งทำงาน นัดพบปะ และคุยโปรเจกต์ เสิร์ฟเครื่องดื่มจากเมล็ดกาแฟท้องถิ่นพังงา ขนมพื้นเมือง และงานคราฟต์ชุมชน
             </p>
-            <ul class="pillar-features">
-              <li data-i18n="p3_f1">โซนเงียบสำหรับอ่านหนังสือและทำงาน (High-Speed Wi-Fi)</li>
-              <li data-i18n="p3_f2">โต๊ะสนทนาแลกเปลี่ยนไอเดีย (Community Table)</li>
-              <li data-i18n="p3_f3">จำหน่ายของฝากคราฟต์ฝีมือชุมชน</li>
-            </ul>
+            <div class="pillar-features-wrap">
+              <span class="pillar-chip" data-i18n="p3_f1">✦ โซนเงียบสำหรับอ่านหนังสือและทำงาน (Wi-Fi)</span>
+              <span class="pillar-chip" data-i18n="p3_f2">✦ โต๊ะสนทนาแลกเปลี่ยนไอเดีย (Community Table)</span>
+              <span class="pillar-chip" data-i18n="p3_f3">✦ จำหน่ายของฝากคราฟต์ฝีมือชุมชน</span>
+            </div>
+            <div class="pillar-card-action">
+              <span class="pillar-action-link" data-i18n="pillar_action_explore_c">ดูแผนผังโซน D (คาเฟ่ชุมชน) →</span>
+            </div>
           </div>
 
           <!-- Pillar 4 -->
-          <div class="pillar-card">
-            <div class="pillar-number">04</div>
-            <div class="pillar-icon">🎪</div>
+          <div class="pillar-card pillar-card-celadon" onclick="selectZoneAndScroll('courtyard')">
+            <div class="pillar-top-stripe"></div>
+            <!-- Authentic Motif: Takua Pa River Waves & Tin Starfire -->
+            <svg class="pillar-bg-pattern" viewBox="0 0 120 120" aria-hidden="true">
+              <path d="M18,36 Q38,20 58,36 T98,36" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M18,58 Q38,42 58,58 T98,58" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M18,80 Q38,64 58,80 T98,80" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M78,16 L81,24 L89,27 L81,30 L78,38 L75,30 L67,27 L75,24 Z" fill="currentColor" fill-opacity="0.25" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+
+            <div class="pillar-card-header">
+              <div class="pillar-icon-box">🎪</div>
+              <div class="pillar-index-badge">
+                <span class="pillar-number">04</span>
+                <span class="pillar-zone-tag">ZONE B</span>
+              </div>
+            </div>
+            <div class="pillar-subhead-row">
+              <span class="pillar-seal">市集</span>
+              <span class="pillar-motif-tag" data-i18n="p4_motif">ลายคลื่นน้ำแม่น้ำเมืองแร่</span>
+            </div>
             <h3 class="pillar-title" data-i18n="pillar_4_title">ลานกิจกรรม & ตลาดสร้างสรรค์ (Courtyard & Market)</h3>
             <p class="pillar-desc" data-i18n="pillar_4_desc">
-              ลานกว้างหน้าอาคารที่พร้อมแปลงร่างเป็นเวทีเปิดสำหรับแสดงดนตรี ฉายหนังกลางแปลง ละครเวทีชุมชน เสวนาเมือง และตลาดนัดงานคราฟต์ยามเย็น
+              ลานกว้างหน้าอาคารที่แปลงร่างเป็นเวทีเปิด แสดงดนตรี ฉายหนังกลางแปลง ละครเวทีชุมชน เสวนาเมือง และตลาดนัดยามเย็น
             </p>
-            <ul class="pillar-features">
-              <li data-i18n="p4_f1">ตลาดนัดเต้าหมิง ครีเอทีฟ มาร์เก็ต สุดสัปดาห์</li>
-              <li data-i18n="p4_f2">โรงฉายภาพยนตร์กลางแปลงใต้แสงดาว</li>
-              <li data-i18n="p4_f3">เวทีเสวนาเมืองและศิลปะร่วมสมัย</li>
-            </ul>
+            <div class="pillar-features-wrap">
+              <span class="pillar-chip" data-i18n="p4_f1">✦ ตลาดนัดเต้าหมิง ครีเอทีฟ มาร์เก็ต สุดสัปดาห์</span>
+              <span class="pillar-chip" data-i18n="p4_f2">✦ โรงฉายภาพยนตร์กลางแปลงใต้แสงดาว</span>
+              <span class="pillar-chip" data-i18n="p4_f3">✦ เวทีเสวนาเมืองและศิลปะร่วมสมัย</span>
+            </div>
+            <div class="pillar-card-action">
+              <span class="pillar-action-link" data-i18n="pillar_action_explore_d">ดูแผนผังโซน B (ลานกลางแจ้ง) →</span>
+            </div>
           </div>
         </div>
       </div>
@@ -1038,6 +1134,6 @@
     </button>
   </nav>
 
-  <script src="app.js"></script>
+  <script src="app.js?v=2.1"></script>
 </body>
 </html>

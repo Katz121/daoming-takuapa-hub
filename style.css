@@ -348,8 +348,6 @@ button, input, select, textarea {
   gap: 10px;
   flex-shrink: 0;
 }
-  gap: 12px;
-}
 
 #langToggleBtn {
   font-family: var(--font-mono);
@@ -357,6 +355,7 @@ button, input, select, textarea {
   font-size: 0.82rem;
   padding: 6px 12px;
   border-radius: var(--radius-pill);
+  white-space: nowrap;
 }
 
 .lang-code.active-lang {
@@ -2525,6 +2524,20 @@ button, input, select, textarea {
 
 /* Tier 1: Tablets & iPad Landscape (max-width: 1080px) */
 @media (max-width: 1080px) {
+  .header-container {
+    padding: 8px 16px;
+    gap: 12px;
+  }
+
+  .brand-sub {
+    display: none;
+  }
+
+  #openBookingHeaderBtn {
+    padding: 6px 12px;
+    font-size: 0.82rem;
+  }
+
   .main-nav {
     display: none;
   }
@@ -2595,6 +2608,37 @@ button, input, select, textarea {
 
 /* Tier 2: iPad Portrait & Small Tablets (max-width: 768px) */
 @media (max-width: 768px) {
+  .header-container {
+    padding: 6px 12px;
+    gap: 8px;
+  }
+
+  .brand-logo-img {
+    width: 34px;
+    height: 34px;
+  }
+
+  .brand-title {
+    font-size: 0.95rem;
+  }
+
+  .brand-sub {
+    display: none;
+  }
+
+  #openBookingHeaderBtn {
+    display: none; /* Hide header booking button on mobile — users have the persistent Mobile Action Dock at the bottom & in the drawer */
+  }
+
+  #langToggleBtn {
+    padding: 5px 9px;
+    font-size: 0.76rem;
+  }
+
+  .mobile-toggle {
+    padding: 6px;
+  }
+
   .section {
     padding: clamp(40px, 6vw, 65px) 0;
   }

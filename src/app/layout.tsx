@@ -32,6 +32,15 @@ export const metadata: Metadata = {
   title: "โรงเรียนเต้าหมิง ตะกั่วป่า | Dao Ming Living Heritage & Creative Hub",
   description: "โรงเรียนจีนแห่งแรกและแห่งเดียวของจังหวัดพังงา (พ.ศ. ๒๔๔๘/๒๔๖๕) สู่พื้นที่สร้างสรรค์และมรดกมีชีวิตแห่งเมืองเก่าตะกั่วป่า รางวัลอนุรักษ์ศิลปสถาปัตยกรรม ประจำปี ๒๕๖๙ สมาคมสถาปนิกสยามฯ",
   keywords: ["เต้าหมิง", "ตะกั่วป่า", "พังงา", "โรงเรียนจีน", "สถาปัตยกรรม", "ASA 2569", "ชิโนโปรตุกีส", "Dao Ming School", "Living Heritage"],
+  icons: {
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/assets/logo-305.jpg', type: 'image/jpeg' }
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png' }
+    ]
+  },
   openGraph: {
     title: "โรงเรียนเต้าหมิง ตะกั่วป่า | Dao Ming Living Heritage & Creative Hub",
     description: "ชุบชีวิตอาคารประวัติศาสตร์ ๑๐๐ ปี สู่ Creative Living Space แห่งตะกั่วป่า",
@@ -48,7 +57,9 @@ export default function RootLayout({
   return (
     <html lang="th" className="scroll-smooth">
       <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" type="image/jpeg" href="/assets/logo-305.jpg" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

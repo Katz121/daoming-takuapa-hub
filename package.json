@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "deploy": "next build && wrangler pages deploy out --project-name daoming-takuapa-hub",
+    "deploy": "next build && npx wrangler pages deploy out --project-name daoming-takuapa-hub --commit-dirty=true",
     "lint": "eslint"
   },
   "dependencies": {

@@ -954,7 +954,6 @@ document.addEventListener('DOMContentLoaded', () => {
   applyLanguage(currentLang);
   initTimeline();
   initGableExplorer();
-  initPinCalibrator();
   initSpaceExplorer();
   initEventFilter();
   initIdeaBoard();
@@ -1173,47 +1172,47 @@ const gableCoordinates = {
   "tiangong": {
     name_th: "โฟกัส: ๑. เสาเทียนกง (ยอดจั่วรับพลังฟ้า)",
     name_en: "Focus: 1. Tiangong Pillar (Apex)",
-    origin: "49.3% 10.2%",
-    scale: 4.2,
-    reticleTop: "10.2%",
-    reticleLeft: "49.3%",
-    scaleLabel: "4.2x"
+    origin: "49.6% 9.9%",
+    scale: 3.6,
+    reticleTop: "9.9%",
+    reticleLeft: "49.6%",
+    scaleLabel: "3.6x"
   },
   "cloud": {
     name_th: "โฟกัส: ๒. ลายเมฆฐานเสา (ฐานยอดจั่ว)",
     name_en: "Focus: 2. Cloud Motif (Base)",
-    origin: "49.3% 14.5%",
-    scale: 3.8,
-    reticleTop: "14.5%",
-    reticleLeft: "49.3%",
-    scaleLabel: "3.8x"
+    origin: "49.6% 15.3%",
+    scale: 6.0,
+    reticleTop: "15.3%",
+    reticleLeft: "49.6%",
+    scaleLabel: "6.0x"
   },
   "triangle": {
     name_th: "โฟกัส: ๓. สามเหลี่ยมเชื่อมฟ้า-ดิน (โครงสร้างจั่ว)",
     name_en: "Focus: 3. Cosmic Triangle Frame",
-    origin: "43.8% 18.5%",
-    scale: 3.2,
-    reticleTop: "18.5%",
-    reticleLeft: "43.8%",
-    scaleLabel: "3.2x"
+    origin: "45.0% 20.7%",
+    scale: 3.8,
+    reticleTop: "20.7%",
+    reticleLeft: "45.0%",
+    scaleLabel: "3.8x"
   },
   "sun12": {
     name_th: "โฟกัส: ๔. พระอาทิตย์ ๑๒ รัศมี (กึ่งกลางจั่ว)",
     name_en: "Focus: 4. 12-Ray Solar Center",
-    origin: "49.3% 18.3%",
-    scale: 3.8,
-    reticleTop: "18.3%",
-    reticleLeft: "49.3%",
-    scaleLabel: "3.8x"
+    origin: "49.6% 19.6%",
+    scale: 5.3,
+    reticleTop: "19.6%",
+    reticleLeft: "49.6%",
+    scaleLabel: "5.3x"
   },
   "circles": {
     name_th: "โฟกัส: ๕. สัญลักษณ์โดมหัวเสาปีกข้าง",
     name_en: "Focus: 5. Spherical Pilaster Finial",
-    origin: "37.4% 20.2%",
-    scale: 3.6,
-    reticleTop: "20.2%",
-    reticleLeft: "37.4%",
-    scaleLabel: "3.6x"
+    origin: "37.6% 21.7%",
+    scale: 6.0,
+    reticleTop: "21.7%",
+    reticleLeft: "37.6%",
+    scaleLabel: "6.0x"
   },
   "overview": {
     name_th: "ภาพรวมทั้งอาคาร (Overview)",
@@ -1341,261 +1340,6 @@ function updateGableDisplay() {
   }
   if (scaleBadgeEl && coord) {
     scaleBadgeEl.textContent = coord.scaleLabel;
-  }
-}
-
-/* ==========================================================================
-   LIVE PIN CALIBRATION & EDITING TOOL (โหมดปรับแต่งพิกัดหมุด ๕ จุด)
-   ========================================================================== */
-let activeCalibratorPinKey = "tiangong";
-let isCalibratorOpen = false;
-
-// Default Pin Configuration (Mathematical % locked to original 2048x1365 image)
-const defaultPinConfig = {
-  tiangong: { top: 10.2, left: 49.3, size: 52, scale: 4.2 },
-  cloud:    { top: 14.5, left: 49.3, size: 52, scale: 3.8 },
-  triangle: { top: 18.5, left: 43.8, size: 52, scale: 3.2 },
-  sun12:    { top: 18.3, left: 49.3, size: 62, scale: 3.8 },
-  circles:  { top: 20.2, left: 37.4, size: 52, scale: 3.6 }
-};
-
-let currentPinConfig = JSON.parse(JSON.stringify(defaultPinConfig));
-
-// Map key to pin class
-const pinClassMap = {
-  tiangong: '.pin-1',
-  cloud:    '.pin-2',
-  triangle: '.pin-3',
-  sun12:    '.pin-4',
-  circles:  '.pin-5'
-};
-
-function applyPinConfigToDom() {
-  for (const [key, cfg] of Object.entries(currentPinConfig)) {
-    const selector = pinClassMap[key];
-    if (selector) {
-      const pinEl = document.querySelector(selector);
-      if (pinEl) {
-        pinEl.style.top = `${cfg.top}%`;
-        pinEl.style.left = `${cfg.left}%`;
-        pinEl.style.width = `${cfg.size}px`;
-        pinEl.style.height = `${cfg.size}px`;
-      }
-    }
-    // Also update gableCoordinates live
-    if (gableCoordinates[key]) {
-      gableCoordinates[key].origin = `${cfg.left}% ${cfg.top}%`;
-      gableCoordinates[key].reticleTop = `${cfg.top}%`;
-      gableCoordinates[key].reticleLeft = `${cfg.left}%`;
-      gableCoordinates[key].scale = cfg.scale;
-      gableCoordinates[key].scaleLabel = `${cfg.scale.toFixed(1)}x`;
-    }
-  }
-}
-
-function loadSavedPinConfig() {
-  try {
-    const saved = localStorage.getItem('daoming_pin_calibration');
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      currentPinConfig = { ...currentPinConfig, ...parsed };
-      applyPinConfigToDom();
-    }
-  } catch (e) {
-    console.warn('Failed to load saved pin config:', e);
-  }
-}
-
-function updateCalibratorUI() {
-  const cfg = currentPinConfig[activeCalibratorPinKey] || currentPinConfig.tiangong;
-
-  const sliderTop = document.getElementById('calSliderTop');
-  const sliderLeft = document.getElementById('calSliderLeft');
-  const sliderSize = document.getElementById('calSliderSize');
-  const sliderScale = document.getElementById('calSliderScale');
-
-  const valTop = document.getElementById('calValTop');
-  const valLeft = document.getElementById('calValLeft');
-  const valSize = document.getElementById('calValSize');
-  const valScale = document.getElementById('calValScale');
-  const liveCode = document.getElementById('calLiveCode');
-
-  if (sliderTop && valTop) {
-    sliderTop.value = cfg.top;
-    valTop.textContent = `${cfg.top.toFixed(1)}%`;
-  }
-  if (sliderLeft && valLeft) {
-    sliderLeft.value = cfg.left;
-    valLeft.textContent = `${cfg.left.toFixed(1)}%`;
-  }
-  if (sliderSize && valSize) {
-    sliderSize.value = cfg.size;
-    valSize.textContent = `${cfg.size}px`;
-  }
-  if (sliderScale && valScale) {
-    sliderScale.value = cfg.scale;
-    valScale.textContent = `${cfg.scale.toFixed(1)}x`;
-  }
-  if (liveCode) {
-    liveCode.textContent = `[${activeCalibratorPinKey}] top: ${cfg.top.toFixed(1)}%; left: ${cfg.left.toFixed(1)}%; size: ${cfg.size}px; scale: ${cfg.scale.toFixed(1)}x;`;
-  }
-
-  // Update pin button states
-  document.querySelectorAll('.cal-pin-btn').forEach(btn => {
-    if (btn.getAttribute('data-pin-key') === activeCalibratorPinKey) {
-      btn.classList.add('active');
-    } else {
-      btn.classList.remove('active');
-    }
-  });
-
-  applyPinConfigToDom();
-  if (typeof updateGableDisplay === 'function') {
-    updateGableDisplay();
-  }
-}
-
-function setPinProperty(key, prop, value) {
-  if (!currentPinConfig[key]) return;
-  currentPinConfig[key][prop] = Math.round(value * 10) / 10;
-  updateCalibratorUI();
-}
-
-function initPinCalibrator() {
-  loadSavedPinConfig();
-
-  const toggleBtn = document.getElementById('btnTogglePinCalibrator');
-  const panel = document.getElementById('pinCalibratorPanel');
-  const stage = document.getElementById('gableZoomStage');
-
-  if (toggleBtn && panel) {
-    toggleBtn.addEventListener('click', () => {
-      isCalibratorOpen = !isCalibratorOpen;
-      panel.style.display = isCalibratorOpen ? 'block' : 'none';
-      toggleBtn.classList.toggle('active', isCalibratorOpen);
-      if (isCalibratorOpen) {
-        updateCalibratorUI();
-      }
-    });
-  }
-
-  // Pin selector tabs
-  document.querySelectorAll('.cal-pin-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      activeCalibratorPinKey = btn.getAttribute('data-pin-key');
-      // Also switch active gable pin in explorer
-      const itemBtn = document.querySelector(`.gable-item-btn[data-gable="${activeCalibratorPinKey}"]`);
-      if (itemBtn) itemBtn.click();
-      updateCalibratorUI();
-    });
-  });
-
-  // Direct Click/Tap on Stage to move active pin
-  if (stage) {
-    stage.addEventListener('click', (e) => {
-      if (!isCalibratorOpen) return;
-      const rect = stage.getBoundingClientRect();
-      const clickX = e.clientX - rect.left;
-      const clickY = e.clientY - rect.top;
-
-      const leftPercent = Math.max(0, Math.min(100, (clickX / rect.width) * 100));
-      const topPercent = Math.max(0, Math.min(100, (clickY / rect.height) * 100));
-
-      currentPinConfig[activeCalibratorPinKey].left = Math.round(leftPercent * 10) / 10;
-      currentPinConfig[activeCalibratorPinKey].top = Math.round(topPercent * 10) / 10;
-
-      updateCalibratorUI();
-      showToast(`🎯 ย้ายหมุด ${activeCalibratorPinKey} ไปที่ (Top: ${topPercent.toFixed(1)}%, Left: ${leftPercent.toFixed(1)}%)`);
-    });
-  }
-
-  // Sliders
-  const sliderTop = document.getElementById('calSliderTop');
-  const sliderLeft = document.getElementById('calSliderLeft');
-  const sliderSize = document.getElementById('calSliderSize');
-  const sliderScale = document.getElementById('calSliderScale');
-
-  if (sliderTop) {
-    sliderTop.addEventListener('input', (e) => setPinProperty(activeCalibratorPinKey, 'top', parseFloat(e.target.value)));
-  }
-  if (sliderLeft) {
-    sliderLeft.addEventListener('input', (e) => setPinProperty(activeCalibratorPinKey, 'left', parseFloat(e.target.value)));
-  }
-  if (sliderSize) {
-    sliderSize.addEventListener('input', (e) => setPinProperty(activeCalibratorPinKey, 'size', parseInt(e.target.value)));
-  }
-  if (sliderScale) {
-    sliderScale.addEventListener('input', (e) => setPinProperty(activeCalibratorPinKey, 'scale', parseFloat(e.target.value)));
-  }
-
-  // D-Pad Nudge Buttons (0.2% precision step)
-  const dpadUp = document.getElementById('dpadUp');
-  const dpadDown = document.getElementById('dpadDown');
-  const dpadLeft = document.getElementById('dpadLeft');
-  const dpadRight = document.getElementById('dpadRight');
-
-  if (dpadUp) {
-    dpadUp.addEventListener('click', () => {
-      const cfg = currentPinConfig[activeCalibratorPinKey];
-      setPinProperty(activeCalibratorPinKey, 'top', Math.max(0, cfg.top - 0.2));
-    });
-  }
-  if (dpadDown) {
-    dpadDown.addEventListener('click', () => {
-      const cfg = currentPinConfig[activeCalibratorPinKey];
-      setPinProperty(activeCalibratorPinKey, 'top', Math.min(100, cfg.top + 0.2));
-    });
-  }
-  if (dpadLeft) {
-    dpadLeft.addEventListener('click', () => {
-      const cfg = currentPinConfig[activeCalibratorPinKey];
-      setPinProperty(activeCalibratorPinKey, 'left', Math.max(0, cfg.left - 0.2));
-    });
-  }
-  if (dpadRight) {
-    dpadRight.addEventListener('click', () => {
-      const cfg = currentPinConfig[activeCalibratorPinKey];
-      setPinProperty(activeCalibratorPinKey, 'left', Math.min(100, cfg.left + 0.2));
-    });
-  }
-
-  // Save Button
-  const saveBtn = document.getElementById('btnSavePinConfig');
-  if (saveBtn) {
-    saveBtn.addEventListener('click', () => {
-      try {
-        localStorage.setItem('daoming_pin_calibration', JSON.stringify(currentPinConfig));
-        showToast('💾 บันทึกพิกัดทั้ง ๕ จุดลงเครื่องเรียบร้อยแล้ว!');
-      } catch (e) {
-        showToast('❌ ไม่สามารถบันทึกพิกัดได้');
-      }
-    });
-  }
-
-  // Copy Code Button
-  const copyBtn = document.getElementById('btnCopyPinCode');
-  if (copyBtn) {
-    copyBtn.addEventListener('click', () => {
-      const formatted = JSON.stringify(currentPinConfig, null, 2);
-      navigator.clipboard.writeText(formatted).then(() => {
-        showToast('📋 คัดลอกโค้ดพิกัด JSON เรียบร้อยแล้ว!');
-      }).catch(() => {
-        prompt('คัดลอกพิกัดด้านล่างนี้ได้เลยครับ:', formatted);
-      });
-    });
-  }
-
-  // Reset Default Button
-  const resetBtn = document.getElementById('btnResetPinDefault');
-  if (resetBtn) {
-    resetBtn.addEventListener('click', () => {
-      if (confirm('ต้องการรีเซ็ตพิกัดหมุดทั้งหมดกลับเป็นค่าเริ่มต้นหรือไม่?')) {
-        localStorage.removeItem('daoming_pin_calibration');
-        currentPinConfig = JSON.parse(JSON.stringify(defaultPinConfig));
-        updateCalibratorUI();
-        showToast('🔄 รีเซ็ตค่าพิกัดเริ่มต้นเรียบร้อยแล้ว');
-      }
-    });
   }
 }
 

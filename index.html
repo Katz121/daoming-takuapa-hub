@@ -57,7 +57,7 @@
   }
   </script>
 
-  <link rel="stylesheet" href="style.css?v=2.6">
+  <link rel="stylesheet" href="style.css?v=2.7">
 </head>
 <body>
 
@@ -357,86 +357,7 @@
                 <button class="btn-zoom-ctrl" id="btnResetGableZoom" title="ดูภาพรวมทั้งอาคาร">
                   <span>🔍</span> <span data-i18n="btn_zoom_overview">ดูภาพรวมทั้งอาคาร</span>
                 </button>
-                <button class="btn-zoom-ctrl btn-calibrator-toggle" id="btnTogglePinCalibrator" title="โหมดแก้ไขและปรับพิกัดหมุด">
-                  <span>🛠️</span> <span>แก้ไขพิกัดหมุด</span>
-                </button>
                 <div class="zoom-hint-pill" data-i18n="zoom_hint_pill">✦ คลิกเลือกหัวข้อด้านขวาเพื่อซูมส่องจุดสัญลักษณ์</div>
-              </div>
-
-              <!-- Pin Calibration & Fine-Tuning Panel -->
-              <div class="pin-calibrator-panel" id="pinCalibratorPanel" style="display: none;">
-                <div class="calibrator-header">
-                  <div class="cal-title-row">
-                    <h4>🛠️ โหมดปรับแต่งพิกัดหมุด ๕ จุด (Live Pin Editor)</h4>
-                    <span class="cal-badge-active">ACTIVE EDIT MODE</span>
-                  </div>
-                  <p class="calibrator-tip">💡 <strong>วิธีใช้:</strong> เลือกหมุดที่ต้องการ แล้วแตะ/คลิกบนรูปภาพตรงจุดที่ต้องการ หรือกดปุ่มลูกศรเพื่อปรับละเอียด เมื่อได้ตำแหน่งที่พอใจให้กด <strong>"บันทึกพิกัด"</strong></p>
-                </div>
-
-                <!-- Select Pin Tabs -->
-                <div class="calibrator-pin-selector" id="calPinSelector">
-                  <button class="cal-pin-btn active" data-pin-key="tiangong">๑. เสาเทียนกง</button>
-                  <button class="cal-pin-btn" data-pin-key="cloud">๒. ลายเมฆฐาน</button>
-                  <button class="cal-pin-btn" data-pin-key="triangle">๓. สามเหลี่ยม</button>
-                  <button class="cal-pin-btn" data-pin-key="sun12">๔. อาทิตย์ ๑๒</button>
-                  <button class="cal-pin-btn" data-pin-key="circles">๕. โดมหัวเสา</button>
-                </div>
-
-                <!-- Nudge Controls & Sliders Grid -->
-                <div class="calibrator-controls-grid">
-                  <!-- D-Pad Directional Controls -->
-                  <div class="calibrator-dpad-box">
-                    <label class="cal-lbl">เลื่อนตำแหน่ง (Fine-Tune)</label>
-                    <div class="dpad-grid">
-                      <button class="dpad-btn" id="dpadUp" title="เลื่อนขึ้น 0.2%">▲</button>
-                      <div class="dpad-mid">
-                        <button class="dpad-btn" id="dpadLeft" title="เลื่อนซ้าย 0.2%">◄</button>
-                        <span class="dpad-center" id="dpadCenter" title="จุดศูนย์กลาง">🎯</span>
-                        <button class="dpad-btn" id="dpadRight" title="เลื่อนขวา 0.2%">►</button>
-                      </div>
-                      <button class="dpad-btn" id="dpadDown" title="เลื่อนลง 0.2%">▼</button>
-                    </div>
-                  </div>
-
-                  <!-- Sliders & Inputs -->
-                  <div class="calibrator-sliders-box">
-                    <div class="cal-slider-row">
-                      <label>แนวดิ่ง (Top): <strong id="calValTop">18.3%</strong></label>
-                      <input type="range" id="calSliderTop" min="0" max="60" step="0.1" value="18.3">
-                    </div>
-                    <div class="cal-slider-row">
-                      <label>แนวนอน (Left): <strong id="calValLeft">49.3%</strong></label>
-                      <input type="range" id="calSliderLeft" min="0" max="100" step="0.1" value="49.3">
-                    </div>
-                    <div class="cal-slider-row">
-                      <label>ขนาดวงแหวน (Size): <strong id="calValSize">52px</strong></label>
-                      <input type="range" id="calSliderSize" min="24" max="120" step="1" value="52">
-                    </div>
-                    <div class="cal-slider-row">
-                      <label>ระดับการซูม (Scale): <strong id="calValScale">3.8x</strong></label>
-                      <input type="range" id="calSliderScale" min="1.5" max="6.0" step="0.1" value="3.8">
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Live Coordinates Summary Box -->
-                <div class="calibrator-output-box">
-                  <span class="output-label">พิกัดหมุดปัจจุบัน:</span>
-                  <code id="calLiveCode">top: 18.3%; left: 49.3%; size: 52px; scale: 3.8x;</code>
-                </div>
-
-                <!-- Actions -->
-                <div class="calibrator-actions-row">
-                  <button class="btn btn-primary-sm" id="btnSavePinConfig" type="button">
-                    <span>💾</span> <span>บันทึกพิกัดลงเครื่อง (Save)</span>
-                  </button>
-                  <button class="btn btn-secondary-sm" id="btnCopyPinCode" type="button">
-                    <span>📋</span> <span>คัดลอกโค้ดพิกัดทั้งหมด (Copy JSON)</span>
-                  </button>
-                  <button class="btn btn-outline-sm" id="btnResetPinDefault" type="button">
-                    <span>🔄</span> <span>รีเซ็ตค่าเริ่มต้น</span>
-                  </button>
-                </div>
               </div>
             </div>
           </div>
@@ -1233,6 +1154,6 @@
     </button>
   </nav>
 
-  <script src="app.js?v=2.6"></script>
+  <script src="app.js?v=2.7"></script>
 </body>
 </html>

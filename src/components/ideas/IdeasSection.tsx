@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useApp } from '@/lib/store';
 import { INITIAL_IDEAS } from '@/data/ideas';
 import { CommunityIdea } from '@/types';
+import { clientDb } from '@/lib/clientDb';
 
 export function IdeasSection() {
   const { lang, t, showToast } = useApp();
@@ -19,21 +20,13 @@ export function IdeasSection() {
   const isZh = lang === 'zh';
 
   useEffect(() => {
-    const fetchIdeas = async () => {
-      try {
-        const res = await fetch('/api/ideas');
-        const json = await res.json();
-        if (json.success && Array.isArray(json.data)) {
-          setIdeas(json.data);
-        }
-      } catch {
-        // Fallback
-      }
-    };
-    fetchIdeas();
+    const loaded = clientDb.getIdeas();
+    if (loaded && loaded.length > 0) {
+      setIdeas(loaded as any);
+    }
   }, []);
 
-  const handleVote = async (id: number) => {
+  const handleVote = (id: number) => {
     let voterKey = localStorage.getItem('daoming_voter_key');
     if (!voterKey) {
       voterKey = `voter_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
@@ -41,33 +34,25 @@ export function IdeasSection() {
     }
 
     try {
-      const res = await fetch('/api/ideas/vote', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ideaId: id, voterKey })
-      });
-      const json = await res.json();
+      const result = clientDb.voteIdea(id, voterKey);
+      setIdeas(prev =>
+        prev.map(item => {
+          if (item.id === id) {
+            return {
+              ...item,
+              votes: result.votes,
+              hasVoted: result.hasVoted
+            };
+          }
+          return item;
+        })
+      );
 
-      if (json.success && json.data) {
-        setIdeas(prev =>
-          prev.map(item => {
-            if (item.id === id) {
-              return {
-                ...item,
-                votes: json.data.votes,
-                hasVoted: json.data.hasVoted
-              };
-            }
-            return item;
-          })
-        );
-
-        showToast(
-          json.data.hasVoted
-            ? (isZh ? "❤️ 投票成功！感謝您參與導明文創共創。" : isEn ? "❤️ Vote recorded! Thank you for co-creating." : "❤️ บันทึกการโหวตสำเร็จ! ขอบคุณที่ร่วมสนับสนุนไอเดียนี้")
-            : (isZh ? "已取消投票。" : isEn ? "Vote removed." : "ยกเลิกการโหวตเรียบร้อย")
-        );
-      }
+      showToast(
+        result.hasVoted
+          ? (isZh ? "❤️ 投票成功！感謝您參與導明文創共創。" : isEn ? "❤️ Vote recorded! Thank you for co-creating." : "❤️ บันทึกการโหวตสำเร็จ! ขอบคุณที่ร่วมสนับสนุนไอเดียนี้")
+          : (isZh ? "已取消投票。" : isEn ? "Vote removed." : "ยกเลิกการโหวตเรียบร้อย")
+      );
     } catch {
       showToast("Error voting. Please try again.");
     }
@@ -85,7 +70,7 @@ export function IdeasSection() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
@@ -101,26 +86,19 @@ export function IdeasSection() {
     const catObj = categoryMap[category] || categoryMap.art;
 
     try {
-      const res = await fetch('/api/ideas', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title,
-          desc,
-          author: author || (isZh ? "社區居民 / 訪客" : isEn ? "Community Member" : "ชาวตะกั่วป่า"),
-          category_th: catObj.th,
-          category_en: catObj.en
-        })
+      const newIdea = clientDb.addIdea({
+        title,
+        desc,
+        author: author || (isZh ? "社區居民 / 訪客" : isEn ? "Community Member" : "ชาวตะกั่วป่า"),
+        category_th: catObj.th,
+        category_en: catObj.en
       });
 
-      const json = await res.json();
-      if (json.success && json.data) {
-        setIdeas(prev => [json.data, ...prev]);
-        setTitle('');
-        setDesc('');
-        setAuthor('');
-        showToast(isZh ? "🎉 構想已成功提交至共創板！感謝您的參與。" : isEn ? "🎉 Idea submitted! Thank you for co-creating." : "🎉 ส่งไอเดียสำเร็จแล้ว! ขอบคุณที่ร่วมสร้างสรรค์เต้าหมิง");
-      }
+      setIdeas(prev => [newIdea as any, ...prev]);
+      setTitle('');
+      setDesc('');
+      setAuthor('');
+      showToast(isZh ? "🎉 構想已成功提交至共創板！感謝您的參與。" : isEn ? "🎉 Idea submitted! Thank you for co-creating." : "🎉 ส่งไอเดียสำเร็จแล้ว! ขอบคุณที่ร่วมสร้างสรรค์เต้าหมิง");
     } catch (err: any) {
       showToast(`Error: ${err.message}`);
     } finally {

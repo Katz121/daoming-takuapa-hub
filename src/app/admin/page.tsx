@@ -1,38 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { clientDb, ClientBooking, ClientIdea } from '@/lib/clientDb';
 
-interface BookingRecord {
-  id: string;
-  ticket_code: string;
-  event_id: string;
-  event_title: string;
-  event_title_en?: string;
-  event_category?: string;
-  guest_name: string;
-  guest_phone: string;
-  guest_email?: string;
-  seats: number;
-  tea_blend?: string;
-  pastry_type?: string;
-  status: string;
-  checked_in: number;
-  checked_in_at: string | null;
-  admin_notes?: string;
-  created_at: string;
-}
-
-interface IdeaRecord {
-  id: number;
-  title: string;
-  desc: string;
-  author: string;
-  category_th: string;
-  category_en: string;
-  votes: number;
-  status: string;
-  created_at: string;
-}
+type BookingRecord = ClientBooking;
+type IdeaRecord = ClientIdea;
 
 export default function AdminDashboardPage() {
   const [activeTab, setActiveTab] = useState<'tickets' | 'spaces' | 'ideas' | 'reports'>('tickets');
@@ -49,25 +21,16 @@ export default function AdminDashboardPage() {
     setTimeout(() => setFeedbackMsg(null), 4000);
   };
 
-  const fetchAllData = async () => {
+  const fetchAllData = () => {
     try {
-      const resBookings = await fetch('/api/admin/bookings?category=event');
-      const jsonBookings = await resBookings.json();
-      if (jsonBookings.success && Array.isArray(jsonBookings.data)) {
-        setBookings(jsonBookings.data);
-      }
+      const bList = clientDb.getBookings('event');
+      setBookings(bList);
 
-      const resSpaces = await fetch('/api/admin/bookings?category=space');
-      const jsonSpaces = await resSpaces.json();
-      if (jsonSpaces.success && Array.isArray(jsonSpaces.data)) {
-        setSpaceProposals(jsonSpaces.data);
-      }
+      const sList = clientDb.getBookings('space');
+      setSpaceProposals(sList);
 
-      const resIdeas = await fetch('/api/admin/ideas');
-      const jsonIdeas = await resIdeas.json();
-      if (jsonIdeas.success && Array.isArray(jsonIdeas.data)) {
-        setIdeas(jsonIdeas.data);
-      }
+      const iList = clientDb.getIdeas();
+      setIdeas(iList);
     } catch {
       // ignore
     }
@@ -79,19 +42,14 @@ export default function AdminDashboardPage() {
     return () => clearInterval(interval);
   }, []);
 
-  const handleVerifyTicket = async (e: React.FormEvent) => {
+  const handleVerifyTicket = (e: React.FormEvent) => {
     e.preventDefault();
     if (!scanCode.trim()) return;
 
     setIsLoading(true);
     try {
-      const res = await fetch('/api/bookings/verify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ticketCode: scanCode.trim() })
-      });
-      const json = await res.json();
-      setScanResult(json);
+      const result = clientDb.checkInTicket(scanCode.trim());
+      setScanResult(result);
       fetchAllData();
     } catch (err: any) {
       setScanResult({ success: false, message: err.message });
@@ -100,15 +58,10 @@ export default function AdminDashboardPage() {
     }
   };
 
-  const handleUpdateBookingStatus = async (ticketCode: string, newStatus: string) => {
+  const handleUpdateBookingStatus = (ticketCode: string, newStatus: string) => {
     try {
-      const res = await fetch('/api/admin/bookings', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ticketCode, status: newStatus })
-      });
-      const json = await res.json();
-      if (json.success) {
+      const success = clientDb.updateBookingStatus(ticketCode, newStatus);
+      if (success) {
         showFeedback(`ปรับสถานะคำขอ ${ticketCode} เป็น ${newStatus} สำเร็จ`);
         fetchAllData();
       }
@@ -117,15 +70,10 @@ export default function AdminDashboardPage() {
     }
   };
 
-  const handleUpdateIdeaStatus = async (ideaId: number, newStatus: string) => {
+  const handleUpdateIdeaStatus = (ideaId: number, newStatus: string) => {
     try {
-      const res = await fetch('/api/admin/ideas', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ideaId, status: newStatus })
-      });
-      const json = await res.json();
-      if (json.success) {
+      const success = clientDb.updateIdeaStatus(ideaId, newStatus);
+      if (success) {
         showFeedback(`ปรับสถานะไอเดีย #${ideaId} สำเร็จ`);
         fetchAllData();
       }

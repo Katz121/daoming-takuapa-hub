@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useApp } from '@/lib/store';
+import { clientDb } from '@/lib/clientDb';
 
 export function SpaceBookingSection() {
   const { lang, t, showToast } = useApp();
@@ -17,41 +18,44 @@ export function SpaceBookingSection() {
   const isEn = lang === 'en';
   const isZh = lang === 'zh';
 
+  const zoneNameMap: Record<string, { th: string; en: string; zh: string }> = {
+    hall: { th: 'โถงอาคารไม้ประวัติศาสตร์ (Zone A)', en: 'Heritage Hall (Zone A)', zh: '百年木質主展廳 (A區)' },
+    courtyard: { th: 'ลานกลางแจ้งเต้าหมิง (Zone B)', en: 'Dao Ming Courtyard (Zone B)', zh: '導明戶外文化廣場 (B區)' },
+    studio: { th: 'สตูดิโอเวิร์กช็อป (Zone C)', en: 'Craft Studio (Zone C)', zh: '文創手作工坊 (C區)' },
+    cafe: { th: 'คาเฟ่ & พื้นที่นั่งทำงาน (Zone D)', en: 'Community Cafe & Lounge (Zone D)', zh: '社區茶座與交流空間 (D區)' },
+    all: { th: 'เหมารวมทั้งพื้นที่ (All Zones)', en: 'All Zones Entire Facility', zh: '全區場地整合包場 (All Zones)' }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     try {
-      const res = await fetch('/api/bookings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          eventId: zone,
-          guestName: name,
-          guestPhone: phone,
-          guestEmail: email,
-          seats: parseInt(attendees) || 20,
-          teaBlend: desc
-        })
+      const selectedZoneInfo = zoneNameMap[zone] || zoneNameMap.hall;
+      await clientDb.createBooking({
+        event_id: zone,
+        event_title: selectedZoneInfo.th,
+        event_title_en: selectedZoneInfo.en,
+        guest_name: name,
+        guest_phone: phone,
+        guest_email: email,
+        seats: parseInt(attendees) || 20,
+        tea_blend: `[วันที่: ${date}] ${desc}`,
+        pastry_type: `จำนวนผู้เข้าร่วม: ${attendees}`
       });
 
-      const json = await res.json();
-      if (res.ok) {
-        showToast(
-          isZh
-            ? `已成功為 ${name} 提交場地申請！導明基金會團隊將在24小時內與您聯絡。`
-            : isEn
-              ? `Proposal submitted for ${name}! Our foundation team will contact you within 24 hours.`
-              : `ส่งคำขอจองพื้นที่สำเร็จสำหรับ ${name}! ทีมงานมูลนิธิเต้าหมิงจะติดต่อกลับภายใน 24 ชม.`
-        );
-        setName('');
-        setPhone('');
-        setEmail('');
-        setDate('');
-        setDesc('');
-      } else {
-        showToast(json.details || json.error || "Failed to submit booking");
-      }
+      showToast(
+        isZh
+          ? `已成功為 ${name} 提交場地申請！導明基金會團隊將在24小時內與您聯絡。`
+          : isEn
+            ? `Proposal submitted for ${name}! Our foundation team will contact you within 24 hours.`
+            : `ส่งคำขอจองพื้นที่สำเร็จสำหรับ ${name}! ทีมงานมูลนิธิเต้าหมิงจะติดต่อกลับภายใน 24 ชม.`
+      );
+      setName('');
+      setPhone('');
+      setEmail('');
+      setDate('');
+      setDesc('');
     } catch (err: any) {
       showToast(`Error: ${err.message}`);
     } finally {

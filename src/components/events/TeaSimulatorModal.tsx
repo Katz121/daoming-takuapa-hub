@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useApp } from '@/lib/store';
+import { clientDb } from '@/lib/clientDb';
 
 const TEA_DATA = {
   oolong: {
@@ -83,25 +84,17 @@ export function TeaSimulatorModal() {
     setIsSubmitting(true);
 
     try {
-      const res = await fetch('/api/bookings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          eventId: 'e1',
-          guestName,
-          guestPhone,
-          seats: 1,
-          teaBlend: isEn ? tea.title_en : tea.title_th,
-          pastryType: isEn ? pastry.name_en : pastry.name_th
-        })
+      // Create booking via clientDb with QR Code generation (works on Cloudflare Pages static edge)
+      const bookingRecord = await clientDb.createBooking({
+        event_id: 'tea_afternoon',
+        event_title: isEn ? '🍵 Heritage Tea Tasting & Storytelling Circle' : '🍵 ชวนจิบชาเปอยี่ & สนทนามรดกเต้าหมิง',
+        event_title_en: 'Heritage Tea Tasting & Storytelling Circle',
+        guest_name: guestName,
+        guest_phone: guestPhone,
+        seats: 1,
+        tea_blend: isEn ? tea.title_en : tea.title_th,
+        pastry_type: isEn ? pastry.name_en : pastry.name_th
       });
-
-      const json = await res.json();
-
-      if (!res.ok) {
-        showToast(json.details || json.error || 'Failed to book session');
-        return;
-      }
 
       setTeaModalOpen(false);
       setGuestName('');
@@ -113,8 +106,23 @@ export function TeaSimulatorModal() {
           : `🎉 สำรองที่นั่งสำเร็จ! ระบบออกตั๋วดิจิทัลพร้อม QR Code ให้ท่านเรียบร้อยแล้ว`
       );
 
-      if (json.data) {
-        setActiveTicket(json.data);
+      if (bookingRecord) {
+        setActiveTicket({
+          id: bookingRecord.id,
+          ticketCode: bookingRecord.ticket_code,
+          eventId: bookingRecord.event_id,
+          eventTitle: bookingRecord.event_title,
+          eventTitleEn: bookingRecord.event_title_en || bookingRecord.event_title,
+          guestName: bookingRecord.guest_name,
+          guestPhone: bookingRecord.guest_phone,
+          seats: bookingRecord.seats,
+          teaBlend: bookingRecord.tea_blend,
+          pastryType: bookingRecord.pastry_type,
+          totalAmount: 0,
+          status: bookingRecord.status,
+          qrDataUrl: bookingRecord.qr_data_url || '',
+          createdAt: bookingRecord.created_at
+        });
       }
     } catch (err: any) {
       showToast(`Error: ${err.message}`);

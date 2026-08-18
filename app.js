@@ -95,11 +95,20 @@ const translations = {
     archive_subtitle: "ภาพถ่ายจริง ๑๓ ภาพ จากความทรงจำของชาวตะกั่วป่า ศิษย์เก่า และทายาทผู้ก่อตั้งโรงเรียน",
     gallery_prev: "ก่อนหน้า",
     gallery_next: "ถัดไป",
+    page_prev: "หน้าก่อน",
+    page_next: "หน้าถัดไป",
+    page_status_tpl: "แสดงภาพ {start} - {end} จาก {total} ภาพ (หน้า {page} / {totalPages})",
     arch_cat_all: "🌟 ทั้งหมด (13 ภาพ)",
     arch_cat_diplomacy: "🏛️ อาคาร & การทูต (2)",
     arch_cat_school: "📚 ครู & นักเรียน (4)",
     arch_cat_sports: "🏀 ทีมบาสเกตบอล (5)",
     arch_cat_community: "📜 เรื่องเล่าชุมชน (2)",
+    tea_modal_badge: "🫖 DAOMING HERITAGE TEA ROOM",
+    tea_modal_title: 'จำลองสุนทรีย์ "จิบชายามบ่าย & ลิ้มรสเต้าส้อเต้าหมิง"',
+    tea_modal_desc: "เลือกสายพันธุ์ชาจีนและขนมเปอรานากันโบราณ เพื่อสัมผัสรสชาติอันละเมียดละไม ณ ระเบียงไม้เต้าหมิง",
+    tea_step_1: "เลือกใบชาโบราณ (Select Tea):",
+    tea_step_2: "เลือกขนมพื้นถิ่นจับคู่ (Delicacy Pairing):",
+    btn_confirm_tea_rsvp: "ยืนยันสำรองที่นั่งจิบชายามบ่าย (฿490)",
 
     // Vision Section
     vision_tag: "REVITALIZATION & LIVING HERITAGE",
@@ -364,11 +373,20 @@ const translations = {
     archive_subtitle: "13 authentic historic photographs from the collective memories of Takua Pa families and alumni",
     gallery_prev: "Previous",
     gallery_next: "Next",
+    page_prev: "Previous Page",
+    page_next: "Next Page",
+    page_status_tpl: "Showing {start} - {end} of {total} photos (Page {page} of {totalPages})",
     arch_cat_all: "🌟 All Photos (13)",
     arch_cat_diplomacy: "🏛️ Campus & Diplomacy (2)",
     arch_cat_school: "📚 Faculty & Students (4)",
     arch_cat_sports: "🏀 Basketball Teams (5)",
     arch_cat_community: "📜 Community Exhibits (2)",
+    tea_modal_badge: "🫖 DAOMING HERITAGE TEA ROOM",
+    tea_modal_title: "Dao Ming Heritage Afternoon Tea & Delicacies Simulator",
+    tea_modal_desc: "Select authentic Chinese tea blends and paired Peranakan delicacies at Dao Ming veranda",
+    tea_step_1: "Select Heritage Tea Blend:",
+    tea_step_2: "Select Local Delicacy Pairing:",
+    btn_confirm_tea_rsvp: "Confirm Tea Session RSVP (฿490)",
 
     // Vision Section
     vision_tag: "REVITALIZATION & LIVING HERITAGE",
@@ -799,26 +817,26 @@ const eventsList = [
   {
     id: "e1",
     category: "workshop",
-    image: "assets/event-batik.jpg",
-    tag_th: "เวิร์กช็อปงานฝีมือ",
-    tag_en: "Artisan Workshop",
+    image: "assets/event-tea.jpg",
+    tag_th: "จิบชายามบ่าย & วัฒนธรรม",
+    tag_en: "Heritage Afternoon Tea",
     day_th: "24",
     month_th: "ส.ค. 2569",
     day_en: "24",
     month_en: "Aug 2026",
-    title_th: "เวิร์กช็อปพิมพ์ลายผ้าบาติกธรรมชาติ ด้วยแม่พิมพ์ไม้โบราณ",
-    title_en: "Natural Dye Batik Workshop with Antique Wooden Blocks",
-    snippet_th: "เรียนรู้ศาสตร์การย้อมผ้าด้วยสีธรรมชาติจากใบไม้ในป่าชายเลนและเปลือกผลไม้ท้องถิ่น ออกแบบลวดลายชิโนโปรตุกีสลงบนผืนผ้าคอตตอนแท้",
-    snippet_en: "Learn the art of eco-dyeing using mangrove leaves and local plant extracts, block-printing Sino-Portuguese motifs on pure cotton.",
-    loc_th: "📍 โซน C: Craft Studio",
-    loc_en: "📍 Zone C: Craft Studio",
-    time_th: "⏰ 13:30 - 16:30 น.",
-    time_en: "⏰ 1:30 PM - 4:30 PM",
-    cap_th: "👥 รับ 15 ท่าน (เหลือ 4 ที่)",
-    cap_en: "👥 15 spots (4 remaining)",
-    price_th: "฿650 / ท่าน (รวมอุปกรณ์)",
-    price_en: "฿650 / pax (All materials included)",
-    btnType: "register"
+    title_th: 'สัมผัสสุนทรีย์ "จิบชายามบ่าย & ลิ้มรสเต้าส้อโบราณเต้าหมิง"',
+    title_en: 'Dao Ming Heritage Afternoon Tea & Takua Pa Delicacies Pairing',
+    snippet_th: "จำลองบรรยากาศสุนทรีย์ยุคทองตะกั่วป่า นั่งจิบชาจีนโบราณเกรดพรีเมียมคู่กับขนมเต้าส้อ ขนมพริก และของว่างเปอรานากันสูตรลับ ณ ระเบียงไม้รับลม พร้อมฟังเรื่องเล่าประวัติศาสตร์จากปราชญ์ท้องถิ่น",
+    snippet_en: "Experience the golden-age nostalgia of Takua Pa with premium traditional Chinese tea pairings, warm homemade Tao Sae pastries, and Peranakan delicacies on the breezy wooden veranda.",
+    loc_th: "📍 โซน D: Community Lounge & Veranda",
+    loc_en: "📍 Zone D: Community Lounge & Veranda",
+    time_th: "⏰ 14:00 - 16:30 น.",
+    time_en: "⏰ 02:00 PM - 04:30 PM",
+    cap_th: "👥 รับ 16 ท่าน (เหลือ 4 ที่)",
+    cap_en: "👥 16 spots (4 remaining)",
+    price_th: "฿490 / ท่าน (เซ็ตชากา + ขนม 5 ชนิด)",
+    price_en: "฿490 / pax (Full Tea Pot & 5 Delicacies Set)",
+    btnType: "tea_simulator"
   },
   {
     id: "e2",
@@ -1508,105 +1526,23 @@ const archivePhotos = [
 ];
 
 let currentLightboxIndex = 0;
-let activeCategory = 'all';
+const ARCHIVE_PAGE_SIZE = 6;
+let currentArchivePage = 1;
+let currentArchiveCategory = 'all';
 
 function initArchiveGallery() {
-  const grid = document.getElementById('archiveGalleryGrid');
   const filterBar = document.getElementById('archiveFilterBar');
-  const prevBtn = document.getElementById('archivePrevBtn');
-  const nextBtn = document.getElementById('archiveNextBtn');
-  const dotsContainer = document.getElementById('archiveDots');
-
-  function getVisibleCards() {
-    if (!grid) return [];
-    return Array.from(grid.querySelectorAll('.archive-card:not(.hidden)'));
-  }
-
-  function updateDots() {
-    const visibleCards = getVisibleCards();
-    if (!dotsContainer) return;
-    dotsContainer.innerHTML = '';
-    visibleCards.forEach((card, idx) => {
-      const dot = document.createElement('button');
-      dot.className = 'archive-dot' + (idx === 0 ? ' active' : '');
-      dot.setAttribute('data-index', idx);
-      dot.setAttribute('aria-label', `ภาพที่ ${idx + 1}`);
-      dot.addEventListener('click', () => {
-        card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-        updateActiveDot(idx);
-      });
-      dotsContainer.appendChild(dot);
-    });
-    updateActiveDot(0);
-  }
-
-  function updateActiveDot(index) {
-    const dots = dotsContainer ? dotsContainer.querySelectorAll('.archive-dot') : [];
-    dots.forEach((d, i) => {
-      d.classList.toggle('active', i === index);
-    });
-    if (prevBtn) prevBtn.disabled = index === 0;
-    if (nextBtn) nextBtn.disabled = index >= dots.length - 1;
-  }
-
-  // Category Filtering
   if (filterBar) {
     const filterBtns = filterBar.querySelectorAll('.filter-btn');
     filterBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         filterBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        activeCategory = btn.getAttribute('data-category');
-
-        const allCards = grid ? grid.querySelectorAll('.archive-card') : [];
-        allCards.forEach(card => {
-          const cardCat = card.getAttribute('data-category');
-          if (activeCategory === 'all' || cardCat === activeCategory) {
-            card.classList.remove('hidden');
-          } else {
-            card.classList.add('hidden');
-          }
-        });
-
-        if (grid) grid.scrollTo({ left: 0, behavior: 'smooth' });
-        updateDots();
+        currentArchiveCategory = btn.getAttribute('data-category') || 'all';
+        currentArchivePage = 1;
+        renderArchivePage();
       });
     });
-  }
-
-  if (grid) {
-    let scrollTimeout;
-    grid.addEventListener('scroll', () => {
-      clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(() => {
-        const visibleCards = getVisibleCards();
-        if (!visibleCards.length) return;
-        const scrollLeft = grid.scrollLeft;
-        const cardWidth = visibleCards[0].offsetWidth + 16;
-        const activeIdx = Math.min(visibleCards.length - 1, Math.max(0, Math.round(scrollLeft / cardWidth)));
-        updateActiveDot(activeIdx);
-      }, 50);
-    }, { passive: true });
-
-    if (prevBtn) {
-      prevBtn.addEventListener('click', () => {
-        const visibleCards = getVisibleCards();
-        if (!visibleCards.length) return;
-        const cardWidth = visibleCards[0].offsetWidth + 16;
-        grid.scrollBy({ left: -cardWidth, behavior: 'smooth' });
-      });
-    }
-
-    if (nextBtn) {
-      nextBtn.addEventListener('click', () => {
-        const visibleCards = getVisibleCards();
-        if (!visibleCards.length) return;
-        const cardWidth = visibleCards[0].offsetWidth + 16;
-        grid.scrollBy({ left: cardWidth, behavior: 'smooth' });
-      });
-    }
-
-    updateDots();
   }
 
   // Global Keyboard listener for Lightbox
@@ -1645,7 +1581,111 @@ function initArchiveGallery() {
       }
     }, { passive: true });
   }
+
+  renderArchivePage();
 }
+
+function getFilteredArchivePhotos() {
+  if (currentArchiveCategory === 'all') {
+    return archivePhotos;
+  }
+  return archivePhotos.filter(p => p.category === currentArchiveCategory);
+}
+
+function renderArchivePage() {
+  const grid = document.getElementById('archiveGalleryGrid');
+  const pageNumbers = document.getElementById('archivePageNumbers');
+  const prevBtn = document.getElementById('archivePagePrevBtn');
+  const nextBtn = document.getElementById('archivePageNextBtn');
+  const statusEl = document.getElementById('archivePageStatus');
+
+  const filtered = getFilteredArchivePhotos();
+  const totalItems = filtered.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / ARCHIVE_PAGE_SIZE));
+
+  if (currentArchivePage > totalPages) currentArchivePage = totalPages;
+  if (currentArchivePage < 1) currentArchivePage = 1;
+
+  const startIdx = (currentArchivePage - 1) * ARCHIVE_PAGE_SIZE;
+  const endIdx = Math.min(startIdx + ARCHIVE_PAGE_SIZE, totalItems);
+  const pageItems = filtered.slice(startIdx, endIdx);
+
+  if (grid) {
+    grid.innerHTML = pageItems.map(item => {
+      const isEn = currentLang === 'en';
+      const title = isEn ? item.title_en : item.title_th;
+      const tag = isEn ? item.tag_en : item.tag_th;
+      const caption = isEn ? item.caption_en : item.caption_th;
+
+      return `
+        <div class="archive-card" data-category="${item.category}" onclick="openPhotoLightbox('${item.src}', '${escapeHtml(caption)}', ${item.id})">
+          <div class="archive-img-box">
+            <img src="${item.src}" alt="${title}" loading="lazy">
+            <span class="archive-era-tag">${tag}</span>
+            <div class="archive-zoom-icon">🔍</div>
+          </div>
+          <div class="archive-card-caption">
+            <h4>${title}</h4>
+            <p>${caption}</p>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Render Page Number Buttons
+  if (pageNumbers) {
+    const thaiDigits = ['๑', '๒', '๓', '๔', '๕', '๖', '๗', '๘', '๙', '๑๐'];
+    let btnsHtml = '';
+    for (let p = 1; p <= totalPages; p++) {
+      const numLabel = currentLang === 'th' ? (thaiDigits[p - 1] || p) : p;
+      btnsHtml += `<button class="page-num-btn ${p === currentArchivePage ? 'active' : ''}" onclick="goToArchivePage(${p})">${numLabel}</button>`;
+    }
+    pageNumbers.innerHTML = btnsHtml;
+  }
+
+  // Prev / Next button states
+  if (prevBtn) prevBtn.disabled = currentArchivePage <= 1;
+  if (nextBtn) nextBtn.disabled = currentArchivePage >= totalPages;
+
+  // Status text
+  if (statusEl) {
+    const isEn = currentLang === 'en';
+    const thaiDigits = ['๑', '๒', '๓', '๔', '๕', '๖', '๗', '๘', '๙', '๑๐', '๑๑', '๑๒', '๑๓'];
+    const sStart = isEn ? (totalItems === 0 ? 0 : startIdx + 1) : (totalItems === 0 ? '๐' : (thaiDigits[startIdx] || (startIdx + 1)));
+    const sEnd = isEn ? endIdx : (thaiDigits[endIdx - 1] || endIdx);
+    const sTotal = isEn ? totalItems : (thaiDigits[totalItems - 1] || totalItems);
+    const sPage = isEn ? currentArchivePage : (thaiDigits[currentArchivePage - 1] || currentArchivePage);
+    const sTotalPages = isEn ? totalPages : (thaiDigits[totalPages - 1] || totalPages);
+
+    statusEl.innerHTML = `<span>${isEn 
+      ? `Showing photos ${sStart} - ${sEnd} of ${sTotal} (Page ${sPage} / ${sTotalPages})` 
+      : `แสดงภาพ ${sStart} - ${sEnd} จาก ${sTotal} ภาพ (หน้า ${sPage} / ${sTotalPages})`}</span>`;
+  }
+}
+
+function changeArchivePage(delta) {
+  const filtered = getFilteredArchivePhotos();
+  const totalPages = Math.max(1, Math.ceil(filtered.length / ARCHIVE_PAGE_SIZE));
+  const newPage = currentArchivePage + delta;
+  if (newPage >= 1 && newPage <= totalPages) {
+    currentArchivePage = newPage;
+    renderArchivePage();
+    const section = document.getElementById('archive');
+    if (section) section.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+window.changeArchivePage = changeArchivePage;
+
+function goToArchivePage(page) {
+  const filtered = getFilteredArchivePhotos();
+  const totalPages = Math.max(1, Math.ceil(filtered.length / ARCHIVE_PAGE_SIZE));
+  if (page >= 1 && page <= totalPages) {
+    currentArchivePage = page;
+    renderArchivePage();
+  }
+}
+window.goToArchivePage = goToArchivePage;
 
 function updateLightboxDisplay() {
   const img = document.getElementById('lightboxImg');
@@ -1716,6 +1756,156 @@ function closePhotoLightbox() {
   }
 }
 window.closePhotoLightbox = closePhotoLightbox;
+
+/* ==========================================================================
+   AFTERNOON TEA SIMULATOR & BOOKING
+   ========================================================================== */
+let currentSelectedTea = 'oolong';
+let currentSelectedPastry = 'taosae';
+
+const teaProfiles = {
+  oolong: {
+    title_th: "ชาอู่หลงสุริยัน ตะกั่วป่า",
+    title_en: "Takua Pa Sun Wuyi Oolong",
+    desc_th: "รินน้ำร้อนอุณหภูมิ 92°C สกัดกลิ่นหอมอบอวล รสคั่วถ่านไม้ บอดี้ลึก ชุ่มคอยาวนาน",
+    desc_en: "Steeped at 92°C, releasing rich charcoal-roasted aroma and lingering deep sweetness.",
+    emoji: "🍵",
+    aroma: "95%",
+    sweet: "88%",
+    calm: "92%"
+  },
+  longjing: {
+    title_th: "ชาหลงจิ่งใบไผ่สด",
+    title_en: "Spring Bamboo Well Green Tea",
+    desc_th: "รินน้ำร้อนอุณหภูมิ 80°C ยอดอ่อนใบชาสด รสละมุน กลิ่นหอมสดชื่น ผ่อนคลาย",
+    desc_en: "Steeped at 80°C with delicate tender shoots, floral notes, and soothing freshness.",
+    emoji: "🌿",
+    aroma: "90%",
+    sweet: "92%",
+    calm: "98%"
+  },
+  black: {
+    title_th: "ชาดำกังฟูสูตรเปอรานากัน",
+    title_en: "Heritage Kung Fu Black Tea",
+    desc_th: "รินน้ำร้อนอุณหภูมิ 95°C รสเข้มข้น กลมกล่อม หอมกลิ่นผลไม้แห้ง เข้ากับขนมหวานลงตัว",
+    desc_en: "Steeped at 95°C, robust and velvety with notes of dried plum and honey malt.",
+    emoji: "🫖",
+    aroma: "96%",
+    sweet: "85%",
+    calm: "89%"
+  }
+};
+
+const pastryProfiles = {
+  taosae: {
+    name_th: "ขนมเต้าส้อโบราณเต้าหมิง",
+    name_en: "Handmade Tao Sae Pastries"
+  },
+  angku: {
+    name_th: "อังกู๊โก้ย & ขนมพริกไทยโบราณ",
+    name_en: "Red Tortoise Cake & Pepper Cookies"
+  },
+  kosui: {
+    name_th: "ขนมโกสุ้ยน้ำตาลอ้อยสด",
+    name_en: "Brown Sugar Ko Sui Delicacy"
+  }
+};
+
+function openTeaSimulator() {
+  const modal = document.getElementById('teaSimulationModal');
+  if (modal) {
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    updateTeaBrewState();
+  }
+}
+window.openTeaSimulator = openTeaSimulator;
+
+function closeTeaSimulator() {
+  const modal = document.getElementById('teaSimulationModal');
+  if (modal) {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+window.closeTeaSimulator = closeTeaSimulator;
+
+function selectTeaType(teaKey) {
+  currentSelectedTea = teaKey;
+  document.querySelectorAll('#teaOptionsGrid .tea-option-card').forEach(card => {
+    card.classList.toggle('active', card.getAttribute('data-tea') === teaKey);
+  });
+  updateTeaBrewState();
+}
+window.selectTeaType = selectTeaType;
+
+function selectPastryType(pastryKey) {
+  currentSelectedPastry = pastryKey;
+  document.querySelectorAll('#pastryOptionsGrid .pastry-option-card').forEach(card => {
+    card.classList.toggle('active', card.getAttribute('data-pastry') === pastryKey);
+  });
+  updateTeaBrewState();
+}
+window.selectPastryType = selectPastryType;
+
+function updateTeaBrewState() {
+  const tea = teaProfiles[currentSelectedTea] || teaProfiles.oolong;
+  const pastry = pastryProfiles[currentSelectedPastry] || pastryProfiles.taosae;
+
+  const isEn = currentLang === 'en';
+  const titleEl = document.getElementById('brewStatusTitle');
+  const descEl = document.getElementById('brewStatusDesc');
+  const cupEl = document.getElementById('brewCupEmoji');
+  const aromaEl = document.getElementById('aromaFill');
+  const sweetEl = document.getElementById('sweetFill');
+  const calmEl = document.getElementById('calmFill');
+
+  if (titleEl) {
+    titleEl.textContent = isEn 
+      ? `Serving Set: ${tea.title_en} + ${pastry.name_en}`
+      : `เซ็ตชาพร้อมเสิร์ฟ: ${tea.title_th} + ${pastry.name_th}`;
+  }
+  if (descEl) {
+    descEl.textContent = isEn ? tea.desc_en : tea.desc_th;
+  }
+  if (cupEl) {
+    cupEl.textContent = tea.emoji;
+  }
+  if (aromaEl) aromaEl.style.width = tea.aroma;
+  if (sweetEl) sweetEl.style.width = tea.sweet;
+  if (calmEl) calmEl.style.width = tea.calm;
+}
+
+function simulateBrewTea() {
+  const btn = document.getElementById('brewActionBtn');
+  const isEn = currentLang === 'en';
+  if (btn) {
+    btn.textContent = isEn ? "⏳ Brewing fresh tea..." : "⏳ กำลังรินชาและสกัดกลิ่นหอม...";
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.textContent = isEn ? "✨ Tasting notes perfect! Try again?" : "✨ รสสัมผัสกลมกล่อมยอดเยี่ยม! (ลองชงใหม่อีกครั้ง)";
+      btn.disabled = false;
+      showToast(isEn ? "🍵 Tea brewed to perfection! Ready for your real visit." : "🍵 รินชาสำเร็จ! หอมกรุ่น อุณหภูมิและความสุนทรีย์สมบูรณ์แบบ");
+    }, 900);
+  }
+}
+window.simulateBrewTea = simulateBrewTea;
+
+function handleTeaBookingSubmit(e) {
+  e.preventDefault();
+  const name = document.getElementById('teaGuestName')?.value || '';
+  const phone = document.getElementById('teaGuestPhone')?.value || '';
+  const isEn = currentLang === 'en';
+
+  showToast(isEn 
+    ? `🎉 Tea session reserved for ${name}! We will contact ${phone} shortly.` 
+    : `🎉 สำรองที่นั่งจิบชายามบ่ายสำเร็จสำหรับคุณ ${name}! ทีมงานจะติดต่อกลับทางเบอร์ ${phone}`);
+  
+  closeTeaSimulator();
+  const form = document.getElementById('teaQuickBookingForm');
+  if (form) form.reset();
+}
+window.handleTeaBookingSubmit = handleTeaBookingSubmit;
 
 /* ==========================================================================
    SPACE & ZONE EXPLORER
@@ -1828,9 +2018,18 @@ function renderEvents() {
     const price = isEn ? ev.price_en : ev.price_th;
 
     let btnLabel = dict.btn_register;
-    if (ev.btnType === 'details') btnLabel = dict.btn_details;
-    if (ev.btnType === 'shops') btnLabel = dict.btn_view_shops;
-    if (ev.btnType === 'reserve') btnLabel = dict.btn_reserve_seat;
+    let btnAction = `handleEventRegister('${escapeHtml(title)}')`;
+
+    if (ev.btnType === 'tea_simulator') {
+      btnLabel = isEn ? '🍵 Tea Simulator & RSVP' : '🍵 จำลองจิบชา & สำรองที่นั่ง';
+      btnAction = 'openTeaSimulator()';
+    } else if (ev.btnType === 'details') {
+      btnLabel = dict.btn_details;
+    } else if (ev.btnType === 'shops') {
+      btnLabel = dict.btn_view_shops;
+    } else if (ev.btnType === 'reserve') {
+      btnLabel = dict.btn_reserve_seat;
+    }
 
     const tagClass = `${ev.category === 'workshop' ? 'workshop-tag' : ev.category === 'exhibition' ? 'exh-tag' : ev.category === 'market' ? 'market-tag' : 'talk-tag'}`;
 
@@ -1854,7 +2053,7 @@ function renderEvents() {
           </div>
           <div class="event-card-footer">
             <span class="event-price ${ev.isFree ? 'highlight-free' : ''}">${price}</span>
-            <button class="btn btn-outline-sm" onclick="handleEventRegister('${escapeHtml(title)}')">${btnLabel}</button>
+            <button class="btn btn-outline-sm" onclick="${btnAction}">${btnLabel}</button>
           </div>
         </div>
       </div>

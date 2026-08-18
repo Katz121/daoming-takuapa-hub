@@ -75,6 +75,8 @@ const translations = {
     tl_btn_3_label: "จัดตั้งมูลนิธิฯ & บูรณะอาคาร",
     tl_btn_4_year: "ปัจจุบัน & รางวัล ASA",
     tl_btn_4_label: "บริบทใหม่ & มรดกที่มีชีวิต",
+    tl_step_prev: "ยุคก่อนหน้า",
+    tl_step_next: "ยุคถัดไป",
 
     // Gable Section
     gable_tag: "COSMIC FACADE PHILOSOPHY",
@@ -335,6 +337,8 @@ const translations = {
     tl_btn_3_label: "Foundation Trust & Roof Restoration",
     tl_btn_4_year: "Present & ASA Award",
     tl_btn_4_label: "New Context & Living Heritage",
+    tl_step_prev: "Previous Era",
+    tl_step_next: "Next Era",
 
     // Gable Section
     gable_tag: "COSMIC FACADE PHILOSOPHY",
@@ -1033,20 +1037,111 @@ function applyLanguage(lang) {
 }
 
 /* ==========================================================================
-   HISTORICAL TIMELINE
+   HISTORICAL TIMELINE — STEP NAVIGATION & TOUCH SWIPE
    ========================================================================== */
+const timelineYears = ["1905", "1950", "1990", "2026"];
+
+function selectTimelineYear(yearKey) {
+  if (!timelineYears.includes(yearKey)) return;
+  currentSelectedYearKey = yearKey;
+
+  const buttons = document.querySelectorAll('.timeline-btn');
+  buttons.forEach(b => {
+    if (b.getAttribute('data-year') === yearKey) {
+      b.classList.add('active');
+    } else {
+      b.classList.remove('active');
+    }
+  });
+
+  const dots = document.querySelectorAll('.tl-dot');
+  dots.forEach(d => {
+    if (d.getAttribute('data-year') === yearKey) {
+      d.classList.add('active');
+    } else {
+      d.classList.remove('active');
+    }
+  });
+
+  const prevBtn = document.getElementById('tlPrevBtn');
+  const nextBtn = document.getElementById('tlNextBtn');
+  const currentIndex = timelineYears.indexOf(yearKey);
+
+  if (prevBtn) {
+    prevBtn.disabled = currentIndex === 0;
+  }
+  if (nextBtn) {
+    nextBtn.disabled = currentIndex === timelineYears.length - 1;
+  }
+
+  updateTimelineDisplay();
+}
+
 function initTimeline() {
   const buttons = document.querySelectorAll('.timeline-btn');
-
   buttons.forEach(btn => {
     btn.addEventListener('click', () => {
-      buttons.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      currentSelectedYearKey = btn.getAttribute('data-year');
-      updateTimelineDisplay();
+      selectTimelineYear(btn.getAttribute('data-year'));
     });
   });
+
+  const prevBtn = document.getElementById('tlPrevBtn');
+  const nextBtn = document.getElementById('tlNextBtn');
+
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+      const currentIndex = timelineYears.indexOf(currentSelectedYearKey);
+      if (currentIndex > 0) {
+        selectTimelineYear(timelineYears[currentIndex - 1]);
+      }
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      const currentIndex = timelineYears.indexOf(currentSelectedYearKey);
+      if (currentIndex < timelineYears.length - 1) {
+        selectTimelineYear(timelineYears[currentIndex + 1]);
+      }
+    });
+  }
+
+  const dots = document.querySelectorAll('.tl-dot');
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      selectTimelineYear(dot.getAttribute('data-year'));
+    });
+  });
+
+  // Mobile Touch Swipe Support
+  const contentBox = document.getElementById('timelineContent');
+  if (contentBox) {
+    let startX = 0;
+    let endX = 0;
+
+    contentBox.addEventListener('touchstart', (e) => {
+      startX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    contentBox.addEventListener('touchend', (e) => {
+      endX = e.changedTouches[0].screenX;
+      const diffX = endX - startX;
+
+      if (Math.abs(diffX) > 45) {
+        const currentIndex = timelineYears.indexOf(currentSelectedYearKey);
+        if (diffX < 0 && currentIndex < timelineYears.length - 1) {
+          // Swipe Left -> Next Era
+          selectTimelineYear(timelineYears[currentIndex + 1]);
+        } else if (diffX > 0 && currentIndex > 0) {
+          // Swipe Right -> Prev Era
+          selectTimelineYear(timelineYears[currentIndex - 1]);
+        }
+      }
+    }, { passive: true });
+  }
+
+  // Initial state setup
+  selectTimelineYear(currentSelectedYearKey || "1905");
 }
 
 function updateTimelineDisplay() {

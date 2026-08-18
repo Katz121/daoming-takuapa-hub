@@ -57,7 +57,7 @@
   }
   </script>
 
-  <link rel="stylesheet" href="style.css?v=2.4">
+  <link rel="stylesheet" href="style.css?v=2.5">
 </head>
 <body>
 
@@ -295,6 +295,26 @@
                   </div>
                 </div>
               </div>
+            </div>
+
+            <!-- Mobile & Desktop Step Navigation Bar -->
+            <div class="tl-step-nav-bar">
+              <button class="tl-step-btn tl-step-prev" id="tlPrevBtn" aria-label="ยุคก่อนหน้า">
+                <span class="tl-step-arrow">←</span>
+                <span class="tl-step-text" data-i18n="tl_step_prev">ยุคก่อนหน้า</span>
+              </button>
+              
+              <div class="tl-step-dots" id="tlStepDots">
+                <button class="tl-dot active" data-year="1905" aria-label="พ.ศ. 2448 - 2465"></button>
+                <button class="tl-dot" data-year="1950" aria-label="พ.ศ. 2480 - 2510"></button>
+                <button class="tl-dot" data-year="1990" aria-label="พ.ศ. 2533 - 2547"></button>
+                <button class="tl-dot" data-year="2026" aria-label="ปัจจุบัน & รางวัล ASA"></button>
+              </div>
+
+              <button class="tl-step-btn tl-step-next" id="tlNextBtn" aria-label="ยุคถัดไป">
+                <span class="tl-step-text" data-i18n="tl_step_next">ยุคถัดไป</span>
+                <span class="tl-step-arrow">→</span>
+              </button>
             </div>
           </div>
         </div>
@@ -1134,6 +1154,6 @@
     </button>
   </nav>
 
-  <script src="app.js?v=2.4"></script>
+  <script src="app.js?v=2.5"></script>
 </body>
 </html>

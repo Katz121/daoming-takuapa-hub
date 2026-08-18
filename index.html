@@ -364,8 +364,14 @@
 
           <!-- Gable Symbol Details -->
           <div class="gable-details-pane">
-            <div class="gable-symbol-card" id="gableSymbolCard">
-              <div class="gable-symbol-badge" id="gableBadge">สัญลักษณ์ที่ 1 / 5</div>
+            <div class="gable-symbol-card gable-animate-fade" id="gableSymbolCard">
+              <div class="gable-card-watermark" id="gableWatermark">01</div>
+              <div class="gable-card-top-row">
+                <div class="gable-symbol-badge" id="gableBadge">
+                  <span class="gable-seal-mini" id="gableSealMini">天</span>
+                  <span id="gableBadgeText">สัญลักษณ์ที่ 1 / 5</span>
+                </div>
+              </div>
               <h3 id="gableTitle">เสาเทียนกง (Tiangong Pillar)</h3>
               <p id="gableDesc" class="gable-desc-text">
                 เสายอดบนสุดของหน้าจั่ว เปรียบเสมือน "เสาสวรรค์" จุดที่ฟ้าส่งพลังงานบริสุทธิ์จากเบื้องบนลงมาสู่โลก เป็นสัญลักษณ์ของการเชื่อมโยงระหว่างจักรวาลกับมนุษย์
@@ -376,13 +382,75 @@
               </div>
             </div>
 
-            <!-- Quick Selector List -->
-            <div class="gable-selector-list">
-              <button class="gable-item-btn active" data-gable="tiangong">๑. เสาเทียนกง (ยอดเสาจุดรับพลังฟ้า)</button>
-              <button class="gable-item-btn" data-gable="cloud">๒. ลายเมฆฐานเสา (ประคองพลังฟ้าสู่ฐาน)</button>
-              <button class="gable-item-btn" data-gable="triangle">๓. สามเหลี่ยมเชื่อมฟ้า-ดิน (กรอบโครงสร้างจั่ว)</button>
-              <button class="gable-item-btn" data-gable="sun12">๔. พระอาทิตย์ ๑๒ รัศมี (วัฏจักรกาลเวลา & ปัญญา)</button>
-              <button class="gable-item-btn" data-gable="circles">๕. สัญลักษณ์โดมหัวเสา (ความมั่นคงและดุลยภาพ)</button>
+            <!-- 5 Smooth Modern Selector Cards -->
+            <div class="gable-selector-list" id="gableSelectorList">
+              <button class="gable-item-btn active" data-gable="tiangong">
+                <div class="gable-item-left">
+                  <span class="gable-item-num">1</span>
+                  <div class="gable-item-title-group">
+                    <h4>เสาเทียนกง (Tiangong Pillar)</h4>
+                    <span>ยอดเสาจุดรับพลังฟ้า เชื่อมต่อจักรวาล</span>
+                  </div>
+                </div>
+                <span class="gable-item-arrow">→</span>
+              </button>
+              <button class="gable-item-btn" data-gable="cloud">
+                <div class="gable-item-left">
+                  <span class="gable-item-num">2</span>
+                  <div class="gable-item-title-group">
+                    <h4>ลายเมฆฐานเสา (Cloud Motif)</h4>
+                    <span>ประคองพลังฟ้าสู่ฐาน ความร่มเย็น</span>
+                  </div>
+                </div>
+                <span class="gable-item-arrow">→</span>
+              </button>
+              <button class="gable-item-btn" data-gable="triangle">
+                <div class="gable-item-left">
+                  <span class="gable-item-num">3</span>
+                  <div class="gable-item-title-group">
+                    <h4>สามเหลี่ยมเชื่อมฟ้า-ดิน (Cosmic Triangle)</h4>
+                    <span>กรอบโครงสร้างจั่ว ดุลยภาพมนุษย์</span>
+                  </div>
+                </div>
+                <span class="gable-item-arrow">→</span>
+              </button>
+              <button class="gable-item-btn" data-gable="sun12">
+                <div class="gable-item-left">
+                  <span class="gable-item-num">4</span>
+                  <div class="gable-item-title-group">
+                    <h4>พระอาทิตย์ ๑๒ รัศมี (12-Ray Sunburst)</h4>
+                    <span>วัฏจักรกาลเวลา & การศึกษาไม่หยุดนิ่ง</span>
+                  </div>
+                </div>
+                <span class="gable-item-arrow">→</span>
+              </button>
+              <button class="gable-item-btn" data-gable="circles">
+                <div class="gable-item-left">
+                  <span class="gable-item-num">5</span>
+                  <div class="gable-item-title-group">
+                    <h4>สัญลักษณ์โดมหัวเสา (Ionic Dome Finials)</h4>
+                    <span>ความมั่นคง ดุลยภาพตะวันตก-ตะวันออก</span>
+                  </div>
+                </div>
+                <span class="gable-item-arrow">→</span>
+              </button>
+            </div>
+
+            <!-- Step Navigation Bar -->
+            <div class="gable-step-nav">
+              <button class="gable-step-btn" id="gableStepPrevBtn" onclick="stepGableSymbol(-1)">
+                <span>←</span> <span>จุดก่อนหน้า</span>
+              </button>
+              <div class="gable-dots-group" id="gableDotsGroup">
+                <button class="gable-dot active" onclick="selectGableSymbol('tiangong')"></button>
+                <button class="gable-dot" onclick="selectGableSymbol('cloud')"></button>
+                <button class="gable-dot" onclick="selectGableSymbol('triangle')"></button>
+                <button class="gable-dot" onclick="selectGableSymbol('sun12')"></button>
+                <button class="gable-dot" onclick="selectGableSymbol('circles')"></button>
+              </div>
+              <button class="gable-step-btn" id="gableStepNextBtn" onclick="stepGableSymbol(1)">
+                <span>จุดถัดไป</span> <span>→</span>
+              </button>
             </div>
           </div>
         </div>
@@ -790,8 +858,12 @@
           <!-- Ideas Showcase Wall -->
           <div class="ideas-wall">
             <div class="ideas-wall-header">
-              <h3><span data-i18n="ideas_wall_heading">กระดานไอเดียจากชุมชน</span> (<span id="ideaCount">4</span>)</h3>
-              <span class="ideas-sort-note" data-i18n="ideas_sort_note">🔥 กด ❤️ เพื่อโหวตไอเดียที่คุณชอบ</span>
+              <h3><span data-i18n="ideas_wall_heading">กระดานไอเดียจากชุมชน</span> (<span id="ideaCount">3</span>)</h3>
+              <div class="ideas-header-right">
+                <span class="ideas-sort-note" data-i18n="ideas_sort_note">🔥 กด ❤️ เพื่อโหวตไอเดียที่คุณชอบ</span>
+                <button class="ideas-nav-btn" onclick="scrollIdeasStream(-1)" aria-label="เลื่อนก่อนหน้า" title="เลื่อนก่อนหน้า">←</button>
+                <button class="ideas-nav-btn" onclick="scrollIdeasStream(1)" aria-label="เลื่อนถัดไป" title="เลื่อนถัดไป">→</button>
+              </div>
             </div>
 
             <div class="ideas-card-stream" id="ideasCardStream">

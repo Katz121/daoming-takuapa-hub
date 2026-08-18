@@ -1,0 +1,20 @@
+@import "tailwindcss";
+@import "./heritage.css";
+
+/* Next.js Image Component Bridge */
+.visual-photo-wrapper img,
+.photo-real-card img,
+.gable-interactive-img,
+.archive-img-box img,
+.event-card-img-wrap img {
+  position: relative !important;
+  height: 100% !important;
+  width: 100% !important;
+  object-fit: cover !important;
+}
+
+.caption-logo-mini img,
+.brand-logo-img {
+  position: relative !important;
+  object-fit: cover !important;
+}

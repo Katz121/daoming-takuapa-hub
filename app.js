@@ -1314,10 +1314,23 @@ function initGableExplorer() {
 
   // Initial display: focus on Tiangong Spire
   selectGable('tiangong');
+
+  window.selectGableSymbol = selectGable;
+  window.stepGableSymbol = function(delta) {
+    const keys = ['tiangong', 'cloud', 'triangle', 'sun12', 'circles'];
+    let idx = keys.indexOf(currentSelectedGableKey);
+    if (idx === -1) idx = 0;
+    const nextIdx = Math.max(0, Math.min(keys.length - 1, idx + delta));
+    selectGable(keys[nextIdx]);
+  };
 }
 
 function updateGableDisplay() {
+  const cardEl = document.getElementById('gableSymbolCard');
   const badgeEl = document.getElementById('gableBadge');
+  const badgeTextEl = document.getElementById('gableBadgeText');
+  const sealMiniEl = document.getElementById('gableSealMini');
+  const watermarkEl = document.getElementById('gableWatermark');
   const titleEl = document.getElementById('gableTitle');
   const descEl = document.getElementById('gableDesc');
   const meaningEl = document.getElementById('gableMeaning');
@@ -1325,6 +1338,11 @@ function updateGableDisplay() {
   const reticleEl = document.getElementById('gableFocusRing');
   const statusTextEl = document.getElementById('zoomStatusText');
   const scaleBadgeEl = document.getElementById('zoomScaleLabel');
+  const dots = document.querySelectorAll('#gableDotsGroup .gable-dot');
+
+  const gableKeys = ['tiangong', 'cloud', 'triangle', 'sun12', 'circles'];
+  const gableSeals = { tiangong: '天', cloud: '雲', triangle: '角', sun12: '日', circles: '柱' };
+  const gableNums = { tiangong: '01', cloud: '02', triangle: '03', sun12: '04', circles: '05' };
 
   const langSet = gableData[currentLang] || gableData.th;
   const isOverview = currentSelectedGableKey === 'overview';
@@ -1332,23 +1350,49 @@ function updateGableDisplay() {
   const data = langSet[dataKey] || langSet["tiangong"];
   const coord = gableCoordinates[currentSelectedGableKey] || gableCoordinates["tiangong"];
 
-  if (data && badgeEl && titleEl && descEl && meaningEl) {
+  // Re-trigger smooth fade animation on card
+  if (cardEl) {
+    cardEl.classList.remove('gable-animate-fade');
+    void cardEl.offsetWidth; // trigger reflow
+    cardEl.classList.add('gable-animate-fade');
+  }
+
+  if (watermarkEl) {
+    watermarkEl.textContent = isOverview ? '🏛️' : (gableNums[dataKey] || '01');
+  }
+  if (sealMiniEl) {
+    sealMiniEl.textContent = isOverview ? '道' : (gableSeals[dataKey] || '天');
+  }
+
+  if (data && titleEl && descEl && meaningEl) {
     if (isOverview) {
-      badgeEl.textContent = currentLang === 'en' ? "Full Facade Overview" : "ภาพรวมสถาปัตยกรรมทั้งหลัง";
+      if (badgeTextEl) badgeTextEl.textContent = currentLang === 'en' ? "Full Facade Overview" : "ภาพรวมสถาปัตยกรรมทั้งหลัง";
+      else if (badgeEl) badgeEl.textContent = currentLang === 'en' ? "Full Facade Overview" : "ภาพรวมสถาปัตยกรรมทั้งหลัง";
       titleEl.textContent = currentLang === 'en' ? "Dao Ming Schoolhouse & Front Porch" : "อาคารโรงเรียนเต้าหมิง & มุขหน้าสถาปัตยกรรม";
       descEl.textContent = currentLang === 'en' 
         ? "Constructed in 1922 by Hokkien master builder Master Phao, featuring colonial Ang Mor Lao verandas and classical pilasters embodying Chinese cosmology."
         : "อาคาร ๒ ชั้นสร้างขึ้นในปี ๒๔๖๕ โดยนายผาว ช่างฝีมือชาวจีนฮกเกี้ยน ผสานสถาปัตยกรรมโคโลเนียลอั้งม่อเหลาและปรัชญาจักรวาลจีนโบราณ";
       meaningEl.textContent = currentLang === 'en'
-        ? "Tap any numbered pin (1 to 6) or button on the right to zoom into specific cosmic symbols."
-        : "คลิกเลือกหมายเลข ๑ - ๖ บนตัวอาคาร หรือเลือกรายการด้านขวาเพื่อซูมส่องจุดสัญลักษณ์";
+        ? "Tap any numbered pin (1 to 5) or button on the right to zoom into specific cosmic symbols."
+        : "คลิกเลือกหมายเลข ๑ - ๕ บนตัวอาคาร หรือเลือกรายการด้านขวาเพื่อซูมส่องจุดสัญลักษณ์";
     } else {
-      badgeEl.textContent = data.badge;
+      if (badgeTextEl) badgeTextEl.textContent = data.badge;
+      else if (badgeEl) badgeEl.textContent = data.badge;
       titleEl.textContent = data.title;
       descEl.textContent = data.desc;
       meaningEl.textContent = data.meaning;
     }
   }
+
+  // Update dots
+  const currentIdx = gableKeys.indexOf(dataKey);
+  dots.forEach((dot, idx) => {
+    if (idx === currentIdx && !isOverview) {
+      dot.classList.add('active');
+    } else {
+      dot.classList.remove('active');
+    }
+  });
 
   // Apply Camera Smooth Zoom on Photo
   if (imgEl && coord) {
@@ -2194,6 +2238,20 @@ function renderIdeas() {
     `;
   }).join('');
 }
+
+function scrollIdeasStream(direction) {
+  const streamEl = document.getElementById('ideasCardStream');
+  if (!streamEl) return;
+  const isMobile = window.innerWidth <= 768;
+  if (isMobile) {
+    const scrollAmount = (streamEl.clientWidth * 0.85) * direction;
+    streamEl.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+  } else {
+    const scrollAmount = 220 * direction;
+    streamEl.scrollBy({ top: scrollAmount, behavior: 'smooth' });
+  }
+}
+window.scrollIdeasStream = scrollIdeasStream;
 
 /* ==========================================================================
    SPACE BOOKING FORM

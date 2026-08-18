@@ -1,33 +1,44 @@
 /* ==========================================================================
    DAO MING CREATIVE HERITAGE HUB — STYLESHEET
-   Sino-Portuguese Heritage & Contemporary Creative Space
+   Authentic Building Palette: Pale Ochre, Celadon Teal, Cinnabar & Tin Gold
    ========================================================================== */
 
 :root {
-  /* Color Tokens */
-  --bg-main: #FBF8F1;
+  /* Core Canvas Tokens (Warm Sunlit Ivory & Pale Ochre) */
+  --bg-main: #FAF7EE;
   --bg-surface: #FFFFFF;
-  --bg-card: #FFFFFF;
-  --bg-muted: #F2ECE0;
-  --bg-dark: #121A21;
-  --bg-dark-surface: #1B252E;
+  --bg-card: #FFFDF9;
+  --bg-muted: #F3EBD8;
+  --bg-ochre-light: #F8F1E1;
+  --bg-ochre-tint: #EFE3C6;
+  --bg-ochre-warm: #E6D2A8;
 
-  --text-main: #1C242C;
-  --text-muted: #636F7B;
-  --text-light: #FBF8F1;
-  --text-light-muted: #A3B1BF;
+  /* Focal Dark Tones (Deep Heritage Celadon & Teak) */
+  --bg-dark: #152B28;
+  --bg-dark-surface: #1E3A36;
+  --bg-dark-card: #18302D;
 
-  /* Accent & Heritage Brand Palette */
-  --color-terracotta: #C44D27;
+  /* Typography Colors */
+  --text-main: #1C2329;
+  --text-muted: #566470;
+  --text-light: #FAF7EE;
+  --text-light-muted: #9BB3AD;
+
+  /* Heritage Building Palette Tokens */
+  --color-ochre-building: #DDA843;       /* Dao Ming Facade Pale Mustard Yellow */
+  --color-ochre-building-dark: #B88526;
+  --color-celadon: #1D665B;              /* Dao Ming Window Louver Teal Green */
+  --color-celadon-light: #E4F1EC;
+  --color-celadon-hover: #154D44;
+  --color-terracotta: #C44D27;           /* Cinnabar Red / Seal Stamp / CTA */
   --color-terracotta-hover: #A63C1B;
-  --color-jade: #1E5E52;
-  --color-jade-light: #E6F0EE;
-  --color-tin-gold: #D4A359;
-  --color-tin-gold-dark: #B38238;
+  --color-tin-gold: #C99738;             /* Tin Ore Brass Gold */
   --color-wood: #5A3D28;
   
-  --border-light: #E6DECE;
-  --border-dark: #2A3642;
+  /* Borders */
+  --border-light: #E8DEC8;
+  --border-ochre: #DEC99F;
+  --border-dark: #2A4E48;
 
   /* Typography */
   --font-display: 'Bai Jamjuree', sans-serif;
@@ -35,10 +46,11 @@
   --font-mono: 'IBM Plex Mono', monospace;
 
   /* Shadows */
-  --shadow-sm: 0 2px 8px rgba(28, 36, 44, 0.05);
-  --shadow-md: 0 6px 20px rgba(28, 36, 44, 0.08);
-  --shadow-lg: 0 16px 36px rgba(28, 36, 44, 0.12);
-  --shadow-warm: 0 8px 24px rgba(196, 77, 39, 0.15);
+  --shadow-sm: 0 2px 8px rgba(35, 42, 48, 0.05);
+  --shadow-md: 0 6px 20px rgba(35, 42, 48, 0.07);
+  --shadow-lg: 0 16px 36px rgba(35, 42, 48, 0.11);
+  --shadow-warm: 0 8px 24px rgba(196, 77, 39, 0.16);
+  --shadow-ochre: 0 12px 30px rgba(221, 168, 67, 0.18);
 
   /* Radii */
   --radius-sm: 6px;
@@ -101,16 +113,16 @@ button, input, select, textarea {
 }
 
 .highlight-wood {
-  color: var(--color-tin-gold);
+  color: var(--color-ochre-building-dark);
 }
 
 .highlight-green {
-  color: var(--color-jade);
+  color: var(--color-celadon);
   font-weight: 600;
 }
 
 .highlight-free {
-  color: var(--color-jade);
+  color: var(--color-celadon);
   font-weight: 700;
 }
 
@@ -143,15 +155,15 @@ button, input, select, textarea {
 }
 
 .btn-secondary {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: var(--text-light);
-  border-color: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(8px);
+  background-color: var(--bg-surface);
+  color: var(--text-main);
+  border: 1px solid var(--border-ochre);
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-secondary:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-  color: #FFFFFF;
+  background-color: var(--bg-muted);
+  border-color: var(--color-ochre-building);
   transform: translateY(-2px);
 }
 
@@ -175,7 +187,7 @@ button, input, select, textarea {
 .btn-outline-sm {
   background-color: transparent;
   color: var(--text-main);
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--border-ochre);
   padding: 8px 14px;
   font-size: 0.85rem;
   border-radius: var(--radius-sm);
@@ -185,7 +197,7 @@ button, input, select, textarea {
 
 .btn-outline-sm:hover {
   background-color: var(--bg-muted);
-  border-color: var(--text-muted);
+  border-color: var(--color-ochre-building);
 }
 
 .btn-secondary-sm {
@@ -212,7 +224,7 @@ button, input, select, textarea {
   position: sticky;
   top: 0;
   z-index: 100;
-  background-color: rgba(251, 248, 241, 0.94);
+  background-color: rgba(250, 247, 238, 0.94);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border-light);
   transition: var(--transition);
@@ -239,7 +251,7 @@ button, input, select, textarea {
   border-radius: 8px;
   object-fit: cover;
   box-shadow: 0 2px 8px rgba(196, 77, 39, 0.25);
-  border: 1px solid rgba(212, 163, 89, 0.4);
+  border: 1px solid rgba(212, 163, 89, 0.5);
   flex-shrink: 0;
   transition: var(--transition);
 }
@@ -264,7 +276,7 @@ button, input, select, textarea {
 .brand-sub {
   font-family: var(--font-mono);
   font-size: 0.65rem;
-  color: var(--color-jade);
+  color: var(--color-celadon);
   font-weight: 600;
   letter-spacing: 0.5px;
 }
@@ -348,7 +360,7 @@ button, input, select, textarea {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(10, 15, 20, 0.6);
+  background: rgba(21, 43, 40, 0.55);
   backdrop-filter: blur(4px);
   z-index: 199;
   opacity: 0;
@@ -374,6 +386,7 @@ button, input, select, textarea {
   flex-direction: column;
   padding: 24px;
   transition: right 0.35s ease;
+  border-left: 2px solid var(--border-ochre);
 }
 
 .mobile-drawer.open {
@@ -418,14 +431,16 @@ button, input, select, textarea {
   padding-top: 16px;
 }
 
-/* Hero Section */
+/* ==========================================================================
+   Hero Section (Sunlit Pale Ochre Heritage Theme)
+   ========================================================================== */
 .hero-section {
   position: relative;
-  background-color: var(--bg-dark);
-  color: var(--text-light);
+  background: linear-gradient(145deg, #FAF4E4 0%, #F5E7C8 50%, #ECE0BF 100%);
+  color: var(--text-main);
   padding: 80px 0 70px;
   overflow: hidden;
-  border-bottom: 1px solid var(--border-dark);
+  border-bottom: 1px solid var(--border-ochre);
 }
 
 .hero-backdrop-pattern {
@@ -434,9 +449,9 @@ button, input, select, textarea {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: radial-gradient(circle at 10% 20%, rgba(212, 163, 89, 0.08) 0%, transparent 40%),
-                    radial-gradient(circle at 80% 80%, rgba(196, 77, 39, 0.08) 0%, transparent 50%);
-  opacity: 0.9;
+  background-image: radial-gradient(circle at 12% 25%, rgba(221, 168, 67, 0.15) 0%, transparent 45%),
+                    radial-gradient(circle at 85% 75%, rgba(196, 77, 39, 0.08) 0%, transparent 50%);
+  opacity: 0.85;
   pointer-events: none;
 }
 
@@ -456,14 +471,15 @@ button, input, select, textarea {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: linear-gradient(90deg, rgba(212, 163, 89, 0.2) 0%, rgba(196, 77, 39, 0.15) 100%);
-  border: 1px solid rgba(212, 163, 89, 0.5);
+  background: linear-gradient(90deg, rgba(221, 168, 67, 0.25) 0%, rgba(196, 77, 39, 0.12) 100%);
+  border: 1px solid rgba(201, 151, 56, 0.6);
   border-radius: var(--radius-pill);
   padding: 6px 14px;
   font-size: 0.82rem;
   font-weight: 600;
-  color: var(--color-tin-gold);
+  color: var(--color-wood);
   margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(221, 168, 67, 0.12);
 }
 
 .hero-badge {
@@ -471,13 +487,14 @@ button, input, select, textarea {
   align-items: center;
   gap: 8px;
   padding: 5px 12px;
-  background-color: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background-color: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--border-ochre);
   border-radius: var(--radius-pill);
   font-family: var(--font-mono);
   font-size: 0.78rem;
-  color: var(--text-light-muted);
+  color: var(--text-muted);
   margin-bottom: 20px;
+  backdrop-filter: blur(4px);
 }
 
 .badge-dot {
@@ -485,7 +502,7 @@ button, input, select, textarea {
   height: 8px;
   border-radius: 50%;
   background-color: var(--color-terracotta);
-  box-shadow: 0 0 8px var(--color-terracotta);
+  box-shadow: 0 0 6px var(--color-terracotta);
 }
 
 .hero-title {
@@ -495,18 +512,19 @@ button, input, select, textarea {
   line-height: 1.25;
   margin-bottom: 20px;
   letter-spacing: -0.5px;
+  color: var(--text-main);
 }
 
 .hero-description {
   font-size: 1.05rem;
-  color: var(--text-light-muted);
+  color: var(--text-muted);
   line-height: 1.75;
   margin-bottom: 30px;
   max-width: 580px;
 }
 
 .hero-description strong {
-  color: #FFFFFF;
+  color: var(--text-main);
 }
 
 .hero-cta-group {
@@ -522,7 +540,7 @@ button, input, select, textarea {
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
   padding-top: 22px;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: 1px solid var(--border-ochre);
 }
 
 .stat-card {
@@ -534,13 +552,13 @@ button, input, select, textarea {
   font-family: var(--font-mono);
   font-size: 1.7rem;
   font-weight: 700;
-  color: var(--color-tin-gold);
+  color: var(--color-wood);
   line-height: 1.2;
 }
 
 .stat-label {
   font-size: 0.78rem;
-  color: var(--text-light-muted);
+  color: var(--text-muted);
   margin-top: 4px;
 }
 
@@ -552,18 +570,19 @@ button, input, select, textarea {
 
 .heritage-card-preview {
   width: 100%;
-  max-width: 460px;
-  background-color: var(--bg-dark-surface);
-  border: 1px solid var(--border-dark);
+  max-width: 470px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-ochre);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  box-shadow: var(--shadow-ochre);
   transition: var(--transition);
 }
 
 .heritage-card-preview:hover {
-  border-color: var(--color-tin-gold);
+  border-color: var(--color-ochre-building-dark);
   transform: translateY(-4px);
+  box-shadow: 0 18px 40px rgba(221, 168, 67, 0.25);
 }
 
 .visual-photo-wrapper {
@@ -571,7 +590,7 @@ button, input, select, textarea {
   width: 100%;
   height: 295px;
   overflow: hidden;
-  background-color: #0d1419;
+  background-color: #EBD9B2;
 }
 
 .hero-real-building-img {
@@ -583,7 +602,7 @@ button, input, select, textarea {
 }
 
 .heritage-card-preview:hover .hero-real-building-img {
-  transform: scale(1.05);
+  transform: scale(1.04);
 }
 
 .visual-badge-overlay {
@@ -600,17 +619,17 @@ button, input, select, textarea {
 }
 
 .tag-status {
-  color: var(--color-tin-gold);
-  background: rgba(18, 26, 33, 0.92);
+  color: var(--text-light);
+  background: rgba(21, 43, 40, 0.9);
   backdrop-filter: blur(8px);
   padding: 4px 10px;
   border-radius: var(--radius-sm);
-  border: 1px solid rgba(212, 163, 89, 0.4);
+  border: 1px solid rgba(221, 168, 67, 0.4);
 }
 
 .tag-location {
-  color: #FFFFFF;
-  background: rgba(18, 26, 33, 0.92);
+  color: var(--text-light);
+  background: rgba(21, 43, 40, 0.9);
   backdrop-filter: blur(8px);
   padding: 4px 10px;
   border-radius: var(--radius-sm);
@@ -618,10 +637,11 @@ button, input, select, textarea {
 
 .visual-caption {
   padding: 18px 20px;
-  background-color: #141c23;
+  background-color: var(--bg-surface);
   display: flex;
   align-items: center;
   gap: 14px;
+  border-top: 1px solid var(--border-light);
 }
 
 .caption-logo-mini img {
@@ -629,24 +649,26 @@ button, input, select, textarea {
   height: 42px;
   border-radius: 8px;
   object-fit: cover;
-  border: 1px solid rgba(212, 163, 89, 0.3);
+  border: 1px solid rgba(212, 163, 89, 0.5);
   flex-shrink: 0;
 }
 
 .caption-title {
   font-size: 0.92rem;
   font-weight: 600;
-  color: var(--text-light);
+  color: var(--text-main);
   margin-bottom: 2px;
   line-height: 1.35;
 }
 
 .caption-sub {
   font-size: 0.78rem;
-  color: var(--text-light-muted);
+  color: var(--text-muted);
 }
 
-/* Section Headings */
+/* ==========================================================================
+   Section Headings & Global Utilities
+   ========================================================================== */
 .section {
   padding: 80px 0;
 }
@@ -700,12 +722,13 @@ button, input, select, textarea {
   padding: 32px 28px;
   box-shadow: var(--shadow-sm);
   transition: var(--transition);
+  border-top: 3px solid var(--color-ochre-building);
 }
 
 .narrative-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-md);
-  border-color: var(--color-tin-gold);
+  border-top-color: var(--color-terracotta);
 }
 
 .card-icon-box {
@@ -803,8 +826,8 @@ button, input, select, textarea {
 }
 
 .timeline-content-box {
-  background-color: var(--bg-main);
-  border: 1px solid var(--border-light);
+  background-color: var(--bg-ochre-light);
+  border: 1px solid var(--border-ochre);
   border-radius: var(--radius-md);
   padding: 28px;
 }
@@ -822,7 +845,7 @@ button, input, select, textarea {
   font-size: 0.82rem;
   font-weight: 600;
   color: var(--color-terracotta);
-  background-color: rgba(196, 77, 39, 0.1);
+  background-color: rgba(196, 77, 39, 0.12);
   padding: 4px 10px;
   border-radius: var(--radius-pill);
   margin-bottom: 12px;
@@ -882,11 +905,13 @@ button, input, select, textarea {
   line-height: 1.5;
 }
 
-/* Cosmic Gable Explorer Section */
+/* ==========================================================================
+   Cosmic Gable Section (Pale Ochre & Seal Motif)
+   ========================================================================== */
 .section-gable {
-  background-color: #F4EFE6;
-  border-top: 1px solid var(--border-light);
-  border-bottom: 1px solid var(--border-light);
+  background-color: var(--bg-ochre-light);
+  border-top: 1px solid var(--border-ochre);
+  border-bottom: 1px solid var(--border-ochre);
 }
 
 .gable-explorer-layout {
@@ -898,7 +923,7 @@ button, input, select, textarea {
 
 .gable-logo-showcase-box {
   background: #FFFFFF;
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--border-ochre);
   border-radius: var(--radius-lg);
   padding: 28px;
   box-shadow: var(--shadow-md);
@@ -910,7 +935,7 @@ button, input, select, textarea {
 }
 
 .gable-logo-showcase-box:hover {
-  border-color: var(--color-tin-gold);
+  border-color: var(--color-ochre-building-dark);
   transform: translateY(-2px);
 }
 
@@ -920,7 +945,7 @@ button, input, select, textarea {
   object-fit: cover;
   border-radius: var(--radius-md);
   box-shadow: 0 8px 24px rgba(196, 77, 39, 0.2);
-  border: 2px solid rgba(212, 163, 89, 0.5);
+  border: 2px solid rgba(221, 168, 67, 0.6);
   margin-bottom: 20px;
   transition: var(--transition);
 }
@@ -1000,8 +1025,8 @@ button, input, select, textarea {
 }
 
 .gable-meaning-box {
-  background-color: var(--bg-main);
-  border-left: 3px solid var(--color-tin-gold);
+  background-color: var(--bg-ochre-light);
+  border-left: 3px solid var(--color-ochre-building-dark);
   padding: 12px 16px;
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   font-size: 0.9rem;
@@ -1034,7 +1059,7 @@ button, input, select, textarea {
 
 .gable-item-btn:hover {
   background-color: var(--bg-muted);
-  border-color: var(--color-tin-gold);
+  border-color: var(--color-ochre-building);
 }
 
 .gable-item-btn.active {
@@ -1044,7 +1069,9 @@ button, input, select, textarea {
   font-weight: 600;
 }
 
-/* Archive Photo Gallery Section */
+/* ==========================================================================
+   Archive Photo Gallery Section
+   ========================================================================== */
 .section-archive {
   background-color: var(--bg-main);
 }
@@ -1070,7 +1097,7 @@ button, input, select, textarea {
 .archive-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-md);
-  border-color: var(--color-tin-gold);
+  border-color: var(--color-ochre-building);
 }
 
 .archive-img-box {
@@ -1078,7 +1105,7 @@ button, input, select, textarea {
   width: 100%;
   height: 210px;
   overflow: hidden;
-  background-color: #121A21;
+  background-color: #1A2826;
 }
 
 .archive-img-box img {
@@ -1098,7 +1125,7 @@ button, input, select, textarea {
   right: 10px;
   width: 32px;
   height: 32px;
-  background-color: rgba(18, 26, 33, 0.8);
+  background-color: rgba(21, 43, 40, 0.85);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -1157,7 +1184,7 @@ button, input, select, textarea {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(10, 15, 20, 0.92);
+  background-color: rgba(15, 31, 29, 0.92);
   backdrop-filter: blur(8px);
 }
 
@@ -1198,12 +1225,16 @@ button, input, select, textarea {
   padding: 16px 24px;
   color: var(--text-light);
   font-size: 0.95rem;
-  background-color: #121A21;
+  background-color: var(--bg-dark);
 }
 
-/* Vision & 4 Pillars */
+/* ==========================================================================
+   Vision & 4 Pillars (Celadon & Ochre Highlights)
+   ========================================================================== */
 .section-vision {
-  background-color: #F4EFE6;
+  background-color: var(--bg-ochre-light);
+  border-top: 1px solid var(--border-ochre);
+  border-bottom: 1px solid var(--border-ochre);
 }
 
 .pillars-grid {
@@ -1225,17 +1256,18 @@ button, input, select, textarea {
 .pillar-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-md);
+  border-color: var(--color-celadon);
 }
 
 .pillar-card.highlight-card {
-  border-color: var(--color-terracotta);
+  border-color: var(--color-ochre-building-dark);
 }
 
 .pillar-badge {
   position: absolute;
   top: 20px;
   right: 20px;
-  background-color: var(--color-terracotta);
+  background-color: var(--color-celadon);
   color: #FFF;
   font-family: var(--font-mono);
   font-size: 0.7rem;
@@ -1248,7 +1280,7 @@ button, input, select, textarea {
   font-family: var(--font-mono);
   font-size: 1.2rem;
   font-weight: 700;
-  color: var(--color-tin-gold);
+  color: var(--color-ochre-building-dark);
   margin-bottom: 8px;
 }
 
@@ -1294,7 +1326,9 @@ button, input, select, textarea {
   font-size: 0.8rem;
 }
 
-/* Spaces & Floor Plan */
+/* ==========================================================================
+   Spaces & Floor Plan Explorer
+   ========================================================================== */
 .section-spaces {
   background-color: var(--bg-main);
 }
@@ -1324,13 +1358,13 @@ button, input, select, textarea {
 }
 
 .zone-item:hover {
-  border-color: var(--color-tin-gold);
+  border-color: var(--color-ochre-building);
   background-color: var(--bg-muted);
 }
 
 .zone-item.active {
   border-color: var(--color-terracotta);
-  background-color: #FDF4F0;
+  background-color: #FDF5F2;
 }
 
 .zone-indicator {
@@ -1380,8 +1414,8 @@ button, input, select, textarea {
   font-family: var(--font-mono);
   font-size: 0.78rem;
   font-weight: 600;
-  color: var(--color-jade);
-  background-color: var(--color-jade-light);
+  color: var(--color-celadon);
+  background-color: var(--color-celadon-light);
   padding: 4px 10px;
   border-radius: var(--radius-pill);
   margin-bottom: 12px;
@@ -1405,7 +1439,7 @@ button, input, select, textarea {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;
-  background-color: var(--bg-main);
+  background-color: var(--bg-ochre-light);
   padding: 20px;
   border-radius: var(--radius-md);
   border: 1px solid var(--border-light);
@@ -1433,9 +1467,13 @@ button, input, select, textarea {
   gap: 12px;
 }
 
-/* Events Section */
+/* ==========================================================================
+   Events & Workshops Section
+   ========================================================================== */
 .section-events {
-  background-color: #F5EFEB;
+  background-color: var(--bg-ochre-light);
+  border-top: 1px solid var(--border-ochre);
+  border-bottom: 1px solid var(--border-ochre);
 }
 
 .event-filter-bar {
@@ -1448,7 +1486,7 @@ button, input, select, textarea {
 
 .filter-btn {
   background-color: var(--bg-surface);
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--border-ochre);
   padding: 8px 18px;
   border-radius: var(--radius-pill);
   font-size: 0.9rem;
@@ -1490,7 +1528,7 @@ button, input, select, textarea {
 .event-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-md);
-  border-color: var(--color-tin-gold);
+  border-color: var(--color-ochre-building);
 }
 
 .event-card-img-wrap {
@@ -1498,7 +1536,7 @@ button, input, select, textarea {
   width: 100%;
   height: 180px;
   overflow: hidden;
-  background-color: #121A21;
+  background-color: #1A2826;
 }
 
 .event-card-img-wrap img {
@@ -1596,7 +1634,9 @@ button, input, select, textarea {
   font-weight: 600;
 }
 
-/* Ideas Co-Creation */
+/* ==========================================================================
+   Ideas Co-Creation Wall
+   ========================================================================== */
 .section-ideas {
   background-color: var(--bg-main);
 }
@@ -1654,7 +1694,7 @@ button, input, select, textarea {
 .form-group textarea {
   width: 100%;
   padding: 10px 14px;
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--border-ochre);
   border-radius: var(--radius-sm);
   background-color: var(--bg-main);
   color: var(--text-main);
@@ -1709,7 +1749,7 @@ button, input, select, textarea {
 }
 
 .user-idea-card:hover {
-  border-color: var(--color-tin-gold);
+  border-color: var(--color-ochre-building);
 }
 
 .idea-card-top {
@@ -1722,8 +1762,8 @@ button, input, select, textarea {
 .idea-category-tag {
   font-size: 0.78rem;
   font-weight: 600;
-  color: var(--color-jade);
-  background-color: var(--color-jade-light);
+  color: var(--color-celadon);
+  background-color: var(--color-celadon-light);
   padding: 3px 8px;
   border-radius: var(--radius-pill);
 }
@@ -1770,7 +1810,9 @@ button, input, select, textarea {
   padding-top: 8px;
 }
 
-/* Booking Section */
+/* ==========================================================================
+   Space Booking Section (Deep Celadon Focal Theme)
+   ========================================================================== */
 .section-booking {
   background-color: var(--bg-dark);
   color: var(--text-light);
@@ -1885,7 +1927,7 @@ button, input, select, textarea {
 .booking-form-pane .form-group input,
 .booking-form-pane .form-group select,
 .booking-form-pane .form-group textarea {
-  background-color: #121A21;
+  background-color: #0F211F;
   border-color: var(--border-dark);
   color: #FFFFFF;
 }
@@ -1896,7 +1938,9 @@ button, input, select, textarea {
   border-color: var(--color-terracotta);
 }
 
-/* Visit & Map */
+/* ==========================================================================
+   Visit & Heritage Map
+   ========================================================================== */
 .section-visit {
   background-color: var(--bg-main);
 }
@@ -1918,7 +1962,7 @@ button, input, select, textarea {
 .map-title-badge {
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  color: var(--color-jade);
+  color: var(--color-celadon);
   font-weight: 700;
   margin-bottom: 6px;
 }
@@ -2039,11 +2083,13 @@ button, input, select, textarea {
   color: #FFF;
 }
 
-/* Footer */
+/* ==========================================================================
+   Footer (Deep Celadon Shade)
+   ========================================================================== */
 .site-footer {
-  background-color: #0E1419;
+  background-color: #0E1E1C;
   color: var(--text-light);
-  border-top: 1px solid #1F2A33;
+  border-top: 1px solid #1E3834;
   padding: 60px 0 0;
 }
 
@@ -2093,7 +2139,7 @@ button, input, select, textarea {
 }
 
 .footer-bottom {
-  border-top: 1px solid #1F2A33;
+  border-top: 1px solid #1A332F;
   padding: 24px 0;
   font-size: 0.8rem;
   color: var(--text-light-muted);
@@ -2135,7 +2181,7 @@ button, input, select, textarea {
 .toast-icon {
   width: 24px;
   height: 24px;
-  background-color: var(--color-jade);
+  background-color: var(--color-celadon);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -2144,7 +2190,9 @@ button, input, select, textarea {
   font-size: 0.8rem;
 }
 
-/* Responsive Media Queries — Comprehensive Mobile Optimization */
+/* ==========================================================================
+   Responsive Media Queries — Comprehensive Mobile Optimization
+   ========================================================================== */
 @media (max-width: 992px) {
   .hero-container {
     grid-template-columns: 1fr;
@@ -2256,9 +2304,10 @@ button, input, select, textarea {
     flex-direction: row;
     align-items: baseline;
     gap: 12px;
-    background: rgba(255, 255, 255, 0.04);
+    background: rgba(255, 255, 255, 0.6);
     padding: 10px 14px;
     border-radius: var(--radius-sm);
+    border: 1px solid var(--border-ochre);
   }
 
   .stat-number {

@@ -1226,6 +1226,247 @@ button, input, select, textarea {
   font-family: var(--font-mono);
 }
 
+/* ==========================================================================
+   Live Pin Calibration & Fine-Tuning Panel Styles
+   ========================================================================== */
+.btn-calibrator-toggle {
+  background: rgba(229, 163, 30, 0.18);
+  border: 1px solid var(--color-ochre-building);
+  color: #FAF2DD;
+}
+
+.btn-calibrator-toggle:hover,
+.btn-calibrator-toggle.active {
+  background: var(--color-ochre-building);
+  color: #122421;
+  font-weight: 700;
+}
+
+.pin-calibrator-panel {
+  background: #112623;
+  border-top: 2px solid var(--color-ochre-building);
+  padding: 16px 20px;
+  color: #FAF2DD;
+  font-family: var(--font-body);
+  animation: fadeIn 0.3s ease;
+}
+
+.calibrator-header {
+  margin-bottom: 14px;
+}
+
+.cal-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.cal-title-row h4 {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--color-tin-gold);
+}
+
+.cal-badge-active {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: var(--color-terracotta);
+  color: #FFF;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  letter-spacing: 0.5px;
+}
+
+.calibrator-tip {
+  font-size: 0.8rem;
+  color: var(--text-light-muted);
+  line-height: 1.45;
+}
+
+.calibrator-pin-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.cal-pin-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-dark);
+  color: #FAF2DD;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.cal-pin-btn:hover {
+  background: rgba(229, 163, 30, 0.2);
+  border-color: var(--color-ochre-building);
+}
+
+.cal-pin-btn.active {
+  background: var(--color-ochre-building);
+  color: #122421;
+  border-color: var(--color-ochre-building);
+  font-weight: 700;
+  box-shadow: 0 0 10px rgba(229, 163, 30, 0.4);
+}
+
+.calibrator-controls-grid {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 20px;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 14px;
+}
+
+/* D-Pad Controls */
+.calibrator-dpad-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.cal-lbl {
+  font-size: 0.72rem;
+  color: var(--text-light-muted);
+  font-weight: 600;
+}
+
+.dpad-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.dpad-mid {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dpad-btn {
+  width: 38px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--border-dark);
+  color: #FFF;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  transition: all 0.15s ease;
+}
+
+.dpad-btn:active,
+.dpad-btn:hover {
+  background: var(--color-terracotta);
+  border-color: var(--color-terracotta);
+  transform: scale(0.95);
+}
+
+.dpad-center {
+  width: 38px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Sliders */
+.calibrator-sliders-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cal-slider-row {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cal-slider-row label {
+  font-size: 0.76rem;
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-light-muted);
+}
+
+.cal-slider-row label strong {
+  color: var(--color-tin-gold);
+  font-family: var(--font-mono);
+}
+
+.cal-slider-row input[type="range"] {
+  width: 100%;
+  accent-color: var(--color-ochre-building);
+  cursor: pointer;
+}
+
+/* Output Code Box */
+.calibrator-output-box {
+  background: #081210;
+  border: 1px solid var(--border-dark);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  font-size: 0.78rem;
+}
+
+.output-label {
+  color: var(--text-light-muted);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.calibrator-output-box code {
+  color: #79EFB3;
+  font-family: var(--font-mono);
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+/* Action Buttons */
+.calibrator-actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+@media (max-width: 600px) {
+  .calibrator-controls-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .calibrator-dpad-box {
+    margin-bottom: 8px;
+  }
+}
+
 .gable-details-pane {
   display: flex;
   flex-direction: column;

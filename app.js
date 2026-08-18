@@ -93,6 +93,8 @@ const translations = {
     archive_tag: "HISTORICAL PHOTO ARCHIVE",
     archive_title: "คลังภาพประวัติศาสตร์โรงเรียนเต้าหมิง",
     archive_subtitle: "ภาพถ่ายจริงจากความทรงจำของชาวตะกั่วป่า ศิษย์เก่า และทายาทผู้ก่อตั้งโรงเรียน",
+    gallery_prev: "ก่อนหน้า",
+    gallery_next: "ถัดไป",
 
     // Vision Section
     vision_tag: "REVITALIZATION & LIVING HERITAGE",
@@ -355,6 +357,8 @@ const translations = {
     archive_tag: "HISTORICAL PHOTO ARCHIVE",
     archive_title: "Historic Photo Archive of Dao Ming School",
     archive_subtitle: "Authentic photographs from the collective memories of Takua Pa families, alumni, and founders",
+    gallery_prev: "Previous",
+    gallery_next: "Next",
 
     // Vision Section
     vision_tag: "REVITALIZATION & LIVING HERITAGE",
@@ -954,6 +958,7 @@ document.addEventListener('DOMContentLoaded', () => {
   applyLanguage(currentLang);
   initTimeline();
   initGableExplorer();
+  initArchiveGallery();
   initSpaceExplorer();
   initEventFilter();
   initIdeaBoard();
@@ -1344,21 +1349,204 @@ function updateGableDisplay() {
 }
 
 /* ==========================================================================
-   PHOTO ARCHIVE LIGHTBOX MODAL
+   HISTORIC PHOTO ARCHIVE & INTERACTIVE LIGHTBOX CAROUSEL
    ========================================================================== */
-function openPhotoLightbox(imgSrc, caption) {
-  const modal = document.getElementById('photoLightbox');
-  const img = document.getElementById('lightboxImg');
-  const cap = document.getElementById('lightboxCaption');
+const archivePhotos = [
+  {
+    src: "img/นิทรรศการ3-โซน2-รับรองกงสุลจีน.jpg",
+    caption_th: "พิธีต้อนรับกงสุลใหญ่สาธารณรัฐจีนประจำสงขลา ณ มุขหน้าอาคารเต้าหมิง สะท้อนบทบาทศูนย์กลางการทูตและสังคม",
+    caption_en: "Reception ceremony for the Consul-General of the Republic of China at Dao Ming Schoolhouse porch"
+  },
+  {
+    src: "img/นิทรรศการ3-โซน 1-โรงเรียนเต้าหมิง.jpg",
+    caption_th: "ภาพประวัติศาสตร์ครูและนักเรียนเต้าหมิงรวมตัวกันหน้าอาคารหลังคากระเบื้องกาบกล้วยและเชิงชายฉลุไม้ดั้งเดิม",
+    caption_en: "Historic group portrait of Dao Ming teachers and students in front of the original tiled roof building"
+  },
+  {
+    src: "img/นิทรรศการ3-โซน2-ทีมบาสหน้าอาคาร.jpg",
+    caption_th: "ทีมนักกีฬาบาสเกตบอลของโรงเรียนเต้าหมิงและครูผู้ฝึกสอน ถ่ายภาพร่วมกัน ณ ลานหน้าอาคารเรียน",
+    caption_en: "Dao Ming school basketball squad and athletic coach at the front courtyard"
+  },
+  {
+    src: "img/นิทรรศการ3-โซน2-ครูนักเรียน.jpg",
+    caption_th: "ภาพถ่ายที่ระลึกนักเรียนชั้นปีต่างๆ และครูผู้สอนโรงเรียนเต้าหมิง พร้อมป้าย '導明學校' (อนุเคราะห์โดย นายนิกร คันธวณิชพันธุ์)",
+    caption_en: "Commemorative group portrait of students and faculty with the historic Chinese school sign"
+  },
+  {
+    src: "img/นิทรรศการ3-โซน2-ครู.jpg",
+    caption_th: "คณะครูอาจารย์ผู้ประสิทธิ์ประสาทวิชาภาษาจีนและคณิตศาสตร์ ที่เดินทางมาจากปีนังและจีนแผ่นดินใหญ่",
+    caption_en: "Distinguished faculty members from Penang and mainland China who laid the educational foundation"
+  },
+  {
+    src: "img/นิทรรศการ3-โซน2-นักเรียนประพฤติดี.jpg",
+    caption_th: "พิธีมอบเกียรติบัตรและรางวัลนักเรียนประพฤติดีและเรียนดี โรงเรียนเต้าหมิง",
+    caption_en: "Merit award ceremony honoring outstanding moral character and academic excellence"
+  }
+];
 
-  if (modal && img && cap) {
-    img.src = imgSrc;
-    cap.textContent = caption;
-    modal.classList.add('open');
-    document.body.style.overflow = 'hidden';
+let currentLightboxIndex = 0;
+
+function initArchiveGallery() {
+  const grid = document.getElementById('archiveGalleryGrid');
+  const prevBtn = document.getElementById('archivePrevBtn');
+  const nextBtn = document.getElementById('archiveNextBtn');
+  const dots = document.querySelectorAll('.archive-dot');
+
+  // Update active dot based on scroll position
+  function updateActiveDot(index) {
+    dots.forEach((d, i) => {
+      d.classList.toggle('active', i === index);
+    });
+    if (prevBtn) prevBtn.disabled = index === 0;
+    if (nextBtn) nextBtn.disabled = index === dots.length - 1;
+  }
+
+  if (grid) {
+    // Scroll listener for dot indicator
+    let scrollTimeout;
+    grid.addEventListener('scroll', () => {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        const cards = grid.querySelectorAll('.archive-card');
+        if (!cards.length) return;
+        const scrollLeft = grid.scrollLeft;
+        const cardWidth = cards[0].offsetWidth + 16;
+        const activeIdx = Math.min(dots.length - 1, Math.max(0, Math.round(scrollLeft / cardWidth)));
+        updateActiveDot(activeIdx);
+      }, 50);
+    }, { passive: true });
+
+    // Arrow navigation
+    if (prevBtn) {
+      prevBtn.addEventListener('click', () => {
+        const cards = grid.querySelectorAll('.archive-card');
+        if (!cards.length) return;
+        const cardWidth = cards[0].offsetWidth + 16;
+        grid.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+      });
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => {
+        const cards = grid.querySelectorAll('.archive-card');
+        if (!cards.length) return;
+        const cardWidth = cards[0].offsetWidth + 16;
+        grid.scrollBy({ left: cardWidth, behavior: 'smooth' });
+      });
+    }
+
+    // Dot navigation
+    dots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        const idx = parseInt(dot.getAttribute('data-index'), 10);
+        const cards = grid.querySelectorAll('.archive-card');
+        if (cards[idx]) {
+          cards[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+      });
+    });
+
+    updateActiveDot(0);
+  }
+
+  // Global Keyboard listener for Lightbox
+  document.addEventListener('keydown', (e) => {
+    const modal = document.getElementById('photoLightbox');
+    if (!modal || !modal.classList.contains('open')) return;
+
+    if (e.key === 'ArrowLeft') {
+      navigateLightbox(-1);
+    } else if (e.key === 'ArrowRight') {
+      navigateLightbox(1);
+    } else if (e.key === 'Escape') {
+      closePhotoLightbox();
+    }
+  });
+
+  // Touch Swipe on Lightbox Modal
+  const lightboxModal = document.getElementById('photoLightbox');
+  if (lightboxModal) {
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    lightboxModal.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    lightboxModal.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const diffX = touchEndX - touchStartX;
+      if (Math.abs(diffX) > 40) {
+        if (diffX < 0) {
+          navigateLightbox(1); // Swipe Left -> Next
+        } else {
+          navigateLightbox(-1); // Swipe Right -> Prev
+        }
+      }
+    }, { passive: true });
   }
 }
+
+function updateLightboxDisplay() {
+  const img = document.getElementById('lightboxImg');
+  const cap = document.getElementById('lightboxCaption');
+  const counter = document.getElementById('lightboxCounter');
+  const prevBtn = document.getElementById('lightboxPrevBtn');
+  const nextBtn = document.getElementById('lightboxNextBtn');
+
+  const photo = archivePhotos[currentLightboxIndex];
+  if (!photo) return;
+
+  if (img) {
+    img.style.opacity = '0';
+    setTimeout(() => {
+      img.src = photo.src;
+      img.style.opacity = '1';
+    }, 120);
+  }
+
+  if (cap) {
+    cap.textContent = currentLang === 'en' ? photo.caption_en : photo.caption_th;
+  }
+
+  if (counter) {
+    const thaiDigits = ['๑', '๒', '๓', '๔', '๕', '๖', '๗', '๘', '๙', '๑๐'];
+    if (currentLang === 'th') {
+      counter.textContent = `${thaiDigits[currentLightboxIndex] || (currentLightboxIndex + 1)} / ${thaiDigits[archivePhotos.length - 1] || archivePhotos.length}`;
+    } else {
+      counter.textContent = `${currentLightboxIndex + 1} / ${archivePhotos.length}`;
+    }
+  }
+
+  if (prevBtn) prevBtn.disabled = currentLightboxIndex === 0;
+  if (nextBtn) nextBtn.disabled = currentLightboxIndex === archivePhotos.length - 1;
+}
+
+function openPhotoLightbox(imgSrc, caption, optionalIndex) {
+  const modal = document.getElementById('photoLightbox');
+  if (!modal) return;
+
+  if (typeof optionalIndex === 'number') {
+    currentLightboxIndex = optionalIndex;
+  } else {
+    const foundIdx = archivePhotos.findIndex(p => p.src === imgSrc);
+    currentLightboxIndex = foundIdx !== -1 ? foundIdx : 0;
+  }
+
+  updateLightboxDisplay();
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
 window.openPhotoLightbox = openPhotoLightbox;
+
+function navigateLightbox(direction) {
+  const nextIdx = currentLightboxIndex + direction;
+  if (nextIdx >= 0 && nextIdx < archivePhotos.length) {
+    currentLightboxIndex = nextIdx;
+    updateLightboxDisplay();
+  }
+}
+window.navigateLightbox = navigateLightbox;
 
 function closePhotoLightbox() {
   const modal = document.getElementById('photoLightbox');

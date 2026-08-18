@@ -92,9 +92,14 @@ const translations = {
     // Archive Section
     archive_tag: "HISTORICAL PHOTO ARCHIVE",
     archive_title: "คลังภาพประวัติศาสตร์โรงเรียนเต้าหมิง",
-    archive_subtitle: "ภาพถ่ายจริงจากความทรงจำของชาวตะกั่วป่า ศิษย์เก่า และทายาทผู้ก่อตั้งโรงเรียน",
+    archive_subtitle: "ภาพถ่ายจริง ๑๓ ภาพ จากความทรงจำของชาวตะกั่วป่า ศิษย์เก่า และทายาทผู้ก่อตั้งโรงเรียน",
     gallery_prev: "ก่อนหน้า",
     gallery_next: "ถัดไป",
+    arch_cat_all: "🌟 ทั้งหมด (13 ภาพ)",
+    arch_cat_diplomacy: "🏛️ อาคาร & การทูต (2)",
+    arch_cat_school: "📚 ครู & นักเรียน (4)",
+    arch_cat_sports: "🏀 ทีมบาสเกตบอล (5)",
+    arch_cat_community: "📜 เรื่องเล่าชุมชน (2)",
 
     // Vision Section
     vision_tag: "REVITALIZATION & LIVING HERITAGE",
@@ -356,9 +361,14 @@ const translations = {
     // Archive Section
     archive_tag: "HISTORICAL PHOTO ARCHIVE",
     archive_title: "Historic Photo Archive of Dao Ming School",
-    archive_subtitle: "Authentic photographs from the collective memories of Takua Pa families, alumni, and founders",
+    archive_subtitle: "13 authentic historic photographs from the collective memories of Takua Pa families and alumni",
     gallery_prev: "Previous",
     gallery_next: "Next",
+    arch_cat_all: "🌟 All Photos (13)",
+    arch_cat_diplomacy: "🏛️ Campus & Diplomacy (2)",
+    arch_cat_school: "📚 Faculty & Students (4)",
+    arch_cat_sports: "🏀 Basketball Teams (5)",
+    arch_cat_community: "📜 Community Exhibits (2)",
 
     // Vision Section
     vision_tag: "REVITALIZATION & LIVING HERITAGE",
@@ -1349,104 +1359,254 @@ function updateGableDisplay() {
 }
 
 /* ==========================================================================
-   HISTORIC PHOTO ARCHIVE & INTERACTIVE LIGHTBOX CAROUSEL
+   HISTORIC PHOTO ARCHIVE & INTERACTIVE LIGHTBOX CAROUSEL (13 PHOTOS)
    ========================================================================== */
 const archivePhotos = [
   {
-    src: "img/นิทรรศการ3-โซน2-รับรองกงสุลจีน.jpg",
-    caption_th: "พิธีต้อนรับกงสุลใหญ่สาธารณรัฐจีนประจำสงขลา ณ มุขหน้าอาคารเต้าหมิง สะท้อนบทบาทศูนย์กลางการทูตและสังคม",
-    caption_en: "Reception ceremony for the Consul-General of the Republic of China at Dao Ming Schoolhouse porch"
-  },
-  {
+    id: 0,
     src: "img/นิทรรศการ3-โซน 1-โรงเรียนเต้าหมิง.jpg",
-    caption_th: "ภาพประวัติศาสตร์ครูและนักเรียนเต้าหมิงรวมตัวกันหน้าอาคารหลังคากระเบื้องกาบกล้วยและเชิงชายฉลุไม้ดั้งเดิม",
-    caption_en: "Historic group portrait of Dao Ming teachers and students in front of the original tiled roof building"
+    category: "diplomacy",
+    tag_th: "พ.ศ. ๒๔๖๕",
+    tag_en: "1922 Historic",
+    title_th: "นักเรียนและครูยุคแรก (๒๔๖๕)",
+    title_en: "Pioneering Faculty & Students (1922)",
+    caption_th: "ภาพประวัติศาสตร์ครูและนักเรียนเต้าหมิงรวมตัวกันหน้าอาคารหลังคากระเบื้องกาบกล้วยและเชิงชายฉลุไม้ดั้งเดิม บันทึกรากฐานการศึกษาชาวจีนในพังงา",
+    caption_en: "Historic group portrait of Dao Ming teachers and students in front of the original banana-leaf tile roof building in 1922."
   },
   {
-    src: "img/นิทรรศการ3-โซน2-ทีมบาสหน้าอาคาร.jpg",
-    caption_th: "ทีมนักกีฬาบาสเกตบอลของโรงเรียนเต้าหมิงและครูผู้ฝึกสอน ถ่ายภาพร่วมกัน ณ ลานหน้าอาคารเรียน",
-    caption_en: "Dao Ming school basketball squad and athletic coach at the front courtyard"
+    id: 1,
+    src: "img/นิทรรศการ3-โซน2-รับรองกงสุลจีน.jpg",
+    category: "diplomacy",
+    tag_th: "พ.ศ. ๒๔๙๓",
+    tag_en: "1950 Diplomatic",
+    title_th: "พิธีต้อนรับกงสุลใหญ่สาธารณรัฐจีน",
+    title_en: "Chinese Consul-General Reception",
+    caption_th: "พิธีต้อนรับกงสุลใหญ่ประจำสงขลา ณ มุขหน้าอาคารเต้าหมิง สะท้อนบทบาทศูนย์กลางการทูต วัฒนธรรม และสังคมของชาวตะกั่วป่า",
+    caption_en: "Reception ceremony for the Consul-General of the Republic of China at Dao Ming Schoolhouse porch in 1950."
   },
   {
-    src: "img/นิทรรศการ3-โซน2-ครูนักเรียน.jpg",
-    caption_th: "ภาพถ่ายที่ระลึกนักเรียนชั้นปีต่างๆ และครูผู้สอนโรงเรียนเต้าหมิง พร้อมป้าย '導明學校' (อนุเคราะห์โดย นายนิกร คันธวณิชพันธุ์)",
-    caption_en: "Commemorative group portrait of students and faculty with the historic Chinese school sign"
-  },
-  {
+    id: 2,
     src: "img/นิทรรศการ3-โซน2-ครู.jpg",
-    caption_th: "คณะครูอาจารย์ผู้ประสิทธิ์ประสาทวิชาภาษาจีนและคณิตศาสตร์ ที่เดินทางมาจากปีนังและจีนแผ่นดินใหญ่",
-    caption_en: "Distinguished faculty members from Penang and mainland China who laid the educational foundation"
+    category: "school",
+    tag_th: "ครูอาจารย์",
+    tag_en: "Founding Faculty",
+    title_th: "คณะครูผู้ประสิทธิ์ประสาทวิชา",
+    title_en: "Founding Faculty & Scholars",
+    caption_th: "ครูผู้ทรงคุณวุฒิที่เดินทางมาจากปีนังและจีนแผ่นดินใหญ่ เพื่อวางรากฐานภาษาจีน ปรัชญา และคณิตศาสตร์ให้ลูกหลาน",
+    caption_en: "Distinguished faculty members from Penang and mainland China who laid the educational foundation in Takua Pa."
   },
   {
+    id: 3,
+    src: "img/นิทรรศการ3-โซน2-ครูนักเรียน.jpg",
+    category: "school",
+    tag_th: "導明學校",
+    tag_en: "Dao Ming Sign",
+    title_th: "ภาพที่ระลึก '導明學校'",
+    title_en: "Commemorative Class Portrait",
+    caption_th: "ภาพถ่ายที่ระลึกนักเรียนชั้นปีต่างๆ และครูผู้สอนโรงเรียนเต้าหมิง พร้อมป้าย '導明學校' (อนุเคราะห์โดย นายนิกร คันธวณิชพันธุ์)",
+    caption_en: "Commemorative class portrait with the historic Chinese school sign (Courtesy of Nikorn Khanthavanichphan)."
+  },
+  {
+    id: 4,
     src: "img/นิทรรศการ3-โซน2-นักเรียนประพฤติดี.jpg",
-    caption_th: "พิธีมอบเกียรติบัตรและรางวัลนักเรียนประพฤติดีและเรียนดี โรงเรียนเต้าหมิง",
-    caption_en: "Merit award ceremony honoring outstanding moral character and academic excellence"
+    category: "school",
+    tag_th: "รางวัลเกียรติยศ",
+    tag_en: "Conduct Merit",
+    title_th: "นักเรียนประพฤติดี & มีคุณธรรม",
+    title_en: "Good Conduct & Moral Merit Award",
+    caption_th: "การมอบเกียรติบัตรและยกย่องคุณธรรม จริยธรรม และวิชาความรู้ของนักเรียนเต้าหมิง",
+    caption_en: "Merit award ceremony honoring outstanding moral character and exemplary conduct of Dao Ming students."
+  },
+  {
+    id: 5,
+    src: "img/นิทรรศการ3-โซน2-นักเรียนเรียนดี.jpg",
+    category: "school",
+    tag_th: "เรียนดีเด่น",
+    tag_en: "Academic Excellence",
+    title_th: "พิธีมอบรางวัลนักเรียนเรียนดีเด่น",
+    title_en: "Academic Excellence Awards",
+    caption_th: "ภาพความภาคภูมิใจในพิธีมอบรางวัลแก่นักเรียนที่มีผลการเรียนยอดเยี่ยมประจำปีการศึกษา",
+    caption_en: "Proud annual ceremony presenting awards to top-achieving academic students at Dao Ming School."
+  },
+  {
+    id: 6,
+    src: "img/นิทรรศการ3-โซน2-ทีมบาสหน้าอาคาร.jpg",
+    category: "sports",
+    tag_th: "ทีมบาสเกตบอล",
+    tag_en: "Basketball Court",
+    title_th: "ทีมบาสเกตบอลหน้าอาคาร",
+    title_en: "Basketball Squad at Front Court",
+    caption_th: "นักกีฬาบาสเกตบอลของโรงเรียนและครูฝึกซ้อม ถ่ายภาพร่วมกัน ณ ลานหน้าอาคารเรียน",
+    caption_en: "Dao Ming school basketball athletes and athletic coach at the front courtyard with the basketball hoop."
+  },
+  {
+    id: 7,
+    src: "img/นิทรรศการ3-โซน2-ทีมบาสเกตบอล.1.jpg",
+    category: "sports",
+    tag_th: "บาสเกตบอล ๑",
+    tag_en: "Varsity Team I",
+    title_th: "นักกีฬาบาสเกตบอล (ชุดที่ ๑)",
+    title_en: "Varsity Basketball Squad I",
+    caption_th: "บันทึกประวัติศาสตร์ทีมบาสเกตบอลตัวแทนโรงเรียนเต้าหมิงในการแข่งขันระดับมณฑลและท้องถิ่น",
+    caption_en: "Historic team portrait representing Dao Ming School in regional and provincial basketball championships."
+  },
+  {
+    id: 8,
+    src: "img/นิทรรศการ3-โซน2-ทีมบาสเกตบอล.2.jpg",
+    category: "sports",
+    tag_th: "บาสเกตบอล ๒",
+    tag_en: "Varsity Team II",
+    title_th: "นักกีฬาบาสเกตบอล (ชุดที่ ๒)",
+    title_en: "Varsity Basketball Squad II",
+    caption_th: "ทีมนักกีฬาบาสเกตบอลเยาวชนเต้าหมิงที่สร้างชื่อเสียงและความสามัคคีให้แก่ชุมชนตลาดใหญ่",
+    caption_en: "Youth basketball team fostering community unity and sporting prestige in Talad Yai old town."
+  },
+  {
+    id: 9,
+    src: "img/นิทรรศการ3-โซน2-ทีมบาสเกตบอล.3.jpg",
+    category: "sports",
+    tag_th: "กรรมการ & นักกีฬา",
+    tag_en: "Referees & Squad",
+    title_th: "นักกีฬาและกรรมการผู้ตัดสิน",
+    title_en: "Athletes & Tournament Referees",
+    caption_th: "ภาพถ่ายร่วมกันระหว่างทีมนักกีฬา ครู และคณะกรรมการจัดการแข่งขันกีฬาเชื่อมความสัมพันธ์",
+    caption_en: "Joint portrait of basketball players, physical education teachers, and tournament match referees."
+  },
+  {
+    id: 10,
+    src: "img/นิทรรศการ3-โซน2-ทีมบาสเด็ก.jpg",
+    category: "sports",
+    tag_th: "เยาวชนรุ่นเล็ก",
+    tag_en: "Junior Squad",
+    title_th: "ทีมบาสเกตบอลเยาวชนรุ่นเล็ก",
+    title_en: "Junior Basketball Team",
+    caption_th: "ภาพความสดใสและความทรงจำอันอบอุ่นของนักเรียนรุ่นเยาว์ในทีมบาสเกตบอลโรงเรียนเต้าหมิง",
+    caption_en: "Warm memories of younger students participating in Dao Ming's youth athletic club."
+  },
+  {
+    id: 11,
+    src: "img/นิทรรศการ3-โซน2-พื้นที่นิทรรศการ1.jpg",
+    category: "community",
+    tag_th: "นิทรรศการ ๑",
+    tag_en: "Exhibit I",
+    title_th: "เรื่องเล่าเมืองตะกั่วป่า (ชุดที่ ๑)",
+    title_en: "Heritage Exhibition Space I",
+    caption_th: "นิทรรศการความทรงจำและบันทึกประวัติศาสตร์คำบอกเล่า (Oral History) ของชาวเหมืองแร่และชุมชน",
+    caption_en: "Community exhibition documenting oral histories and living memories of the tin mining community."
+  },
+  {
+    id: 12,
+    src: "img/นิทรรศการ3-โซน2-พื้นที่นิทรรศการ2.jpg",
+    category: "community",
+    tag_th: "นิทรรศการ ๒",
+    tag_en: "Exhibit II",
+    title_th: "เรื่องเล่าเมืองตะกั่วป่า (ชุดที่ ๒)",
+    title_en: "Heritage Exhibition Space II",
+    caption_th: "เอกสาร แผนผัง และร่องรอยประวัติศาสตร์ที่บันทึกบทบาทของเต้าหมิงในฐานะศูนย์รวมจิตใจของชุมชน",
+    caption_en: "Historic maps, archival documents, and artifacts illustrating Dao Ming as the communal heart."
   }
 ];
 
 let currentLightboxIndex = 0;
+let activeCategory = 'all';
 
 function initArchiveGallery() {
   const grid = document.getElementById('archiveGalleryGrid');
+  const filterBar = document.getElementById('archiveFilterBar');
   const prevBtn = document.getElementById('archivePrevBtn');
   const nextBtn = document.getElementById('archiveNextBtn');
-  const dots = document.querySelectorAll('.archive-dot');
+  const dotsContainer = document.getElementById('archiveDots');
 
-  // Update active dot based on scroll position
+  function getVisibleCards() {
+    if (!grid) return [];
+    return Array.from(grid.querySelectorAll('.archive-card:not(.hidden)'));
+  }
+
+  function updateDots() {
+    const visibleCards = getVisibleCards();
+    if (!dotsContainer) return;
+    dotsContainer.innerHTML = '';
+    visibleCards.forEach((card, idx) => {
+      const dot = document.createElement('button');
+      dot.className = 'archive-dot' + (idx === 0 ? ' active' : '');
+      dot.setAttribute('data-index', idx);
+      dot.setAttribute('aria-label', `ภาพที่ ${idx + 1}`);
+      dot.addEventListener('click', () => {
+        card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        updateActiveDot(idx);
+      });
+      dotsContainer.appendChild(dot);
+    });
+    updateActiveDot(0);
+  }
+
   function updateActiveDot(index) {
+    const dots = dotsContainer ? dotsContainer.querySelectorAll('.archive-dot') : [];
     dots.forEach((d, i) => {
       d.classList.toggle('active', i === index);
     });
     if (prevBtn) prevBtn.disabled = index === 0;
-    if (nextBtn) nextBtn.disabled = index === dots.length - 1;
+    if (nextBtn) nextBtn.disabled = index >= dots.length - 1;
+  }
+
+  // Category Filtering
+  if (filterBar) {
+    const filterBtns = filterBar.querySelectorAll('.filter-btn');
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeCategory = btn.getAttribute('data-category');
+
+        const allCards = grid ? grid.querySelectorAll('.archive-card') : [];
+        allCards.forEach(card => {
+          const cardCat = card.getAttribute('data-category');
+          if (activeCategory === 'all' || cardCat === activeCategory) {
+            card.classList.remove('hidden');
+          } else {
+            card.classList.add('hidden');
+          }
+        });
+
+        if (grid) grid.scrollTo({ left: 0, behavior: 'smooth' });
+        updateDots();
+      });
+    });
   }
 
   if (grid) {
-    // Scroll listener for dot indicator
     let scrollTimeout;
     grid.addEventListener('scroll', () => {
       clearTimeout(scrollTimeout);
       scrollTimeout = setTimeout(() => {
-        const cards = grid.querySelectorAll('.archive-card');
-        if (!cards.length) return;
+        const visibleCards = getVisibleCards();
+        if (!visibleCards.length) return;
         const scrollLeft = grid.scrollLeft;
-        const cardWidth = cards[0].offsetWidth + 16;
-        const activeIdx = Math.min(dots.length - 1, Math.max(0, Math.round(scrollLeft / cardWidth)));
+        const cardWidth = visibleCards[0].offsetWidth + 16;
+        const activeIdx = Math.min(visibleCards.length - 1, Math.max(0, Math.round(scrollLeft / cardWidth)));
         updateActiveDot(activeIdx);
       }, 50);
     }, { passive: true });
 
-    // Arrow navigation
     if (prevBtn) {
       prevBtn.addEventListener('click', () => {
-        const cards = grid.querySelectorAll('.archive-card');
-        if (!cards.length) return;
-        const cardWidth = cards[0].offsetWidth + 16;
+        const visibleCards = getVisibleCards();
+        if (!visibleCards.length) return;
+        const cardWidth = visibleCards[0].offsetWidth + 16;
         grid.scrollBy({ left: -cardWidth, behavior: 'smooth' });
       });
     }
 
     if (nextBtn) {
       nextBtn.addEventListener('click', () => {
-        const cards = grid.querySelectorAll('.archive-card');
-        if (!cards.length) return;
-        const cardWidth = cards[0].offsetWidth + 16;
+        const visibleCards = getVisibleCards();
+        if (!visibleCards.length) return;
+        const cardWidth = visibleCards[0].offsetWidth + 16;
         grid.scrollBy({ left: cardWidth, behavior: 'smooth' });
       });
     }
 
-    // Dot navigation
-    dots.forEach(dot => {
-      dot.addEventListener('click', () => {
-        const idx = parseInt(dot.getAttribute('data-index'), 10);
-        const cards = grid.querySelectorAll('.archive-card');
-        if (cards[idx]) {
-          cards[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-        }
-      });
-    });
-
-    updateActiveDot(0);
+    updateDots();
   }
 
   // Global Keyboard listener for Lightbox
@@ -1510,7 +1670,7 @@ function updateLightboxDisplay() {
   }
 
   if (counter) {
-    const thaiDigits = ['๑', '๒', '๓', '๔', '๕', '๖', '๗', '๘', '๙', '๑๐'];
+    const thaiDigits = ['๑', '๒', '๓', '๔', '๕', '๖', '๗', '๘', '๙', '๑๐', '๑๑', '๑๒', '๑๓'];
     if (currentLang === 'th') {
       counter.textContent = `${thaiDigits[currentLightboxIndex] || (currentLightboxIndex + 1)} / ${thaiDigits[archivePhotos.length - 1] || archivePhotos.length}`;
     } else {

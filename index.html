@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>โรงเรียนเต้าหมิง ตะกั่วป่า | Dao Ming Living Heritage & Creative Hub</title>
+  <meta name="description" content="โรงเรียนจีนแห่งแรกและแห่งเดียวของจังหวัดพังงา (พ.ศ. 2448/2465) สู่พื้นที่สร้างสรรค์และมีชีวิตแห่งเมืองเก่าตะกั่วป่า รางวัลอนุรักษ์ศิลปสถาปัตยกรรม ประจำปี 2569 โดยสมาคมสถาปนิกสยามฯ">
+  <meta name="keywords" content="โรงเรียนเต้าหมิง, โต๊ะเบ๋ง, ตะกั่วป่า, พังงา, อั้งม่อเหลา, สมาคมสถาปนิกสยาม, รางวัลอนุรักษ์ศิลปสถาปัตยกรรม 2569, มรดกเมืองเก่า, พื้นที่สร้างสรรค์">
+
+  <!-- Open Graph / Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="โรงเรียนเต้าหมิง ตะกั่วป่า | Dao Ming Living Heritage & Creative Hub">
+  <meta property="og:description" content="ชุบชีวิตอาคารประวัติศาสตร์ 100 ปี สู่ Creative Living Space แห่งตะกั่วป่า">
+  <meta property="og:image" content="assets/logo-305.jpg">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="assets/logo-305.jpg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600;700&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="site-header" id="siteHeader">
+    <div class="header-container">
+      <a href="#hero" class="brand-logo">
+        <img src="assets/logo-305.jpg" alt="โลโก้โรงเรียนเต้าหมิง" class="brand-logo-img">
+        <div class="brand-text">
+          <span class="brand-title" data-i18n="brand_title">โรงเรียนเต้าหมิง</span>
+          <span class="brand-sub" data-i18n="brand_sub">DAO MING · TAKUA PA HUB</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="main-nav" id="mainNav">
+        <a href="#story" class="nav-link" data-i18n="nav_story">ประวัติ & สถาปัตยกรรม</a>
+        <a href="#gable" class="nav-link" data-i18n="nav_gable">ปรัชญาหน้าจั่ว</a>
+        <a href="#archive" class="nav-link" data-i18n="nav_archive">คลังภาพเก่า</a>
+        <a href="#vision" class="nav-link" data-i18n="nav_vision">วิสัยทัศน์พื้นที่</a>
+        <a href="#spaces" class="nav-link" data-i18n="nav_spaces">แผนผัง & โซน</a>
+        <a href="#events" class="nav-link" data-i18n="nav_events">กิจกรรม</a>
+        <a href="#ideas" class="nav-link" data-i18n="nav_ideas">ร่วมออกไอเดีย</a>
+        <a href="#visit" class="nav-link" data-i18n="nav_visit">การเดินทาง</a>
+      </nav>
+
+      <!-- Action Area -->
+      <div class="header-actions">
+        <button class="btn btn-outline-sm" id="langToggleBtn" title="สลับภาษา / Switch Language">
+          <span class="lang-code active-lang" id="thLangSpan">TH</span> / <span class="lang-code" id="enLangSpan">EN</span>
+        </button>
+        <a href="#booking" class="btn btn-primary-sm" id="openBookingHeaderBtn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          <span data-i18n="btn_book_space">ขอใช้พื้นที่</span>
+        </a>
+        <button class="mobile-toggle" id="mobileMenuToggle" aria-label="เปิดเมนู">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Menu -->
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+  <div class="mobile-drawer" id="mobileDrawer">
+    <div class="drawer-header">
+      <div class="brand-logo">
+        <img src="assets/logo-305.jpg" alt="โลโก้โรงเรียนเต้าหมิง" class="brand-logo-img">
+        <div class="brand-text">
+          <span class="brand-title" data-i18n="brand_title">โรงเรียนเต้าหมิง</span>
+          <span class="brand-sub" data-i18n="brand_sub">DAO MING CREATIVE HUB</span>
+        </div>
+      </div>
+      <button class="close-drawer-btn" id="closeDrawerBtn">&times;</button>
+    </div>
+    <nav class="mobile-nav-links">
+      <a href="#story" class="m-link" data-i18n="m_nav_story">๑. ประวัติศาสตร์ & สถาปัตยกรรม</a>
+      <a href="#gable" class="m-link" data-i18n="m_nav_gable">๒. ปรัชญาหน้าจั่วจำลองจักรวาล</a>
+      <a href="#archive" class="m-link" data-i18n="m_nav_archive">๓. คลังภาพเก่า (Living Archive)</a>
+      <a href="#vision" class="m-link" data-i18n="m_nav_vision">๔. วิสัยทัศน์พื้นที่สร้างสรรค์</a>
+      <a href="#spaces" class="m-link" data-i18n="m_nav_spaces">๕. แผนผัง & โซนพื้นที่</a>
+      <a href="#events" class="m-link" data-i18n="m_nav_events">๖. ปฏิทินกิจกรรม</a>
+      <a href="#ideas" class="m-link" data-i18n="m_nav_ideas">๗. ร่วมออกไอเดีย (Idea Wall)</a>
+      <a href="#booking" class="m-link" data-i18n="m_nav_booking">๘. ขอใช้พื้นที่จัดงาน</a>
+      <a href="#visit" class="m-link" data-i18n="m_nav_visit">๙. การเดินทาง & แผนที่</a>
+    </nav>
+    <div class="drawer-footer">
+      <button class="btn btn-primary btn-block" id="mobileBookingBtn" data-i18n="btn_book_space_full">ขอใช้พื้นที่จัดกิจกรรม</button>
+    </div>
+  </div>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero-section" id="hero">
+      <div class="hero-backdrop-pattern"></div>
+      <div class="hero-container">
+        <div class="hero-content">
+          <!-- Award Ribbon Banner -->
+          <div class="hero-award-ribbon">
+            <span class="award-star">🏆</span>
+            <span data-i18n="hero_award_text">รางวัลอนุรักษ์ศิลปสถาปัตยกรรม ประจำปี 2569 · สมาคมสถาปนิกสยาม ในพระบรมราชูปถัมภ์ (ASA)</span>
+          </div>
+
+          <div class="hero-badge">
+            <span class="badge-dot"></span>
+            <span data-i18n="hero_badge">โรงเรียนจีนแห่งแรกและแห่งเดียวของ จ.พังงา · ก่อตั้ง พ.ศ. 2448 / อาคาร พ.ศ. 2465</span>
+          </div>
+
+          <h1 class="hero-title" data-i18n="hero_title">
+            คืนชีวิตให้ <span class="highlight-wood">เส้นทางแห่งแสงสว่าง</span><br>
+            เติมพลังสร้างสรรค์สู่ <span class="highlight-terracotta">อนาคต</span>
+          </h1>
+
+          <p class="hero-description" data-i18n="hero_desc">
+            จาก <strong>"โต๊ะเบ๋ง" สู่ "เต้าหมิง" (導明)</strong> โรงเรียนจีนแห่งแรกของจังหวัดพังงาที่สร้างขึ้นโดยการลงขันของคหบดีเหมืองแร่และช่างผาวในปี 2465 สู่การเป็น <strong>มรดกที่มีชีวิต (Living Heritage)</strong> ภายใต้มูลนิธิโรงเรียนเต้าหมิง ตะกั่วป่า เพื่อการเรียนรู้ วัฒนธรรม และพื้นที่สร้างสรรค์ของทุกคน
+          </p>
+
+          <div class="hero-cta-group">
+            <a href="#vision" class="btn btn-primary">
+              <span data-i18n="hero_btn_vision">สำรวจวิสัยทัศน์ & พื้นที่</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="#story" class="btn btn-secondary">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <span data-i18n="hero_btn_story">อ่านประวัติ 100 ปี</span>
+            </a>
+          </div>
+
+          <!-- Quick Stat Strip -->
+          <div class="hero-stats-grid">
+            <div class="stat-card">
+              <span class="stat-number">120+</span>
+              <span class="stat-label" data-i18n="hero_stat_1">ปี นับแต่เริ่มก่อตั้ง พ.ศ. 2448 (โต๊ะเบ๋ง)</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-number">2465</span>
+              <span class="stat-label" data-i18n="hero_stat_2">ปีสร้างอาคารอั้งม่อเหลา โดยนายผาว</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-number">100%</span>
+              <span class="stat-label" data-i18n="hero_stat_3">มรดกชุมชน ดูแลโดยมูลนิธิฯ เพื่อสาธารณะ</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Visual Card -->
+        <div class="hero-visual">
+          <div class="heritage-card-preview">
+            <div class="visual-photo-wrapper">
+              <img src="img/อาคารกับชุมชน.jpg" alt="อาคารโรงเรียนเต้าหมิงและชุมชนเยาวชนตะกั่วป่า" class="hero-real-building-img">
+              <div class="visual-badge-overlay">
+                <span class="tag-status" data-i18n="tag_status">🏆 สมาคมสถาปนิกสยามฯ 2569</span>
+                <span class="tag-location" data-i18n="tag_location">📍 ย่านเมืองเก่าศรีตะกั่วป่า</span>
+              </div>
+            </div>
+            <div class="visual-caption">
+              <div class="caption-logo-mini">
+                <img src="assets/logo-305.jpg" alt="ตราสัญลักษณ์เต้าหมิง">
+              </div>
+              <div>
+                <p class="caption-title" data-i18n="caption_title">"เต้าหมิง (導明) แปลว่า หนทางแห่งแสงสว่างและปัญญา"</p>
+                <span class="caption-sub" data-i18n="caption_sub">อาคารอั้งม่อเหลาสาธารณะ ผสานคลาสสิกโคโลเนียลและปรัชญาจีน</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section: The Story & Authentic Facts -->
+    <section class="section section-story" id="story">
+      <div class="container">
+        <div class="section-heading text-center">
+          <div class="section-tag" data-i18n="story_tag">AUTHENTIC HISTORY & FOUNDATION</div>
+          <h2 class="section-title" data-i18n="story_title">ประวัติศาสตร์ความเป็นมา "โรงเรียนเต้าหมิง"</h2>
+          <p class="section-subtitle" data-i18n="story_subtitle">
+            จากโรงเรียนจีนแห่งแรกของจังหวัดพังงา สู่มรดกทางสถาปัตยกรรมและจิตวิญญาณแห่งความสามัคคีของชุมชน
+          </p>
+        </div>
+
+        <!-- 3 Core Narrative Fact Cards -->
+        <div class="story-narrative-grid">
+          <div class="narrative-card">
+            <div class="card-icon-box">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </div>
+            <h3 data-i18n="narrative_1_title">๑. กำเนิด "โต๊ะเบ๋ง" สู่ "เต้าหมิง" (พ.ศ. ๒๔๔๘ - ๒๔๖๓)</h3>
+            <p data-i18n="narrative_1_desc">
+              ก่อตั้งอย่างไม่เป็นทางการในปี 2448 เดิมใช้ชื่อสำเนียงฮกเกี้ยนว่า <strong>“โต๊ะเบ๋ง”</strong> ก่อนเปลี่ยนเป็น <strong>“เต้าหมิง” (導明)</strong> สำเนียงจีนกลาง และจดทะเบียนเป็นโรงเรียนราษฎร์ในปี 2463 คำว่า <em>เต้า</em> หมายถึง ทาง/ชี้นำ, <em>หมิง</em> หมายถึง แสงสว่าง/ความเข้าใจ รวมกันคือ <strong>"เส้นทางสู่แสงสว่างแห่งปัญญา"</strong>
+            </p>
+          </div>
+
+          <div class="narrative-card">
+            <div class="card-icon-box">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
+            <h3 data-i18n="narrative_2_title">๒. สถาปัตยกรรมอั้งม่อเหลา & ช่างผาว (พ.ศ. ๒๔๖๕)</h3>
+            <p data-i18n="narrative_2_desc">
+              อาคารหลังปัจจุบัน (หลังที่ 2) สร้างเมื่อปี 2465 โดย <strong>"นายผาว"</strong> ช่างฝีมือชาวจีนฮกเกี้ยน ทุนทรัพย์จากการลงขันของพ่อค้าเหมืองแร่ในตะกั่วป่า ระนอง และภูเก็ต อาคารเป็นรูปแบบอั้งม่อเหลาประยุกต์โคโลเนียล ใช้คอนกรีตเสริมเหล็กยุคแรก ผนังก่ออิฐ มุขยื่น 2 ชั้น ระเบียงรอบ และประดับหัวเสาแบบกรีก
+            </p>
+          </div>
+
+          <div class="narrative-card">
+            <div class="card-icon-box">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <h3 data-i18n="narrative_3_title">๓. โครงสร้างที่ดิน & มูลนิธิเพื่อสาธารณะ</h3>
+            <p data-i18n="narrative_3_desc">
+              ที่ดินเกิดจากการร่วมซื้อของชาวจีนหลายครอบครัว ถือครอง สค.1 ในนามคนไทย 3 คน เพื่อเป็น <strong>"มรดกของลูกหลานตะกั่วป่า"</strong> ในปี 2533 ได้จัดตั้ง <strong>"มูลนิธิโรงเรียนเต้าหมิง ตะกั่วป่า"</strong> และในปี 2542 ทายาททั้ง 3 ท่านได้ส่งมอบกรรมสิทธิ์ที่ดินและอาคารให้แก่มูลนิธิฯ อย่างสมบูรณ์ 100%
+            </p>
+          </div>
+        </div>
+
+        <!-- Interactive History Timeline -->
+        <div class="timeline-container">
+          <div class="timeline-header">
+            <h3 data-i18n="tl_header_title">ลำดับกาลเวลา ๑๒๐ ปี เต้าหมิง (Chronological Milestones)</h3>
+            <p data-i18n="tl_header_subtitle">คลิกเลือกยุคสมัยเพื่อศึกษาประวัติศาสตร์และหลักฐานที่บันทึกไว้</p>
+          </div>
+
+          <div class="timeline-nav" id="timelineNav">
+            <button class="timeline-btn active" data-year="1905">
+              <span class="tl-year" data-i18n="tl_btn_1_year">2448 - 2465</span>
+              <span class="tl-label" data-i18n="tl_btn_1_label">โต๊ะเบ๋งสู่เต้าหมิง & ช่างผาว</span>
+            </button>
+            <button class="timeline-btn" data-year="1950">
+              <span class="tl-year" data-i18n="tl_btn_2_year">2480 - 2510</span>
+              <span class="tl-label" data-i18n="tl_btn_2_label">ศูนย์กลางชุมชน & รับรองกงสุล</span>
+            </button>
+            <button class="timeline-btn" data-year="1990">
+              <span class="tl-year" data-i18n="tl_btn_3_year">2533 - 2547</span>
+              <span class="tl-label" data-i18n="tl_btn_3_label">จัดตั้งมูลนิธิฯ & บูรณะอาคาร</span>
+            </button>
+            <button class="timeline-btn" data-year="2026">
+              <span class="tl-year" data-i18n="tl_btn_4_year">ปัจจุบัน & รางวัล ASA</span>
+              <span class="tl-label" data-i18n="tl_btn_4_label">บริบทใหม่ & มรดกที่มีชีวิต</span>
+            </button>
+          </div>
+
+          <div class="timeline-content-box" id="timelineContent">
+            <div class="tl-detail-grid">
+              <div class="tl-text">
+                <span class="tl-badge-year" id="tlBadgeYear">พ.ศ. ๒๔๔๘ - ๒๔๖๕</span>
+                <h4 id="tlTitle">กำเนิด "โต๊ะเบ๋ง" สู่การก่อสร้างอาคารเต้าหมิงโดยช่างผาว</h4>
+                <p id="tlDesc">
+                  เริ่มก่อตั้งอย่างไม่เป็นทางการในปี 2448 ในชื่อโต๊ะเบ๋ง ก่อนเปลี่ยนเป็นเต้าหมิง (導明) และจดทะเบียนโรงเรียนราษฎร์ในปี 2463 อาคารหลังปัจจุบันสร้างขึ้นในปี 2465 โดยนายผาว ช่างฝีมือชาวจีนฮกเกี้ยน จากเงินบริจาคของคหบดีเหมืองแร่ตะกั่วป่า ระนอง และภูเก็ต เดิมมุงหลังคากระเบื้องกาบกล้วยและเชิงชายไม้ฉลุ
+                </p>
+                <div class="tl-meta-chips" id="tlChips">
+                  <span class="chip">🏛️ ช่างผาว ฮกเกี้ยน</span>
+                  <span class="chip">📚 จดทะเบียนราษฎร์ 2463</span>
+                  <span class="chip">🤝 ลงขันเหมืองแร่ 3 เมือง</span>
+                </div>
+              </div>
+              <div class="tl-photo-card">
+                <div class="photo-real-card">
+                  <img src="img/นิทรรศการ3-โซน 1-โรงเรียนเต้าหมิง.jpg" alt="ภาพหมู่นักเรียนและครูโรงเรียนเต้าหมิงยุคแรก" class="timeline-illustration-img" id="tlPhotoImg">
+                  <div class="photo-caption-inner" id="tlPhotoCaption">
+                    "ภาพประวัติศาสตร์: นักเรียนและครูถ่ายภาพร่วมกันหน้าอาคารเต้าหมิง ยุคหลังคากระเบื้องกาบกล้วยดั้งเดิม"
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section: Cosmic Gable Architecture Explorer (ถอดรหัสปรัชญาหน้าจั่วเต้าหมิง) -->
+    <section class="section section-gable" id="gable">
+      <div class="container">
+        <div class="section-heading text-center">
+          <div class="section-tag" data-i18n="gable_tag">COSMIC FACADE PHILOSOPHY</div>
+          <h2 class="section-title" data-i18n="gable_title">ถอดรหัสปรัชญาหน้าจั่ว: "ภาพจำลองจักรวาล ฟ้า-ดิน-คน"</h2>
+          <p class="section-subtitle" data-i18n="gable_subtitle">
+            หน้าจั่วอาคารเต้าหมิงได้รับการออกแบบอย่างลึกซึ้งตามคติเต๋าและปรัชญาจีนโบราณ สื่อถึงพลังงาน ปัญญา และการศึกษา
+          </p>
+        </div>
+
+        <div class="gable-explorer-layout">
+          <!-- Gable Graphic Motif Pane -->
+          <div class="gable-visual-pane">
+            <div class="gable-logo-showcase-box">
+              <img src="assets/logo-305.jpg" alt="ตราสัญลักษณ์และลวดลายหน้าจั่วโรงเรียนเต้าหมิง" class="gable-logo-hero-img">
+              <div class="gable-logo-caption">
+                <span class="logo-sub-badge" data-i18n="gable_logo_badge">อัตลักษณ์สถาปัตยกรรมเต้าหมิง</span>
+                <p data-i18n="gable_logo_desc">ตราสัญลักษณ์จำลองรูปทรงหน้าจั่วและปรัชญาจักรวาล ๓ ภพ "ฟ้า - ดิน - คน"</p>
+              </div>
+            </div>
+            <p class="gable-hint-note" data-i18n="gable_hint">✦ เลือกคลิกศึกษาความหมายเชิงสัญลักษณ์ทั้ง ๖ จากรายการด้านข้าง</p>
+          </div>
+
+          <!-- Gable Symbol Details -->
+          <div class="gable-details-pane">
+            <div class="gable-symbol-card" id="gableSymbolCard">
+              <div class="gable-symbol-badge" id="gableBadge">สัญลักษณ์ที่ 1 / 6</div>
+              <h3 id="gableTitle">เสาเทียนกง (Tiangong Pillar)</h3>
+              <p id="gableDesc" class="gable-desc-text">
+                เสายอดบนสุดของหน้าจั่ว เปรียบเสมือน "เสาสวรรค์" จุดที่ฟ้าส่งพลังงานบริสุทธิ์จากเบื้องบนลงมาสู่โลก เป็นสัญลักษณ์ของการเชื่อมโยงระหว่างจักรวาลกับมนุษย์
+              </p>
+              <div class="gable-meaning-box">
+                <strong data-i18n="gable_meaning_lbl">ความหมายต่อการศึกษา:</strong>
+                <span id="gableMeaning">แสงสว่างแห่งปัญญาและความรู้ชั้นสูงที่หลั่งไหลลงมาสู่ผู้เรียน</span>
+              </div>
+            </div>
+
+            <!-- Quick Selector List -->
+            <div class="gable-selector-list">
+              <button class="gable-item-btn active" data-gable="tiangong">๑. เสาเทียนกง (จุดรับพลังฟ้า)</button>
+              <button class="gable-item-btn" data-gable="cloud">๒. ลายเมฆฐานเสา (ประคองพลังฟ้าสู่ฐาน)</button>
+              <button class="gable-item-btn" data-gable="triangle">๓. สามเหลี่ยมเชื่อมฟ้า-ดิน (โลกและผู้คน)</button>
+              <button class="gable-item-btn" data-gable="sun12">๔. พระอาทิตย์ 12 รัศมี (วัฏจักรกาลเวลา & ปัญญา)</button>
+              <button class="gable-item-btn" data-gable="circles">๕. วงกลม 3 ชั้น (ฟ้า ดิน คน ในคติเต๋า)</button>
+              <button class="gable-item-btn" data-gable="sun8double">๖. พระอาทิตย์ 8 รัศมีซ้อน (ฟ้าอยู่ในดิน & การถ่ายทอดความรู้)</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section: Living Archive & Historic Photo Gallery -->
+    <section class="section section-archive" id="archive">
+      <div class="container">
+        <div class="section-heading text-center">
+          <div class="section-tag" data-i18n="archive_tag">HISTORICAL PHOTO ARCHIVE</div>
+          <h2 class="section-title" data-i18n="archive_title">คลังภาพประวัติศาสตร์โรงเรียนเต้าหมิง</h2>
+          <p class="section-subtitle" data-i18n="archive_subtitle">
+            ภาพถ่ายจริงจากความทรงจำของชาวตะกั่วป่า ศิษย์เก่า และทายาทผู้ก่อตั้งโรงเรียน
+          </p>
+        </div>
+
+        <div class="archive-gallery-grid" id="archiveGalleryGrid">
+          <!-- Item 1: Consul -->
+          <div class="archive-card" onclick="openPhotoLightbox('img/นิทรรศการ3-โซน2-รับรองกงสุลจีน.jpg', 'พิธีต้อนรับกงสุลใหญ่สาธารณรัฐจีนประจำสงขลา ณ มุขหน้าอาคารเต้าหมิง')">
+            <div class="archive-img-box">
+              <img src="img/นิทรรศการ3-โซน2-รับรองกงสุลจีน.jpg" alt="พิธีต้อนรับกงสุลใหญ่" loading="lazy">
+              <div class="archive-zoom-icon">🔍</div>
+            </div>
+            <div class="archive-card-caption">
+              <h4>พิธีต้อนรับกงสุลใหญ่สาธารณรัฐจีน</h4>
+              <p>พิธีต้อนรับกงสุลใหญ่ประจำสงขลา ณ มุขหน้าอาคารเต้าหมิง สะท้อนบทบาทศูนย์กลางการทูตและสังคม</p>
+            </div>
+          </div>
+
+          <!-- Item 2: All School Mass Photo -->
+          <div class="archive-card" onclick="openPhotoLightbox('img/นิทรรศการ3-โซน 1-โรงเรียนเต้าหมิง.jpg', 'ภาพประวัติศาสตร์ครูและนักเรียนเต้าหมิงรวมตัวกันหน้าอาคารหลังคากระเบื้องกาบกล้วย')">
+            <div class="archive-img-box">
+              <img src="img/นิทรรศการ3-โซน 1-โรงเรียนเต้าหมิง.jpg" alt="ภาพหมู่นักเรียนเต้าหมิง" loading="lazy">
+              <div class="archive-zoom-icon">🔍</div>
+            </div>
+            <div class="archive-card-caption">
+              <h4>นักเรียนและครูยุคแรก</h4>
+              <p>ภาพถ่ายหมู่นักเรียนนับร้อยคนหน้าอาคารหลังคาดั้งเดิม มุงกระเบื้องกาบกล้วยและเชิงชายฉลุไม้</p>
+            </div>
+          </div>
+
+          <!-- Item 3: Basketball Team -->
+          <div class="archive-card" onclick="openPhotoLightbox('img/นิทรรศการ3-โซน2-ทีมบาสหน้าอาคาร.jpg', 'ทีมบาสเกตบอลโรงเรียนเต้าหมิงหน้าอาคารพร้อมแป้นบาส')">
+            <div class="archive-img-box">
+              <img src="img/นิทรรศการ3-โซน2-ทีมบาสหน้าอาคาร.jpg" alt="ทีมบาสเกตบอลเต้าหมิง" loading="lazy">
+              <div class="archive-zoom-icon">🔍</div>
+            </div>
+            <div class="archive-card-caption">
+              <h4>ทีมบาสเกตบอลหน้าอาคาร</h4>
+              <p>นักกีฬาบาสเกตบอลของโรงเรียนและครูฝึกซ้อม ถ่ายภาพร่วมกัน ณ ลานหน้าอาคารเรียน</p>
+            </div>
+          </div>
+
+          <!-- Item 4: Classroom Group Photo -->
+          <div class="archive-card" onclick="openPhotoLightbox('img/นิทรรศการ3-โซน2-ครูนักเรียน.jpg', 'ภาพถ่ายที่ระลึกนักเรียนชั้นปีต่างๆ และครูผู้สอนโรงเรียนเต้าหมิง (ภาพจาก นายนิกร คันธวณิชพันธุ์)')">
+            <div class="archive-img-box">
+              <img src="img/นิทรรศการ3-โซน2-ครูนักเรียน.jpg" alt="ภาพนักเรียนและครู" loading="lazy">
+              <div class="archive-zoom-icon">🔍</div>
+            </div>
+            <div class="archive-card-caption">
+              <h4>ภาพที่ระลึก "導明學校"</h4>
+              <p>ภาพที่ระลึกครูและนักเรียน พร้อมป้ายภาษาจีนโบราณ (อนุเคราะห์โดย นายนิกร คันธวณิชพันธุ์)</p>
+            </div>
+          </div>
+
+          <!-- Item 5: Teachers -->
+          <div class="archive-card" onclick="openPhotoLightbox('img/นิทรรศการ3-โซน2-ครู.jpg', 'คณะครูอาจารย์ผู้ประสิทธิ์ประสาทวิชาภาษาจีนและคณิตศาสตร์ โรงเรียนเต้าหมิง')">
+            <div class="archive-img-box">
+              <img src="img/นิทรรศการ3-โซน2-ครู.jpg" alt="คณะครูเต้าหมิง" loading="lazy">
+              <div class="archive-zoom-icon">🔍</div>
+            </div>
+            <div class="archive-card-caption">
+              <h4>คณะครูผู้สอน</h4>
+              <p>ครูผู้ทรงคุณวุฒิที่เดินทางมาจากปีนังและจีนแผ่นดินใหญ่ เพื่อวางรากฐานการศึกษาให้ลูกหลาน</p>
+            </div>
+          </div>
+
+          <!-- Item 6: Outstanding Students -->
+          <div class="archive-card" onclick="openPhotoLightbox('img/นิทรรศการ3-โซน2-นักเรียนประพฤติดี.jpg', 'ภาพมอบรางวัลนักเรียนประพฤติดีและเรียนดี โรงเรียนเต้าหมิง')">
+            <div class="archive-img-box">
+              <img src="img/นิทรรศการ3-โซน2-นักเรียนประพฤติดี.jpg" alt="นักเรียนประพฤติดี" loading="lazy">
+              <div class="archive-zoom-icon">🔍</div>
+            </div>
+            <div class="archive-card-caption">
+              <h4>นักเรียนประพฤติดี & เรียนดี</h4>
+              <p>การมอบเกียรติบัตรและยกย่องคุณธรรม จริยธรรม และวิชาความรู้ของนักเรียนเต้าหมิง</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section: The Vision & 4 Pillars -->
+    <section class="section section-vision" id="vision">
+      <div class="container">
+        <div class="section-heading text-center">
+          <div class="section-tag" data-i18n="vision_tag">REVITALIZATION & LIVING HERITAGE</div>
+          <h2 class="section-title" data-i18n="vision_title">โครงการ: "เต้าหมิง - บริบทใหม่ในเมืองตะกั่วป่า"</h2>
+          <p class="section-subtitle" data-i18n="vision_subtitle">
+            การฟื้นฟูมรดกที่มีชีวิต ผสานการอนุรักษ์เชิงกายภาพ คุณค่าทางวัฒนธรรม การท่องเที่ยวเชิงนิเวศ และการมีส่วนร่วมของชุมชน
+          </p>
+        </div>
+
+        <div class="pillars-grid">
+          <!-- Pillar 1 -->
+          <div class="pillar-card">
+            <div class="pillar-number">01</div>
+            <div class="pillar-icon">🏛️</div>
+            <h3 class="pillar-title" data-i18n="pillar_1_title">พิพิธภัณฑ์มีชีวิต & บันทึกเมือง (Living Archive)</h3>
+            <p class="pillar-desc" data-i18n="pillar_1_desc">
+              จัดแสดงนิทรรศการประวัติศาสตร์ยุคทองดีบุก ภาพถ่ายโบราณ เครื่องใช้ในอดีต บันทึกประวัติศาสตร์คำบอกเล่า (Oral History) ของคนเฒ่าคนแก่ และเปิดชั้นล่างให้อาคารเป็นพื้นที่เรียนรู้มีชีวิต
+            </p>
+            <ul class="pillar-features">
+              <li data-i18n="p1_f1">นิทรรศการประวัติศาสตร์เหมืองแร่ & ครอบครัวชาวจีน</li>
+              <li data-i18n="p1_f2">ศูนย์ข้อมูลและห้องสมุดประวัติศาสตร์เมืองเก่า</li>
+              <li data-i18n="p1_f3">ชั้นบน: สถานปฏิบัติธรรมอันสงบเงียบ</li>
+            </ul>
+          </div>
+
+          <!-- Pillar 2 -->
+          <div class="pillar-card highlight-card">
+            <div class="pillar-badge" data-i18n="pillar_2_badge">POPULAR</div>
+            <div class="pillar-number">02</div>
+            <div class="pillar-icon">🎨</div>
+            <h3 class="pillar-title" data-i18n="pillar_2_title">สตูดิโอคราฟต์ & เวิร์กช็อปศิลปะ (Creative Studio)</h3>
+            <p class="pillar-desc" data-i18n="pillar_2_desc">
+              ห้องเรียนสร้างสรรค์ที่ชวนคนทุกวัยมาลงมือทำ เปลี่ยนภูมิปัญญาท้องถิ่นให้เป็นผลิตภัณฑ์ร่วมสมัย สอนโดยช่างฝีมือ ปราชญ์ชาวบ้าน และศิลปินรุ่นใหม่
+            </p>
+            <ul class="pillar-features">
+              <li data-i18n="p2_f1">เวิร์กช็อปพิมพ์ลายผ้าบาติกเมืองเก่า</li>
+              <li data-i18n="p2_f2">คลาสทำขนมเต้าส้อ & อาหารเปอรานากันโบราณ</li>
+              <li data-i18n="p2_f3">การปั้นเซรามิก & วาดภาพสีน้ำสถาปัตยกรรม</li>
+            </ul>
+          </div>
+
+          <!-- Pillar 3 -->
+          <div class="pillar-card">
+            <div class="pillar-number">03</div>
+            <div class="pillar-icon">☕</div>
+            <h3 class="pillar-title" data-i18n="pillar_3_title">คาเฟ่ชุมชน & Co-Working Space (Community Lounge)</h3>
+            <p class="pillar-desc" data-i18n="pillar_3_desc">
+              พื้นที่นั่งทำงาน นัดพบปะ และคุยโปรเจกต์ใหม่ๆ สำหรับคนทำงานอิสระ คนในท้องถิ่น และนักท่องเที่ยว พร้อมเสิร์ฟเครื่องดื่มจากเมล็ดกาแฟท้องถิ่นพังงาและขนมพื้นเมือง
+            </p>
+            <ul class="pillar-features">
+              <li data-i18n="p3_f1">โซนเงียบสำหรับอ่านหนังสือและทำงาน (High-Speed Wi-Fi)</li>
+              <li data-i18n="p3_f2">โต๊ะสนทนาแลกเปลี่ยนไอเดีย (Community Table)</li>
+              <li data-i18n="p3_f3">จำหน่ายของฝากคราฟต์ฝีมือชุมชน</li>
+            </ul>
+          </div>
+
+          <!-- Pillar 4 -->
+          <div class="pillar-card">
+            <div class="pillar-number">04</div>
+            <div class="pillar-icon">🎪</div>
+            <h3 class="pillar-title" data-i18n="pillar_4_title">ลานกิจกรรม & ตลาดสร้างสรรค์ (Courtyard & Market)</h3>
+            <p class="pillar-desc" data-i18n="pillar_4_desc">
+              ลานกว้างหน้าอาคารที่พร้อมแปลงร่างเป็นเวทีเปิดสำหรับแสดงดนตรี ฉายหนังกลางแปลง ละครเวทีชุมชน เสวนาเมือง และตลาดนัดงานคราฟต์ยามเย็น
+            </p>
+            <ul class="pillar-features">
+              <li data-i18n="p4_f1">ตลาดนัดเต้าหมิง ครีเอทีฟ มาร์เก็ต สุดสัปดาห์</li>
+              <li data-i18n="p4_f2">โรงฉายภาพยนตร์กลางแปลงใต้แสงดาว</li>
+              <li data-i18n="p4_f3">เวทีเสวนาเมืองและศิลปะร่วมสมัย</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section: Interactive Floor Plan & Space Explorer -->
+    <section class="section section-spaces" id="spaces">
+      <div class="container">
+        <div class="section-heading text-center">
+          <div class="section-tag" data-i18n="spaces_tag">SPACES & FACILITIES</div>
+          <h2 class="section-title" data-i18n="spaces_title">สำรวจแผนผังและโซนการใช้งาน</h2>
+          <p class="section-subtitle" data-i18n="spaces_subtitle">
+            เลือกโซนที่ต้องการดูเพื่อศึกษารายละเอียด ความจุ และความเหมาะสมในการจัดกิจกรรม
+          </p>
+        </div>
+
+        <div class="space-explorer-layout">
+          <!-- Zone Selector List -->
+          <div class="zone-list" id="zoneList">
+            <div class="zone-item active" data-zone="hall">
+              <div class="zone-indicator">A</div>
+              <div class="zone-info">
+                <h4 data-i18n="zone_list_a_title">โถงอาคารไม้ประวัติศาสตร์ (Main Heritage Hall)</h4>
+                <span data-i18n="zone_list_a_sub">ชั้นล่าง · ความจุ 80 - 120 คน · เหมาะกับงานนิทรรศการ เสวนา และพิธีการ</span>
+              </div>
+            </div>
+
+            <div class="zone-item" data-zone="courtyard">
+              <div class="zone-indicator">B</div>
+              <div class="zone-info">
+                <h4 data-i18n="zone_list_b_title">ลานกลางแจ้งเต้าหมิง (Dao Ming Courtyard)</h4>
+                <span data-i18n="zone_list_b_sub">ความจุ 150 - 250 คน · เหมาะกับตลาดคราฟต์ หนังกลางแปลง คอนเสิร์ต</span>
+              </div>
+            </div>
+
+            <div class="zone-item" data-zone="studio">
+              <div class="zone-indicator">C</div>
+              <div class="zone-info">
+                <h4 data-i18n="zone_list_c_title">สตูดิโอเวิร์กช็อป & ห้องเรียนคราฟต์ (Craft Studios)</h4>
+                <span data-i18n="zone_list_c_sub">ความจุ 20 - 35 คน · พร้อมอุปกรณ์ศิลปะ โต๊ะทำงานกลุ่ม และจอโปรเจกเตอร์</span>
+              </div>
+            </div>
+
+            <div class="zone-item" data-zone="cafe">
+              <div class="zone-indicator">D</div>
+              <div class="zone-info">
+                <h4 data-i18n="zone_list_d_title">คาเฟ่ชุมชน & มุมอ่านหนังสือ (Cafe & Reading Nook)</h4>
+                <span data-i18n="zone_list_d_sub">ความจุ 30 - 45 คน · มุมพักผ่อน กาแฟ ขนมพื้นถิ่น และพื้นที่นั่งทำงาน</span>
+              </div>
+            </div>
+
+            <div class="zone-item" data-zone="veranda">
+              <div class="zone-indicator">E</div>
+              <div class="zone-info">
+                <h4 data-i18n="zone_list_e_title">ระเบียงมุขยื่น 2 ชั้น & สวนหย่อม (Double Porch & Veranda)</h4>
+                <span data-i18n="zone_list_e_sub">ความจุ 25 - 40 คน · นิทรรศการกลางแจ้ง มุมถ่ายรูป และพักผ่อน</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Zone Detailed Card Display -->
+          <div class="zone-preview-card" id="zonePreviewCard">
+            <div class="zone-preview-header">
+              <div class="zone-tag-badge" id="zoneBadge">ZONE A · ชั้น 1 โถงหลัก</div>
+              <h3 id="zoneTitle">โถงอาคารไม้ประวัติศาสตร์ (Main Heritage Hall)</h3>
+              <p id="zoneDesc">
+                โถงไม้อเนกประสงค์ขนาดใหญ่ที่โปร่งโล่งด้วยหน้าต่างบานเกล็ดไม้โบราณรอบทิศทาง แสงธรรมชาติส่องกระทบพื้นไม้ขัดเงา บรรยากาศเงียบสงบและมีมนต์ขลัง เหมาะเป็นพิเศษสำหรับนิทรรศการศิลปะ งานเสวนา การเปิดตัวหนังสือ หรือคอนเสิร์ตอะคูสติก
+              </p>
+            </div>
+
+            <div class="zone-specs-grid">
+              <div class="spec-item">
+                <span class="spec-label" data-i18n="spec_area_label">📐 ขนาดพื้นที่</span>
+                <strong id="zoneArea">180 ตร.ม.</strong>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label" data-i18n="spec_cap_label">👥 ความจุคน</span>
+                <strong id="zoneCap">80 - 120 ที่นั่ง</strong>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label" data-i18n="spec_equip_label">💡 อุปกรณ์พร้อมใช้</span>
+                <strong id="zoneEquip">ไฟส่องภาพ, ปลั๊กไฟ, ลำโพงบลูทูธ</strong>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label" data-i18n="spec_vent_label">🌿 การระบายอากาศ</span>
+                <strong id="zoneVent">ลมธรรมชาติ + พัดลมโบราณ</strong>
+              </div>
+            </div>
+
+            <div class="zone-action-bar">
+              <button class="btn btn-primary" onclick="openBookingWithZone()">
+                <span data-i18n="btn_book_zone">ขอจองใช้พื้นที่โซนนี้</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </button>
+              <button class="btn btn-secondary-sm" id="btn360Preview">
+                <span data-i18n="btn_view_360">ดูภาพจำลอง 360°</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section: Upcoming Activities & Events -->
+    <section class="section section-events" id="events">
+      <div class="container">
+        <div class="section-heading text-center">
+          <div class="section-tag" data-i18n="events_tag">CALENDAR & WORKSHOPS</div>
+          <h2 class="section-title" data-i18n="events_title">ปฏิทินกิจกรรม & เวิร์กช็อปสร้างสรรค์</h2>
+          <p class="section-subtitle" data-i18n="events_subtitle">
+            ร่วมสัมผัสประสบการณ์สร้างสรรค์ ค้นหาแรงบันดาลใจ และเชื่อมต่อกับผู้คน
+          </p>
+        </div>
+
+        <!-- Filter Buttons -->
+        <div class="event-filter-bar">
+          <button class="filter-btn active" data-filter="all" data-i18n="filter_all">ทั้งหมด (All)</button>
+          <button class="filter-btn" data-filter="workshop" data-i18n="filter_workshop">เวิร์กช็อป (Workshops)</button>
+          <button class="filter-btn" data-filter="exhibition" data-i18n="filter_exhibition">นิทรรศการ (Exhibitions)</button>
+          <button class="filter-btn" data-filter="market" data-i18n="filter_market">ตลาด & ดนตรี (Markets)</button>
+          <button class="filter-btn" data-filter="talk" data-i18n="filter_talk">เสวนา (Talks)</button>
+        </div>
+
+        <!-- Events Grid (Rendered by JS with actual photography assets) -->
+        <div class="events-grid" id="eventsGrid">
+        </div>
+      </div>
+    </section>
+
+    <!-- Section: Co-Creation Idea Board -->
+    <section class="section section-ideas" id="ideas">
+      <div class="container">
+        <div class="section-heading text-center">
+          <div class="section-tag" data-i18n="ideas_tag">COMMUNITY CO-CREATION</div>
+          <h2 class="section-title" data-i18n="ideas_title">ร่วมออกแบบ "เต้าหมิงในฝันของคุณ"</h2>
+          <p class="section-subtitle" data-i18n="ideas_subtitle">
+            คุณอยากให้โรงเรียนเต้าหมิงจัดกิจกรรมอะไร? มีพื้นที่แบบไหน? ส่งไอเดียของคุณเข้ามาได้เลย ไอเดียที่ได้รับความสนใจจะถูกนำไปพัฒนาจริง!
+          </p>
+        </div>
+
+        <div class="ideas-layout-grid">
+          <!-- Submission Form Card -->
+          <div class="idea-form-card">
+            <div class="form-header">
+              <span class="form-icon">💡</span>
+              <div>
+                <h3 data-i18n="idea_form_heading">เสนอไอเดียกิจกรรม</h3>
+                <p data-i18n="idea_form_sub">ร่วมเป็นส่วนหนึ่งในการขับเคลื่อนเต้าหมิง</p>
+              </div>
+            </div>
+
+            <form id="ideaSubmissionForm">
+              <div class="form-group">
+                <label for="ideaCategory" data-i18n="idea_label_category">ประเภทกิจกรรม / ไอเดีย</label>
+                <select id="ideaCategory" required>
+                  <option value="art" data-i18n="opt_cat_art">🎨 ศิลปะ & งานคราฟต์</option>
+                  <option value="edu" data-i18n="opt_cat_edu">📚 การศึกษา & ประวัติศาสตร์</option>
+                  <option value="food" data-i18n="opt_cat_food">🍲 อาหาร & วัฒนธรรมพื้นถิ่น</option>
+                  <option value="show" data-i18n="opt_cat_show">🎭 การแสดง & ดนตรี</option>
+                  <option value="env" data-i18n="opt_cat_env">🌱 สิ่งแวดล้อม & ชุมชน</option>
+                  <option value="other" data-i18n="opt_cat_other">✨ อื่นๆ</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="ideaTitle" data-i18n="idea_label_title">หัวข้อไอเดียสั้นๆ</label>
+                <input type="text" id="ideaTitle" placeholder="เช่น คลาสสอนทำขนมเต้าส้อสูตรคุณยาย" required maxlength="80">
+              </div>
+
+              <div class="form-group">
+                <label for="ideaDesc" data-i18n="idea_label_desc">รายละเอียดกิจกรรม / สิ่งที่อยากเห็น</label>
+                <textarea id="ideaDesc" rows="3" placeholder="อธิบายเพิ่มเติม เช่น อยากให้จัดวันเสาร์ ชวนคุณป้าในตลาดมาสอน..." required maxlength="300"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="ideaAuthor" data-i18n="idea_label_author">ชื่อของคุณ หรือ นามปากกา</label>
+                <input type="text" id="ideaAuthor" placeholder="เช่น คนตะกั่วป่ารุ่นใหม่ / นุ่น" required maxlength="50">
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-block">
+                <span data-i18n="btn_submit_idea">ส่งไอเดียขึ้นกระดาน</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+              </button>
+            </form>
+          </div>
+
+          <!-- Ideas Showcase Wall -->
+          <div class="ideas-wall">
+            <div class="ideas-wall-header">
+              <h3><span data-i18n="ideas_wall_heading">กระดานไอเดียจากชุมชน</span> (<span id="ideaCount">4</span>)</h3>
+              <span class="ideas-sort-note" data-i18n="ideas_sort_note">🔥 กด ❤️ เพื่อโหวตไอเดียที่คุณชอบ</span>
+            </div>
+
+            <div class="ideas-card-stream" id="ideasCardStream">
+              <!-- Rendered dynamically by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section: Space Booking & Proposal Request -->
+    <section class="section section-booking" id="booking">
+      <div class="container">
+        <div class="booking-wrapper">
+          <div class="booking-info-pane">
+            <div class="section-tag" data-i18n="booking_tag">SPACE PROPOSAL</div>
+            <h2 class="booking-title" data-i18n="booking_title">ขอใช้พื้นที่จัดกิจกรรม / แสดงงาน</h2>
+            <p class="booking-desc" data-i18n="booking_desc">
+              ไม่ว่าคุณจะเป็นศิลปิน, สมาคมชุมชน, ครูอาจารย์, นักศึกษา หรือกลุ่มคนที่มีไอเดียสร้างสรรค์ โรงเรียนเต้าหมิงยินดีต้อนรับทุกข้อเสนอโครงการที่ช่วยสร้างประโยชน์และคุณค่าให้เมืองตะกั่วป่า
+            </p>
+
+            <div class="booking-perks-list">
+              <div class="perk-item">
+                <span class="perk-icon">✓</span>
+                <div>
+                  <strong data-i18n="perk_1_title">สนับสนุนพื้นที่กิจกรรมเชิงชุมชนและวัฒนธรรม</strong>
+                  <p data-i18n="perk_1_desc">มีอัตราพิเศษและพื้นที่สนับสนุนฟรีสำหรับโครงการเพื่อการศึกษาและชุมชน</p>
+                </div>
+              </div>
+              <div class="perk-item">
+                <span class="perk-icon">✓</span>
+                <div>
+                  <strong data-i18n="perk_2_title">สิ่งอำนวยความสะดวกครบครัน</strong>
+                  <p data-i18n="perk_2_desc">ระบบไฟ เครื่องเสียงพื้นฐาน โต๊ะเก้าอี้ไม้ และทีมงานประสานงานในพื้นที่</p>
+                </div>
+              </div>
+              <div class="perk-item">
+                <span class="perk-icon">✓</span>
+                <div>
+                  <strong data-i18n="perk_3_title">ช่วยประชาสัมพันธ์ผ่านช่องทางสื่อ</strong>
+                  <p data-i18n="perk_3_desc">โปรโมตผ่านเครือข่ายเมืองเก่าตะกั่วป่าและสื่อออนไลน์</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="contact-direct-box">
+              <span data-i18n="contact_direct_label">📞 ติดต่อด่วน / สอบถามคิวงาน:</span>
+              <strong>076-471-XXX / contact@daoming-takuapa.org</strong>
+            </div>
+          </div>
+
+          <div class="booking-form-pane">
+            <form id="spaceBookingForm">
+              <h3 data-i18n="booking_form_title">แบบฟอร์มขอใช้พื้นที่</h3>
+              <p class="form-sub" data-i18n="booking_form_sub">กรอกข้อมูลเบื้องต้น ทีมงานจะติดต่อกลับภายใน 24 ชม.</p>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="bookName" data-i18n="lbl_book_name">ชื่อผู้ติดต่อ / องค์กร *</label>
+                  <input type="text" id="bookName" placeholder="เช่น ชมรมศิลปะพังงา / สมชาย" required>
+                </div>
+                <div class="form-group">
+                  <label for="bookPhone" data-i18n="lbl_book_phone">เบอร์โทรศัพท์ *</label>
+                  <input type="tel" id="bookPhone" placeholder="08X-XXX-XXXX" required>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="bookEmail" data-i18n="lbl_book_email">อีเมล</label>
+                  <input type="email" id="bookEmail" placeholder="name@example.com">
+                </div>
+                <div class="form-group">
+                  <label for="bookZone" data-i18n="lbl_book_zone">เลือกโซนที่ต้องการใช้งาน *</label>
+                  <select id="bookZone" required>
+                    <option value="hall" data-i18n="opt_zone_a">โถงอาคารไม้ประวัติศาสตร์ (Zone A)</option>
+                    <option value="courtyard" data-i18n="opt_zone_b">ลานกลางแจ้งเต้าหมิง (Zone B)</option>
+                    <option value="studio" data-i18n="opt_zone_c">สตูดิโอเวิร์กช็อป (Zone C)</option>
+                    <option value="cafe" data-i18n="opt_zone_d">คาเฟ่ & พื้นที่นั่งทำงาน (Zone D)</option>
+                    <option value="all" data-i18n="opt_zone_all">เหมารวมทั้งพื้นที่ (All Zones)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="bookDate" data-i18n="lbl_book_date">วันที่ต้องการจัดงาน *</label>
+                  <input type="date" id="bookDate" required>
+                </div>
+                <div class="form-group">
+                  <label for="bookAttendees" data-i18n="lbl_book_att">จำนวนผู้เข้าร่วมโดยประมาณ *</label>
+                  <select id="bookAttendees" required>
+                    <option value="1 - 20" data-i18n="opt_att_1">1 - 20 คน</option>
+                    <option value="21 - 50" data-i18n="opt_att_2">21 - 50 คน</option>
+                    <option value="51 - 100" data-i18n="opt_att_3">51 - 100 คน</option>
+                    <option value="100+" data-i18n="opt_att_4">มากกว่า 100 คน</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="bookEventName" data-i18n="lbl_book_desc">ชื่อกิจกรรม & วัตถุประสงค์สั้นๆ *</label>
+                <textarea id="bookEventName" rows="3" placeholder="อธิบายรูปแบบงาน เช่น จัดนิทรรศการภาพถ่าย 3 วัน, จัดเวิร์กช็อปสอนเยาวชน..." required></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-block">
+                <span data-i18n="btn_submit_booking">ส่งคำขอจองพื้นที่</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section: Location & Old Town Walking Map Connection -->
+    <section class="section section-visit" id="visit">
+      <div class="container">
+        <div class="section-heading text-center">
+          <div class="section-tag" data-i18n="visit_tag">LOCATION & WALKING ROUTE</div>
+          <h2 class="section-title" data-i18n="visit_title">การเดินทาง & เส้นทางเชื่อมต่อเมืองเก่า</h2>
+          <p class="section-subtitle" data-i18n="visit_subtitle">
+            โรงเรียนเต้าหมิงตั้งอยู่ใจกลางย่านเมืองเก่าตะกั่วป่า สามารถเดินเชื่อมต่อไปยังจุดสำคัญทางประวัติศาสตร์ได้อย่างสะดวก
+          </p>
+        </div>
+
+        <div class="visit-grid">
+          <!-- Walking Map Visual Card -->
+          <div class="walking-map-card">
+            <div class="map-header">
+              <div class="map-title-badge" data-i18n="map_badge">🗺️ TAKUA PA HERITAGE MAP</div>
+              <h3 data-i18n="map_title">เส้นทางเดินเท้าวัฒนธรรมกั่วป่าโพ้</h3>
+            </div>
+
+            <div class="route-nodes-list">
+              <div class="route-node active-node">
+                <div class="node-icon">📍</div>
+                <div class="node-info">
+                  <strong data-i18n="node_1_title">โรงเรียนเต้าหมิง (Dao Ming Hub)</strong>
+                  <span data-i18n="node_1_desc">ศูนย์กลางความคิดสร้างสรรค์ นิทรรศการ และเวิร์กช็อป</span>
+                </div>
+              </div>
+
+              <div class="route-node">
+                <div class="node-icon">🏮</div>
+                <div class="node-info">
+                  <strong data-i18n="node_2_title">ถนนวัฒนธรรมศรีตะกั่วป่า (Walking Street)</strong>
+                  <span data-i18n="node_2_desc">ห่างเพียง 150 ม. (เดิน 2 นาที) · ตลาดนัดวันอาทิตย์ ขนมโบราณ อาคารชิโนฯ</span>
+                </div>
+              </div>
+
+              <div class="route-node">
+                <div class="node-icon">⛩️</div>
+                <div class="node-info">
+                  <strong data-i18n="node_3_title">ศาลเจ้ากวนอู (กวนเต้กุ้น)</strong>
+                  <span data-i18n="node_3_desc">ห่าง 300 ม. (เดิน 4 นาที) · ศาลเจ้าเก่าแก่อายุกว่า 150 ปี</span>
+                </div>
+              </div>
+
+              <div class="route-node">
+                <div class="node-icon">🌉</div>
+                <div class="node-info">
+                  <strong data-i18n="node_4_title">สะพานเหล็กบุญสูง (Boon Soong Iron Bridge)</strong>
+                  <span data-i18n="node_4_desc">ห่าง 850 ม. (เดิน 10 นาที) · สะพานประวัติศาสตร์สร้างจากชิ้นส่วนเรือขุดแร่ดีบุก</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Practical Info Card -->
+          <div class="practical-info-card">
+            <h3 data-i18n="practical_title">ข้อมูลการเข้าชม & การติดต่อ</h3>
+            <div class="info-blocks">
+              <div class="info-block">
+                <span class="info-icon">📍</span>
+                <div>
+                  <strong data-i18n="info_address_lbl">ที่ตั้ง</strong>
+                  <p data-i18n="info_address_val">ถนนศรีตะกั่วป่า ตำบลตลาดใหญ่ อำเภอตะกั่วป่า จังหวัดพังงา 82110</p>
+                </div>
+              </div>
+
+              <div class="info-block">
+                <span class="info-icon">🕒</span>
+                <div>
+                  <strong data-i18n="info_hours_lbl">เวลาเปิดทำการ</strong>
+                  <p data-i18n="info_hours_val">วันอังคาร - วันอาทิตย์: 09:00 - 18:00 น.<br>(วันที่มีกิจกรรม/ตลาด เปิดถึง 21:00 น. · ปิดวันจันทร์)</p>
+                </div>
+              </div>
+
+              <div class="info-block">
+                <span class="info-icon">🚗</span>
+                <div>
+                  <strong data-i18n="info_parking_lbl">การจอดรถ</strong>
+                  <p data-i18n="info_parking_val">มีจุดจอดรถรองรับบริเวณลานวัดใกล้เคียงและริมถนนศรีตะกั่วป่า</p>
+                </div>
+              </div>
+
+              <div class="info-block">
+                <span class="info-icon">🎫</span>
+                <div>
+                  <strong data-i18n="info_admission_lbl">ค่าเข้าชมพื้นที่ทั่วไป</strong>
+                  <p class="highlight-green" data-i18n="info_admission_val">เข้าชมฟรี (Free Admission)</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="social-share-strip">
+              <span data-i18n="social_follow_lbl">ติดตามข่าวสาร:</span>
+              <a href="#" class="social-btn">Facebook: เต้าหมิง ตะกั่วป่า</a>
+              <a href="#" class="social-btn">IG: @daoming.takuapa</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <div class="brand-logo">
+          <img src="assets/logo-305.jpg" alt="โลโก้โรงเรียนเต้าหมิง" class="brand-logo-img">
+          <div class="brand-text">
+            <span class="brand-title" data-i18n="brand_title">โรงเรียนเต้าหมิง ตะกั่วป่า</span>
+            <span class="brand-sub" data-i18n="brand_sub">DAO MING LIVING HERITAGE & CREATIVE HUB</span>
+          </div>
+        </div>
+        <p class="footer-tagline" data-i18n="footer_tagline">
+          "สืบสานรากเหง้าเมืองเหมืองแร่ เติมพลังความคิดสร้างสรรค์สู่อนาคตอย่างยั่งยืน"
+        </p>
+      </div>
+
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h4 data-i18n="footer_col1_title">เมนูด่วน</h4>
+          <a href="#story" data-i18n="f_story">ประวัติ 120 ปี</a>
+          <a href="#gable" data-i18n="nav_gable">ปรัชญาหน้าจั่ว</a>
+          <a href="#archive" data-i18n="nav_archive">คลังภาพเก่า</a>
+          <a href="#vision" data-i18n="f_vision">วิสัยทัศน์บริบทใหม่</a>
+          <a href="#spaces" data-i18n="f_spaces">แผนผังพื้นที่</a>
+        </div>
+        <div class="footer-col">
+          <h4 data-i18n="footer_col2_title">การมีส่วนร่วม</h4>
+          <a href="#ideas" data-i18n="f_ideas">ส่งไอเดียกิจกรรม</a>
+          <a href="#booking" data-i18n="f_booking">ขอใช้พื้นที่จัดงาน</a>
+          <a href="#events" data-i18n="f_events">ปฏิทินกิจกรรม</a>
+          <a href="#visit" data-i18n="f_visit">เส้นทางท่องเที่ยว</a>
+        </div>
+        <div class="footer-col">
+          <h4 data-i18n="footer_col3_title">เครือข่ายเมืองเก่า</h4>
+          <a href="#" data-i18n="f_net0">มูลนิธิโรงเรียนเต้าหมิง ตะกั่วป่า</a>
+          <a href="#" data-i18n="f_net1">ชุมชนตลาดใหญ่ ตะกั่วป่า</a>
+          <a href="#" data-i18n="f_net2">เทศบาลเมืองตะกั่วป่า</a>
+          <a href="#" data-i18n="f_net3">สมาคมสถาปนิกสยามฯ (ASA)</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container bottom-flex">
+        <p data-i18n="footer_copyright">© 2026 มูลนิธิโรงเรียนเต้าหมิง ตะกั่วป่า (Dao Ming Foundation). All rights reserved.</p>
+        <p class="design-credit" data-i18n="footer_credit">รางวัลอนุรักษ์ศิลปสถาปัตยกรรม ประจำปี 2569 สมาคมสถาปนิกสยาม ในพระบรมราชูปถัมภ์</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Lightbox Modal for Historic Photos -->
+  <div class="lightbox-modal" id="photoLightbox">
+    <div class="lightbox-backdrop" onclick="closePhotoLightbox()"></div>
+    <div class="lightbox-content">
+      <button class="lightbox-close-btn" onclick="closePhotoLightbox()">&times;</button>
+      <img src="" alt="ภาพขยาย" id="lightboxImg" class="lightbox-img">
+      <p class="lightbox-caption" id="lightboxCaption"></p>
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div class="toast-notification" id="toastNotification">
+    <span class="toast-icon">✓</span>
+    <span class="toast-message" id="toastMessage">ส่งไอเดียสำเร็จแล้ว! ขอบคุณที่ร่วมสร้างสรรค์</span>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

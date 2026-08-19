@@ -14,8 +14,8 @@ export default function AdminDashboardPage() {
 
   // Login & Register form states
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
-  const [usernameInput, setUsernameInput] = useState('admin');
-  const [passwordInput, setPasswordInput] = useState('takuapa2569');
+  const [usernameInput, setUsernameInput] = useState('');
+  const [passwordInput, setPasswordInput] = useState('');
   const [authError, setAuthError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
@@ -964,32 +964,6 @@ export default function AdminDashboardPage() {
                 </div>
               </div>
 
-              {/* Super Admin Fast Login Helper Pill */}
-              <div style={{ backgroundColor: 'rgba(229, 163, 30, 0.08)', border: '1px dashed rgba(229, 163, 30, 0.3)', borderRadius: '10px', padding: '8px 12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '0.74rem', color: 'rgba(250, 242, 221, 0.8)' }}>
-                  👑 บัญชี Admin สูงสุด: <strong style={{ color: '#E5A31E' }}>admin</strong>
-                </span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setUsernameInput('admin');
-                    setPasswordInput('takuapa2569');
-                  }}
-                  style={{
-                    backgroundColor: 'rgba(229, 163, 30, 0.2)',
-                    border: '1px solid #E5A31E',
-                    color: '#E5A31E',
-                    padding: '3px 8px',
-                    borderRadius: '6px',
-                    fontSize: '0.72rem',
-                    fontWeight: 'bold',
-                    cursor: 'pointer'
-                  }}
-                >
-                  คลิกกรอกอัตโนมัติ
-                </button>
-              </div>
-
               <button
                 type="submit"
                 style={{
@@ -1004,7 +978,7 @@ export default function AdminDashboardPage() {
                   cursor: 'pointer',
                   boxShadow: '0 4px 15px rgba(229, 163, 30, 0.35)',
                   transition: 'all 0.2s ease',
-                  marginTop: '4px'
+                  marginTop: '8px'
                 }}
               >
                 🔓 เข้าสู่ระบบ (Log in)
@@ -1457,7 +1431,7 @@ export default function AdminDashboardPage() {
                   </h2>
                 </div>
                 <p style={{ fontSize: '0.8rem', color: 'rgba(250, 242, 221, 0.7)', margin: 0 }}>
-                  Super Admin (admin/takuapa2569) มีอำนาจสูงสุดในการแต่งตั้งสิทธิ์ อนุมัติสมาชิกใหม่ รีเซ็ตรหัสผ่าน และควบคุมการเข้าถึงระบบ
+                  ผู้ดูแลระบบสูงสุด (Super Admin) มีอำนาจในการแต่งตั้งสิทธิ์ อนุมัติสมาชิกใหม่ รีเซ็ตรหัสผ่าน และควบคุมการเข้าถึงระบบ
                 </p>
               </div>
 

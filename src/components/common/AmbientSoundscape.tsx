@@ -47,7 +47,7 @@ export function AmbientSoundscape() {
   const [activeTrackIndex, setActiveTrackIndex] = useState<number>(0);
   const [volume, setVolume] = useState<number>(0.25);
   const [isOpenPanel, setIsOpenPanel] = useState<boolean>(false);
-  const [isMinimized, setIsMinimized] = useState<boolean>(false);
+  const [isMinimized, setIsMinimized] = useState<boolean>(true);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const wasPlayingBeforeGuideRef = useRef<boolean>(false);

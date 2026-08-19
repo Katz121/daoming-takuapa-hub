@@ -52,7 +52,7 @@ export function HeroSection() {
             ) : isEn ? (
               <>From <strong>"Toh Beng" to "Dao Ming" (導明)</strong>, the premier Chinese academy in Phang Nga founded by tin mining merchants and Master Pao in 1922, thoughtfully transformed into a <strong>Living Heritage</strong> cultural & creative hub for all generations.</>
             ) : (
-              <>จาก <strong>"โต๊ะเบ๋ง" สู่ "เต้าหมิง" (導明)</strong> โรงเรียนจีนแห่งแรกของจังหวัดพังงาที่สร้างขึ้นโดยการลงขันของคหบดีเหมืองแร่และช่างผาวในปี 2465 สู่การเป็น <strong>มรดกที่มีชีวิต (Living Heritage)</strong> ภายใต้มูลนิธิโรงเรียนเต้าหมิง ตะกั่วป่า เพื่อการเรียนรู้ วัฒนธรรม และพื้นที่สร้างสรรค์ของทุกคน</>
+              <>จาก <strong>"โต๊ะเบ๋ง" สู่ "เต้าหมิง"</strong> โรงเรียนจีนแห่งแรกของจังหวัดพังงาที่สร้างขึ้นโดยการลงขันของคหบดีเหมืองแร่และช่างผาวในปี 2465 สู่การเป็น <strong>มรดกที่มีชีวิต (Living Heritage)</strong> ภายใต้มูลนิธิโรงเรียนเต้าหมิง ตะกั่วป่า เพื่อการเรียนรู้ วัฒนธรรม และพื้นที่สร้างสรรค์ของทุกคน</>
             )}
           </p>
 
@@ -100,7 +100,7 @@ export function HeroSection() {
               </div>
               <div>
                 <p className="caption-title">
-                  {isZh ? '「導明（Dao Ming）——引領光明、傳承智慧之道」' : isEn ? '"Dao Ming (導明) means The Path of Enlightenment & Wisdom"' : '"เต้าหมิง (導明) แปลว่า หนทางแห่งแสงสว่างและปัญญา"'}
+                  {isZh ? '「導明（Dao Ming）——引領光明、傳承智慧之道」' : isEn ? '"Dao Ming means The Path of Enlightenment & Wisdom"' : '"เต้าหมิง แปลว่า หนทางแห่งแสงสว่างและปัญญา"'}
                 </p>
                 <span className="caption-sub">
                   {isZh ? "中西合璧公共紅毛樓建築，融合殖民柱廊與道家山牆哲學" : isEn ? "Public Ang Mor Lao architecture combining Classical Colonial and Chinese cosmology" : "อาคารอั้งม่อเหลาสาธารณะ ผสานคลาสสิกโคโลเนียลและปรัชญาจีน"}

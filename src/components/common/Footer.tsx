@@ -55,15 +55,21 @@ export function Footer() {
             <h4>{isZh ? "聯繫基金會" : isEn ? "Contact Foundation" : "ติดต่อมูลนิธิฯ"}</h4>
             <p><strong>{isZh ? "德古巴導明學校基金會" : isEn ? "Dao Ming School Foundation" : "มูลนิธิโรงเรียนเต้าหมิง ตะกั่วป่า"}</strong></p>
             <p>{isZh ? "泰國攀牙府德古巴縣大市場鎮斯里德古巴路 82110" : isEn ? "Sri Takua Pa Road, Talad Yai, Takua Pa, Phang Nga 82110" : "ถนนศรีตะกั่วป่า ตำบลตลาดใหญ่ อำอตะกั่วป่า จังหวัดพังงา ๘๒๑๑๐"}</p>
-            <p>☎️ 電話: 081-891-2345</p>
-            <p>✉️ 電子郵箱: contact@daoming-heritage.org</p>
+            <p>{isZh ? "☎️ 電話: 081-891-2345" : isEn ? "☎️ Tel: 081-891-2345" : "☎️ โทร: 081-891-2345"}</p>
+            <p>{isZh ? "✉️ 電子郵箱: contact@daoming-heritage.org" : isEn ? "✉️ Email: contact@daoming-heritage.org" : "✉️ อีเมล: contact@daoming-heritage.org"}</p>
           </div>
         </div>
       </div>
 
       <div className="footer-bottom">
         <div className="container">
-          <p>© 2569 / 2026 德古巴導明學校基金會 (Dao Ming School Foundation) · 版權所有</p>
+          <p>
+            {isZh
+              ? "© 2569 / 2026 德古巴導明學校基金會 (Dao Ming School Foundation) · 版權所有"
+              : isEn
+                ? "© 2569 / 2026 Dao Ming School Foundation · All Rights Reserved"
+                : "© 2569 / 2026 มูลนิธิโรงเรียนเต้าหมิง ตะกั่วป่า (Dao Ming School Foundation) · สงวนลิขสิทธิ์"}
+          </p>
         </div>
       </div>
     </footer>

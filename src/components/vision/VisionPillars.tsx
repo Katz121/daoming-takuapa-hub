@@ -50,7 +50,7 @@ export function VisionPillars() {
               </div>
             </div>
             <div className="pillar-subhead-row">
-              <span className="pillar-seal">歷史</span>
+              <span className="pillar-seal">{isZh ? "歷史" : isEn ? "HIST" : "มรดก"}</span>
               <span className="pillar-motif-tag">{isZh ? "十二光芒太陽紋" : isEn ? "12-Ray Solar Motif" : "ลายพระอาทิตย์ ๑๒ รัศมี"}</span>
             </div>
             <h3 className="pillar-title">
@@ -95,7 +95,7 @@ export function VisionPillars() {
               </div>
             </div>
             <div className="pillar-subhead-row">
-              <span className="pillar-seal">創藝</span>
+              <span className="pillar-seal">{isZh ? "創藝" : isEn ? "CRAFT" : "คราฟต์"}</span>
               <span className="pillar-motif-tag">{isZh ? "峇峇娘惹蠟染紋樣" : isEn ? "Batik Stencil Motif" : "ลายฉลุผ้าบาติก & คราฟต์"}</span>
             </div>
             <h3 className="pillar-title">
@@ -109,57 +109,55 @@ export function VisionPillars() {
                   : "ห้องเรียนสร้างสรรค์ชวนคนทุกวัยลงมือทำ เปลี่ยนภูมิปัญญาท้องถิ่นเป็นผลิตภัณฑ์ร่วมสมัย สอนโดยช่างฝีมือและศิลปินรุ่นใหม่"}
             </p>
             <div className="pillar-features-wrap">
-              <span className="pillar-chip">✦ {isZh ? "老城天然植物染蠟染印花工坊" : isEn ? "Old town natural batik printing" : "เวิร์กช็อปพิมพ์ลายผ้าบาติกเมืองเก่า"}</span>
-              <span className="pillar-chip">✦ {isZh ? "古法豆沙餅與娘惹糕點烘焙班" : isEn ? "Tao Sae pastry & Peranakan cuisine" : "คลาสทำขนมเต้าส้อ & อาหารเปอรานากัน"}</span>
-              <span className="pillar-chip">✦ {isZh ? "陶藝拉坯塑形與老城水彩寫生" : isEn ? "Ceramic pottery & watercolor painting" : "การปั้นเซรามิก & วาดภาพสีน้ำสถาปัตยกรรม"}</span>
+              <span className="pillar-chip">✦ {isZh ? "在地手作坊：植物染、錫工藝與傳統陶藝" : isEn ? "Hands-on workshops: Batik, tincraft & pottery" : "เวิร์กช็อปหัตถกรรม: บาติก, แร่ดีบุก, เซรามิก"}</span>
+              <span className="pillar-chip">✦ {isZh ? "德古巴古法糕餅烘焙與私房料理課" : isEn ? "Takua Pa heritage pastry & culinary labs" : "คลาสทำอาหาร & ขนมพื้นเมืองสูตรดั้งเดิม"}</span>
+              <span className="pillar-chip">✦ {isZh ? "青年創客孵化基地與共享工作空間" : isEn ? "Youth maker co-working & incubation hub" : "พื้นที่บ่มเพาะนักสร้างสรรค์และสตาร์ทอัพรุ่นใหม่"}</span>
             </div>
             <div className="pillar-card-action">
-              <span className="pillar-action-link">{isZh ? "查看 C區 (手作坊) 平面 →" : isEn ? "Explore Zone C (Craft Studio) →" : "ดูแผนผังโซน C (สตูดิโอคราฟต์) →"}</span>
+              <span className="pillar-action-link">{isZh ? "查看 C區 (工坊) 平面 →" : isEn ? "Explore Zone C (Studio) →" : "ดูแผนผังโซน C (สตูดิโอ) →"}</span>
             </div>
           </div>
 
           {/* Pillar 3 */}
-          <div className="pillar-card pillar-card-wood" onClick={() => selectZoneAndScroll('cafe')}>
+          <div className="pillar-card pillar-card-sage" onClick={() => selectZoneAndScroll('cafe')}>
             <div className="pillar-top-stripe"></div>
-            {/* Authentic Motif: Sino Wooden Window Geometry */}
+            {/* Authentic Motif: Takua Pa Tin Currency Cross & Window Lattice */}
             <svg className="pillar-bg-pattern" viewBox="0 0 120 120" aria-hidden="true">
-              <rect x="22" y="22" width="76" height="76" rx="6" fill="none" stroke="currentColor" strokeWidth="2"/>
-              <path d="M34,34 H86 V86 H34 Z" fill="none" stroke="currentColor" strokeWidth="1.5" strokeDasharray="4 2"/>
-              <path d="M46,46 H74 V74 H46 Z" fill="currentColor" fillOpacity="0.09" stroke="currentColor" strokeWidth="2"/>
-              <line x1="22" y1="60" x2="46" y2="60" stroke="currentColor" strokeWidth="2"/>
-              <line x1="74" y1="60" x2="98" y2="60" stroke="currentColor" strokeWidth="2"/>
-              <line x1="60" y1="22" x2="60" y2="46" stroke="currentColor" strokeWidth="2"/>
-              <line x1="60" y1="74" x2="60" y2="98" stroke="currentColor" strokeWidth="2"/>
+              <rect x="30" y="30" width="60" height="60" rx="4" fill="none" stroke="currentColor" strokeWidth="2"/>
+              <rect x="42" y="42" width="36" height="36" rx="2" fill="none" stroke="currentColor" strokeWidth="1.5" strokeDasharray="2 2"/>
+              <line x1="60" y1="30" x2="60" y2="90" stroke="currentColor" strokeWidth="1.5"/>
+              <line x1="30" y1="60" x2="90" y2="60" stroke="currentColor" strokeWidth="1.5"/>
+              <circle cx="60" cy="60" r="6" fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="1.5"/>
             </svg>
 
             <div className="pillar-card-header">
-              <div className="pillar-icon-box">☕</div>
+              <div className="pillar-icon-box">🍵</div>
               <div className="pillar-index-badge">
                 <span className="pillar-number">03</span>
                 <span className="pillar-zone-tag">ZONE D</span>
               </div>
             </div>
             <div className="pillar-subhead-row">
-              <span className="pillar-seal">聚場</span>
-              <span className="pillar-motif-tag">{isZh ? "紅毛樓古典百葉木窗幾何" : isEn ? "Ang Mor Lao Window Motif" : "ลายบานหน้าต่างอั้งม่อเหลา"}</span>
+              <span className="pillar-seal">{isZh ? "聚場" : isEn ? "GATHER" : "ชุมชน"}</span>
+              <span className="pillar-motif-tag">{isZh ? "中式幾何冰裂花窗紋" : isEn ? "Lattice Geometrics" : "ลายเรขาคณิตช่องลมโบราณ"}</span>
             </div>
             <h3 className="pillar-title">
-              {isZh ? "社區茶座與共享辦公空間 (Community Lounge)" : isEn ? "Community Cafe & Co-Working Lounge (Community Lounge)" : "คาเฟ่ชุมชน & Co-Working Space (Community Lounge)"}
+              {isZh ? "百年茶座與社區共聚客廳 (Community Cafe)" : isEn ? "Heritage Tea Lounge & Co-Living Room (Community Cafe)" : "คาเฟ่ชุมชน & ห้องรับแขกเมือง (Community Cafe)"}
             </h3>
             <p className="pillar-desc">
               {isZh
                 ? "靜謐舒適的辦公與社交場所，供應攀牙產地精品咖啡、工夫名茶與在地風味點心"
                 : isEn 
-                  ? "Relaxed space to work and meet, serving Phang Nga roast coffee, Chinese tea pairings, and local sweets"
-                  : "พื้นที่นั่งทำงาน นัดพบปะ และคุยโปรเจกต์ เสิร์ฟเครื่องดื่มจากเมล็ดกาแฟท้องถิ่นพังงา ขนมพื้นเมือง และงานคราฟต์ชุมชน"}
+                  ? "Relaxing meeting room & slow cafe serving Phang Nga single-origin coffee and heritage tea sets"
+                  : "พื้นที่นั่งทำงาน พักผ่อน และพบปะพูดคุย เสิร์ฟกาแฟพังงาคั่วพิเศษ ชาจีนโบราณ และขนมเต้าส้อโฮมเมด"}
             </p>
             <div className="pillar-features-wrap">
-              <span className="pillar-chip">✦ {isZh ? "沉浸式閱讀與遠端工作區 (高速Wi-Fi)" : isEn ? "Quiet reading & laptop working area (Wi-Fi)" : "โซนเงียบสำหรับอ่านหนังสือและทำงาน (Wi-Fi)"}</span>
-              <span className="pillar-chip">✦ {isZh ? "跨界交流大長桌與工夫茶席吧" : isEn ? "Community sharing table & tea bar" : "โต๊ะสนทนาแลกเปลี่ยนไอเดีย (Community Table)"}</span>
-              <span className="pillar-chip">✦ {isZh ? "在地手作工藝伴手禮展示展銷" : isEn ? "Local artisan souvenir showcase" : "จำหน่ายของฝากคราฟต์ฝีมือชุมชน"}</span>
+              <span className="pillar-chip">✦ {isZh ? "在地莊園精品手沖咖啡與工夫茶席" : isEn ? "Single-origin local coffee & Gongfu tea bar" : "กาแฟดริปท้องถิ่น & ชุดน้ำชาโบราณ"}</span>
+              <span className="pillar-chip">✦ {isZh ? "微風通透的木質外廊與自由漫步空間" : isEn ? "Breezy shaded colonial wooden verandas" : "ที่นั่งระเบียงไม้โปร่งรับลมธรรมชาติ"}</span>
+              <span className="pillar-chip">✦ {isZh ? "社區沙龍、讀書會與微型文創選品店" : isEn ? "Community salon, book corner & retail shop" : "มุมอ่านหนังสือ & สินค้าคราฟต์ที่ระลึก"}</span>
             </div>
             <div className="pillar-card-action">
-              <span className="pillar-action-link">{isZh ? "查看 D區 (社區茶座) 平面 →" : isEn ? "Explore Zone D (Community Lounge) →" : "ดูแผนผังโซน D (คาเฟ่ชุมชน) →"}</span>
+              <span className="pillar-action-link">{isZh ? "查看 D區 (茶座) 平面 →" : isEn ? "Explore Zone D (Cafe) →" : "ดูแผนผังโซน D (คาเฟ่) →"}</span>
             </div>
           </div>
 
@@ -182,7 +180,7 @@ export function VisionPillars() {
               </div>
             </div>
             <div className="pillar-subhead-row">
-              <span className="pillar-seal">市集</span>
+              <span className="pillar-seal">{isZh ? "市集" : isEn ? "MARKET" : "ตลาด"}</span>
               <span className="pillar-motif-tag">{isZh ? "德古巴礦河波紋" : isEn ? "River Wave Motif" : "ลายคลื่นน้ำแม่น้ำเมืองแร่"}</span>
             </div>
             <h3 className="pillar-title">

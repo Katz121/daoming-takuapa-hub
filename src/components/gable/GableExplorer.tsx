@@ -166,7 +166,7 @@ export function GableExplorer() {
               
               <div className="gable-card-top-row">
                 <div className="gable-symbol-badge" id="gableBadge">
-                  <span className="gable-seal-mini">{GABLE_SEALS[symbol.id] || '道'}</span>
+                  <span className="gable-seal-mini">{isZh ? (GABLE_SEALS[symbol.id] || '道') : `#${safeIndex + 1}`}</span>
                   <span>{isZh ? symbol.badge_zh : isEn ? symbol.badge_en : symbol.badge_th}</span>
                 </div>
               </div>

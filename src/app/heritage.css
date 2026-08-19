@@ -271,7 +271,9 @@ button, input, select, textarea {
   width: 40px;
   height: 40px;
   border-radius: 8px;
-  object-fit: cover;
+  object-fit: contain;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 2px;
   box-shadow: 0 2px 8px rgba(196, 77, 39, 0.25);
   border: 1.5px solid rgba(229, 163, 30, 0.6);
   flex-shrink: 0;

@@ -116,7 +116,7 @@ export function HeroSection() {
 
             <div className="visual-caption">
               <div className="caption-logo-mini">
-                <img src="/assets/logo.jpg" alt="ตราสัญลักษณ์เต้าหมิง" />
+                <img src="/assets/logo.png" alt="ตราสัญลักษณ์เต้าหมิง" />
               </div>
               <div>
                 <p className="caption-title">

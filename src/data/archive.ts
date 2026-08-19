@@ -182,5 +182,19 @@ export const ARCHIVE_PHOTOS: ArchivePhoto[] = [
     caption_th: "เอกสาร แผนผัง และร่องรอยประวัติศาสตร์ที่บันทึกบทบาทของเต้าหมิงในฐานะศูนย์รวมจิตใจของชุมชน",
     caption_en: "Historic maps, archival documents, and artifacts illustrating Dao Ming as the communal heart.",
     caption_zh: "珍貴地契文獻、建築藍圖與口述實錄，詳述導明學校如何凝聚代代華人鄉情。"
+  },
+  {
+    id: 13,
+    category: "art",
+    src: "/assets/poster-daoming-pop.png",
+    tag_th: "พ.ศ. ๒๕๖๙",
+    tag_en: "2026 Contemporary Art",
+    tag_zh: "2026年 幾何藝術",
+    title_th: "โปสเตอร์อัตลักษณ์ ๑๒๐ ปี เต้าหมิง (Pop-Heritage)",
+    title_en: "120th Commemorative Dao Ming Pop-Heritage Poster",
+    title_zh: "「導明」百廿週年紀念波普幾何藝術海報",
+    caption_th: "ผลงานกราฟิกร่วมสมัยผสานตราสัญลักษณ์เต้าหมิงและดวงตราอักษรจีนโบราณในโครงข่ายแสตมป์คู่สีคอนทราสต์สมมาตร",
+    caption_en: "Contemporary pop-heritage poster combining symmetrical Dao Ming architecture emblems and vintage single-character seals.",
+    caption_zh: "結合導明學校古典建築圖騰與傳統漢字單印章，以幾何對稱與高對比色調展現百年華校之現代生命力。"
   }
 ];

@@ -36,7 +36,7 @@ export interface GableSymbol {
 
 export interface ArchivePhoto {
   id: number;
-  category: 'diplomacy' | 'school' | 'sports' | 'community';
+  category: 'diplomacy' | 'school' | 'sports' | 'community' | 'art';
   src: string;
   tag_th: string;
   tag_en: string;

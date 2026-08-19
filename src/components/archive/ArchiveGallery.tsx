@@ -111,6 +111,12 @@ export function ArchiveGallery() {
           >
             {t('arch_cat_community')}
           </button>
+          <button
+            className={`filter-btn ${selectedCategory === 'art' ? 'active' : ''}`}
+            onClick={() => handleCategoryChange('art')}
+          >
+            {t('arch_cat_art')}
+          </button>
         </div>
 
         {/* Mobile Swipe Hint */}

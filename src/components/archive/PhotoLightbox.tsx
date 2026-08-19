@@ -262,23 +262,48 @@ export function PhotoLightbox() {
               textAlign: 'left'
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-              <span
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '6px', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span
+                  style={{
+                    fontSize: '0.75rem',
+                    fontFamily: 'monospace',
+                    fontWeight: 'bold',
+                    color: '#C44D27',
+                    background: 'rgba(196, 77, 39, 0.12)',
+                    padding: '2px 8px',
+                    borderRadius: '4px'
+                  }}
+                >
+                  {isZh ? photo.tag_zh : isEn ? photo.tag_en : photo.tag_th}
+                </span>
+                <h4 style={{ color: '#E5A31E', margin: 0, fontSize: '1.05rem', fontWeight: 'bold' }}>
+                  {isZh ? photo.title_zh : isEn ? photo.title_en : photo.title_th}
+                </h4>
+              </div>
+
+              <a
+                href={safeSrc}
+                download
+                target="_blank"
+                rel="noreferrer"
                 style={{
-                  fontSize: '0.75rem',
-                  fontFamily: 'monospace',
+                  fontSize: '0.76rem',
+                  padding: '4px 12px',
+                  borderRadius: '20px',
+                  backgroundColor: 'rgba(229, 163, 30, 0.15)',
+                  border: '1px solid #E5A31E',
+                  color: '#E5A31E',
+                  textDecoration: 'none',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
                   fontWeight: 'bold',
-                  color: '#C44D27',
-                  background: 'rgba(196, 77, 39, 0.12)',
-                  padding: '2px 8px',
-                  borderRadius: '4px'
+                  cursor: 'pointer'
                 }}
               >
-                {isZh ? photo.tag_zh : isEn ? photo.tag_en : photo.tag_th}
-              </span>
-              <h4 style={{ color: '#E5A31E', margin: 0, fontSize: '1.05rem', fontWeight: 'bold' }}>
-                {isZh ? photo.title_zh : isEn ? photo.title_en : photo.title_th}
-              </h4>
+                📥 {isZh ? '下載高解析原圖' : isEn ? 'Download HD' : 'บันทึกภาพคมชัด'}
+              </a>
             </div>
             <p style={{ margin: 0, fontSize: '0.88rem', color: 'rgba(250, 242, 221, 0.8)', lineHeight: '1.5' }}>
               {isZh ? photo.caption_zh : isEn ? photo.caption_en : photo.caption_th}

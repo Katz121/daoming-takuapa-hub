@@ -4,7 +4,6 @@ import React from 'react';
 import { useApp } from '@/lib/store';
 import { Toast } from './Toast';
 import { MobileDock } from './MobileDock';
-import { AmbientSoundscape } from './AmbientSoundscape';
 import { PhotoLightbox } from '../archive/PhotoLightbox';
 import { TeaSimulatorModal } from '../events/TeaSimulatorModal';
 import { ETicketModal } from '../events/ETicketModal';
@@ -17,7 +16,6 @@ export function AppModals() {
   return (
     <>
       <MobileDock />
-      <AmbientSoundscape />
       <Toast />
       <PhotoLightbox />
       <TeaSimulatorModal />

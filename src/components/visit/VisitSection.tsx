@@ -131,6 +131,65 @@ export function VisitSection() {
             </div>
           </div>
         </div>
+
+        {/* 120th Anniversary Commemorative Postcard & Art Banner */}
+        <div className="visitor-postcard-banner" style={{
+          marginTop: '36px',
+          background: 'linear-gradient(135deg, rgba(229, 163, 30, 0.12) 0%, rgba(14, 28, 26, 0.95) 100%)',
+          border: '1.5px solid rgba(229, 163, 30, 0.45)',
+          borderRadius: '20px',
+          padding: '24px 28px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '24px',
+          flexWrap: 'wrap',
+          boxShadow: '0 8px 30px rgba(0, 0, 0, 0.35)'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flex: '1 1 320px' }}>
+            <img
+              src="/assets/poster-daoming-pop.png"
+              alt="Dao Ming Pop Heritage Art"
+              style={{
+                width: '74px',
+                height: '98px',
+                objectFit: 'cover',
+                borderRadius: '10px',
+                border: '1.5px solid #E5A31E',
+                boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
+                flexShrink: 0
+              }}
+            />
+            <div>
+              <span style={{ fontSize: '0.72rem', letterSpacing: '1px', fontWeight: 'bold', color: '#E5A31E', textTransform: 'uppercase', display: 'block', marginBottom: '2px' }}>
+                📮 {isZh ? "百年導明限定紀念明信片" : isEn ? "120th Anniversary Commemorative Postcard" : "โปสการ์ดของที่ระลึก ๑๒๐ ปี เต้าหมิง"}
+              </span>
+              <h4 style={{ margin: '0 0 6px', fontSize: '1.08rem', color: '#FAF2DD', fontWeight: 'bold' }}>
+                {isZh ? "「導明」百廿週年紀念波普幾何藝術海報" : isEn ? "120th Dao Ming Pop-Heritage Graphic Series" : "ชุดภาพศิลปะกราฟิกอัตลักษณ์ ๑๒๐ ปี เต้าหมิง"}
+              </h4>
+              <p style={{ margin: 0, fontSize: '0.84rem', color: 'rgba(250, 242, 221, 0.78)', lineHeight: '1.45' }}>
+                {isZh
+                  ? "蒞臨導明學校打卡或參與文化工作坊，即可領取實體限定明信片；或點擊免費下載高清手機桌布。"
+                  : isEn
+                    ? "Check in at Dao Ming Hub or join workshops to receive physical collectible postcards, or download free HD wallpaper."
+                    : "รับโปสการ์ดจริงเมื่อเช็คอินหรือร่วมเวิร์กช็อป ณ อาคารเต้าหมิง หรือคลิกบันทึกภาพความละเอียดสูง"}
+              </p>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexShrink: 0 }}>
+            <a
+              href="/assets/poster-daoming-pop.png"
+              download="DaoMing_120Y_Heritage_Poster.png"
+              target="_blank"
+              rel="noreferrer"
+              className="btn btn-secondary"
+              style={{ fontSize: '0.82rem', padding: '9px 18px', borderRadius: '12px', border: '1.5px solid #E5A31E', color: '#FAF2DD', textDecoration: 'none', fontWeight: 'bold' }}
+            >
+              📥 {isZh ? "下載高清圖檔" : isEn ? "Download HD" : "ดาวน์โหลดภาพคมชัด"}
+            </a>
+          </div>
+        </div>
       </div>
     </section>
   );

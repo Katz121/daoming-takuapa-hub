@@ -51,11 +51,12 @@ export const TRANSLATIONS = {
     gallery_next: "ถัดไป",
     page_prev: "หน้าก่อน",
     page_next: "หน้าถัดไป",
-    arch_cat_all: "🌟 ทั้งหมด (13 ภาพ)",
+    arch_cat_all: "🌟 ทั้งหมด (14 ภาพ)",
     arch_cat_diplomacy: "🏛️ อาคาร & การทูต (2)",
     arch_cat_school: "📚 ครู & นักเรียน (4)",
     arch_cat_sports: "🏀 ทีมบาสเกตบอล (5)",
     arch_cat_community: "📜 เรื่องเล่าชุมชน (2)",
+    arch_cat_art: "🎨 อัตลักษณ์ & ศิลปะ (1)",
 
     // Tea Modal
     tea_modal_badge: "🫖 DAOMING HERITAGE TEA ROOM",
@@ -156,11 +157,12 @@ export const TRANSLATIONS = {
     gallery_next: "Next",
     page_prev: "Previous Page",
     page_next: "Next Page",
-    arch_cat_all: "🌟 All Photos (13)",
+    arch_cat_all: "🌟 All Photos (14)",
     arch_cat_diplomacy: "🏛️ Campus & Diplomacy (2)",
     arch_cat_school: "📚 Faculty & Students (4)",
     arch_cat_sports: "🏀 Basketball Teams (5)",
     arch_cat_community: "📜 Community Exhibits (2)",
+    arch_cat_art: "🎨 Pop Art & Identity (1)",
 
     // Tea Modal
     tea_modal_badge: "🫖 DAOMING HERITAGE TEA ROOM",
@@ -261,11 +263,12 @@ export const TRANSLATIONS = {
     gallery_next: "下一張",
     page_prev: "上一頁",
     page_next: "下一頁",
-    arch_cat_all: "🌟 全部影像 (13幅)",
+    arch_cat_all: "🌟 全部影像 (14幅)",
     arch_cat_diplomacy: "🏛️ 建築與外交 (2)",
     arch_cat_school: "📚 師資與學子 (4)",
     arch_cat_sports: "🏀 籃球隊風采 (5)",
     arch_cat_community: "📜 礦鄉記憶 (2)",
+    arch_cat_art: "🎨 幾何藝術與標誌 (1)",
 
     // Tea Modal
     tea_modal_badge: "🫖 導明百年茶席",

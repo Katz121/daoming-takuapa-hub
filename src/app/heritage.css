@@ -711,36 +711,51 @@ button, input, select, textarea {
 }
 
 .visual-caption {
-  padding: 18px 20px;
+  padding: 16px 20px;
   background-color: var(--bg-surface);
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
   border-top: 1px solid var(--border-light);
 }
 
-.caption-logo-mini img {
-  width: 42px;
-  height: 42px;
-  border-radius: 8px;
-  object-fit: contain;
-  background-color: #FFFFFF;
-  padding: 3px;
-  border: 1.5px solid #E5A31E;
+.caption-logo-mini {
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.caption-logo-mini img {
+  width: 68px;
+  height: 68px;
+  border-radius: 12px;
+  object-fit: contain !important;
+  background-color: #FFFFFF;
+  padding: 4px;
+  border: 2px solid #E5A31E;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 14px rgba(229, 163, 30, 0.3);
+  flex-shrink: 0;
+  transition: var(--transition);
+}
+
+.caption-logo-mini img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), 0 0 18px rgba(229, 163, 30, 0.45);
 }
 
 .caption-title {
-  font-size: 0.92rem;
-  font-weight: 600;
+  font-size: 0.96rem;
+  font-weight: 700;
   color: var(--text-main);
-  margin-bottom: 2px;
-  line-height: 1.35;
+  margin-bottom: 4px;
+  line-height: 1.4;
 }
 
 .caption-sub {
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   color: var(--text-muted);
+  line-height: 1.45;
 }
 
 /* ==========================================================================
@@ -1038,16 +1053,24 @@ button, input, select, textarea {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 0.76rem;
+  font-size: 0.84rem;
   font-family: var(--font-mono);
-  color: var(--color-cream);
-  font-weight: 600;
-  opacity: 0.9;
+  color: #FFFFFF !important;
+  font-weight: 700;
+  opacity: 1 !important;
   white-space: nowrap;
+  letter-spacing: 0.5px;
+}
+
+.tl-narrate-time-counter span {
+  color: #FFFFFF !important;
+  opacity: 1 !important;
 }
 
 .tl-time-sep {
-  opacity: 0.4;
+  color: #FFFFFF !important;
+  opacity: 0.85 !important;
+  margin: 0 1px;
 }
 
 /* Timeline Step Navigation Bar */
@@ -3895,12 +3918,21 @@ button, input, select, textarea {
 
   .visual-caption {
     padding: 12px 14px;
-    gap: 10px;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .caption-logo-mini img {
+    width: 54px;
+    height: 54px;
+    border-radius: 10px;
+    padding: 3px;
   }
 
   .caption-title {
-    font-size: 0.85rem;
-    line-height: 1.4;
+    font-size: 0.88rem;
+    line-height: 1.35;
+    margin-bottom: 2px;
   }
 
   .caption-sub {
@@ -4812,9 +4844,10 @@ button, input, select, textarea {
 
 .audio-time-label {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  min-width: 36px;
+  font-size: 0.8rem;
+  color: #FFFFFF !important;
+  font-weight: 600;
+  min-width: 38px;
 }
 
 .audio-track-line {

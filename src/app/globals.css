@@ -16,5 +16,5 @@
 .caption-logo-mini img,
 .brand-logo-img {
   position: relative !important;
-  object-fit: cover !important;
+  object-fit: contain !important;
 }

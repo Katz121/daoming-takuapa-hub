@@ -546,11 +546,11 @@ export default function AdminDashboardPage() {
                     <span style={{ fontSize: '0.78rem', color: '#F43F5E', fontWeight: 'bold', fontFamily: 'monospace' }}>❤️ {idea.votes} โหวต</span>
                   </div>
 
-                  <h3 style={{ fontSize: '0.95rem', fontWeight: 'bold', color: '#FFF', margin: 0 }}>{idea.title}</h3>
-                  <p style={{ fontSize: '0.8rem', color: 'rgba(250, 242, 221, 0.7)', margin: 0, lineHeight: '1.4' }}>{idea.desc}</p>
+                  <h3 style={{ fontSize: '0.95rem', fontWeight: 'bold', color: '#FFF', margin: 0 }}>{idea.title_th || (idea as any).title}</h3>
+                  <p style={{ fontSize: '0.8rem', color: 'rgba(250, 242, 221, 0.7)', margin: 0, lineHeight: '1.4' }}>{idea.desc_th || (idea as any).desc}</p>
                   
                   <div style={{ fontSize: '0.72rem', color: 'rgba(250, 242, 221, 0.5)', fontFamily: 'monospace' }}>
-                    เสนอโดย: <strong>{idea.author}</strong>
+                    เสนอโดย: <strong>{idea.author_th || (idea as any).author || 'ชาวตะกั่วป่า'}</strong>
                   </div>
 
                   <div style={{ paddingTop: '10px', borderTop: '1px solid rgba(255, 255, 255, 0.08)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

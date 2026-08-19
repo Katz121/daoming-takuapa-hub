@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useApp } from '@/lib/store';
 import { INITIAL_IDEAS } from '@/data/ideas';
 import { CommunityIdea } from '@/types';
-import { clientDb } from '@/lib/clientDb';
+import { clientDb, ClientIdea } from '@/lib/clientDb';
 
 export function IdeasSection() {
   const { lang, t, showToast } = useApp();
@@ -72,6 +72,8 @@ export function IdeasSection() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!title.trim() || !desc.trim()) return;
+
     setIsSubmitting(true);
 
     const categoryMap: Record<string, { th: string; en: string; zh: string }> = {
@@ -87,11 +89,12 @@ export function IdeasSection() {
 
     try {
       const newIdea = clientDb.addIdea({
-        title,
-        desc,
-        author: author || (isZh ? "社區居民 / 訪客" : isEn ? "Community Member" : "ชาวตะกั่วป่า"),
+        title: title.trim(),
+        desc: desc.trim(),
+        author: author.trim() || (isZh ? "社區居民 / 訪客" : isEn ? "Community Member" : "ชาวตะกั่วป่า"),
         category_th: catObj.th,
-        category_en: catObj.en
+        category_en: catObj.en,
+        category_zh: catObj.zh
       });
 
       setIdeas(prev => [newIdea as any, ...prev]);
@@ -225,28 +228,60 @@ export function IdeasSection() {
             </div>
 
             <div className="ideas-card-stream" id="ideasCardStream" ref={streamRef}>
-              {ideas.map(item => (
-                <div key={item.id} className="user-idea-card">
-                  <div className="idea-card-top">
-                    <span className="idea-category-tag">{isZh ? (item.category_zh || item.category_en) : isEn ? item.category_en : item.category_th}</span>
-                    <button
-                      type="button"
-                      className={`idea-heart-btn ${item.hasVoted ? 'voted' : ''}`}
-                      onClick={() => handleVote(item.id)}
-                      aria-label="Vote idea"
-                    >
-                      <span>❤️</span>
-                      <strong className="vote-count">{item.votes}</strong>
-                    </button>
+              {ideas.map(item => {
+                const itemTitle = isZh
+                  ? (item.title_zh || item.title_en || (item as any).title || item.title_th)
+                  : isEn
+                  ? (item.title_en || (item as any).title || item.title_th)
+                  : (item.title_th || (item as any).title || item.title_en);
+
+                const itemDesc = isZh
+                  ? (item.desc_zh || item.desc_en || (item as any).desc || item.desc_th)
+                  : isEn
+                  ? (item.desc_en || (item as any).desc || item.desc_th)
+                  : (item.desc_th || (item as any).desc || item.desc_en);
+
+                const itemAuthor = isZh
+                  ? (item.author_zh || item.author_th || (item as any).author || '德古巴居民')
+                  : isEn
+                  ? (item.author_en || (item as any).author || item.author_th || 'Community Member')
+                  : (item.author_th || (item as any).author || 'ชาวตะกั่วป่า');
+
+                const itemCategory = isZh
+                  ? (item.category_zh || item.category_en || item.category_th)
+                  : isEn
+                  ? (item.category_en || item.category_th)
+                  : item.category_th;
+
+                const itemDate = isZh
+                  ? (item.date_zh || item.date_th || (item as any).created_at || '近期')
+                  : isEn
+                  ? (item.date_en || item.date_th || (item as any).created_at || 'Recent')
+                  : (item.date_th || (item as any).created_at || 'ล่าสุด');
+
+                return (
+                  <div key={item.id} className="user-idea-card">
+                    <div className="idea-card-top">
+                      <span className="idea-category-tag">{itemCategory}</span>
+                      <button
+                        type="button"
+                        className={`idea-heart-btn ${item.hasVoted ? 'voted' : ''}`}
+                        onClick={() => handleVote(item.id)}
+                        aria-label="Vote idea"
+                      >
+                        <span>❤️</span>
+                        <strong className="vote-count">{item.votes}</strong>
+                      </button>
+                    </div>
+                    <h4>{itemTitle}</h4>
+                    <p>{itemDesc}</p>
+                    <div className="idea-card-author">
+                      <span>{isZh ? "發起人：" : isEn ? "Proposed by" : "เสนอโดย"} <strong>{itemAuthor}</strong></span>
+                      <span>{itemDate}</span>
+                    </div>
                   </div>
-                  <h4>{isZh ? (item.title_zh || item.title_en) : isEn ? item.title_en : item.title_th}</h4>
-                  <p>{isZh ? (item.desc_zh || item.desc_en) : isEn ? item.desc_en : item.desc_th}</p>
-                  <div className="idea-card-author">
-                    <span>{isZh ? "發起人：" : isEn ? "Proposed by" : "เสนอโดย"} <strong>{isZh ? (item.author_zh || item.author_th) : item.author_th}</strong></span>
-                    <span>{isZh ? (item.date_zh || item.date_th) : (item.date_th || 'ล่าสุด')}</span>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>

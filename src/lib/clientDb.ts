@@ -1,6 +1,7 @@
 'use client';
 
 import QRCode from 'qrcode';
+import { INITIAL_IDEAS } from '@/data/ideas';
 
 export interface ClientBooking {
   id: string;
@@ -25,61 +26,32 @@ export interface ClientBooking {
 
 export interface ClientIdea {
   id: number;
-  title: string;
-  desc: string;
-  author: string;
+  title_th: string;
+  title_en: string;
+  title_zh?: string;
+  desc_th: string;
+  desc_en: string;
+  desc_zh?: string;
+  author_th: string;
+  author_en?: string;
+  author_zh?: string;
+  date_th?: string;
+  date_en?: string;
+  date_zh?: string;
   category_th: string;
   category_en: string;
   category_zh?: string;
   votes: number;
-  status: string;
-  created_at: string;
+  status?: string;
+  hasVoted?: boolean;
+  created_at?: string;
 }
 
 const STORAGE_KEYS = {
-  BOOKINGS: 'daoming_bookings_store_v1',
-  IDEAS: 'daoming_ideas_store_v1',
-  SEATS: 'daoming_seats_store_v1',
+  BOOKINGS: 'daoming_bookings_store_v2',
+  IDEAS: 'daoming_ideas_store_v2',
+  SEATS: 'daoming_seats_store_v2',
 };
-
-const DEFAULT_IDEAS: ClientIdea[] = [
-  {
-    id: 1,
-    category_th: "🍲 อาหาร & วัฒนธรรมพื้นถิ่น",
-    category_en: "🍲 Local Food & Culture",
-    category_zh: "🍲 在地飲食與傳統文化",
-    title: "คลาสสอนทำขนมเต้าส้อ & ขนมพริกโบราณ สูตรดั้งเดิม",
-    desc: "อยากให้เชิญคุณป้าคุณยายในย่านเมืองเก่ามาถ่ายทอดสูตรทำแป้งขนมเต้าส้อไส้เค็ม-หวาน และเปิดให้ชิมสดๆ ร้อนๆ จากเตา",
-    author: "นุ่น (ชาวตะกั่วป่า)",
-    votes: 48,
-    status: 'in_action',
-    created_at: "2026-08-14 10:00:00"
-  },
-  {
-    id: 2,
-    category_th: "🎭 การแสดง & ดนตรี",
-    category_en: "🎭 Performance & Music",
-    category_zh: "🎭 藝文演出與星空音樂",
-    title: "เทศกาลฉายหนังกลางแปลงสารคดีเหมืองแร่ & ดนตรีแจ๊สในสวน",
-    desc: "จัดฉายหนังสารคดีประวัติศาสตร์เมืองแร่ใต้แสงจันทร์ พร้อมชวนวงดนตรีอะคูสติกคนรุ่นใหม่มาร่วมบรรเลงวันเสาร์สิ้นเดือน",
-    author: "บาส สถาปนิกชุมชน",
-    votes: 35,
-    status: 'reviewing',
-    created_at: "2026-08-12 18:30:00"
-  },
-  {
-    id: 3,
-    category_th: "📚 ประวัติศาสตร์ & การศึกษา",
-    category_en: "📚 History & Education",
-    category_zh: "📚 歷史溯源與青年走讀",
-    title: "ทัวร์เดินเท้า 'ตามรอยโรงเรียนจีนและอั้งม่อเหลา' โดยมัคคุเทศก์น้อย",
-    desc: "ฝึกเด็กๆ ในตะกั่วป่าเป็นนักเล่าเรื่อง พาเดินชมอาคารเต้าหมิง ศาลเจ้ากวนอู และบ้านขุนนิพัทธ์ฯ สัมผัสประวัติศาสตร์มีชีวิต",
-    author: "ครูวิชัย ศิษย์เก่าเต้าหมิง",
-    votes: 62,
-    status: 'in_action',
-    created_at: "2026-08-10 09:15:00"
-  }
-];
 
 const DEFAULT_BOOKINGS: ClientBooking[] = [
   {
@@ -234,26 +206,66 @@ export const clientDb = {
   },
 
   getIdeas(): ClientIdea[] {
-    if (typeof window === 'undefined') return DEFAULT_IDEAS;
+    if (typeof window === 'undefined') return INITIAL_IDEAS as any;
     try {
       const raw = localStorage.getItem(STORAGE_KEYS.IDEAS);
       if (!raw) {
-        localStorage.setItem(STORAGE_KEYS.IDEAS, JSON.stringify(DEFAULT_IDEAS));
-        return DEFAULT_IDEAS;
+        localStorage.setItem(STORAGE_KEYS.IDEAS, JSON.stringify(INITIAL_IDEAS));
+        return INITIAL_IDEAS as any;
       }
-      return JSON.parse(raw);
+      const parsed = JSON.parse(raw);
+      return parsed.map((item: any) => ({
+        ...item,
+        title_th: item.title_th || item.title || '',
+        title_en: item.title_en || item.title || '',
+        title_zh: item.title_zh || item.title || '',
+        desc_th: item.desc_th || item.desc || '',
+        desc_en: item.desc_en || item.desc || '',
+        desc_zh: item.desc_zh || item.desc || '',
+        author_th: item.author_th || item.author || '',
+        author_en: item.author_en || item.author || '',
+        author_zh: item.author_zh || item.author || '',
+        date_th: item.date_th || item.created_at || 'ล่าสุด',
+        date_en: item.date_en || 'Recent',
+        date_zh: item.date_zh || '近期',
+        category_th: item.category_th || '💡 ทั่วไป',
+        category_en: item.category_en || '💡 General',
+        category_zh: item.category_zh || '💡 通用'
+      }));
     } catch {
-      return DEFAULT_IDEAS;
+      return INITIAL_IDEAS as any;
     }
   },
 
-  addIdea(idea: { title: string; desc: string; author: string; category_th: string; category_en: string }): ClientIdea {
+  addIdea(idea: {
+    title: string;
+    desc: string;
+    author: string;
+    category_th: string;
+    category_en: string;
+    category_zh?: string;
+  }): ClientIdea {
     const list = this.getIdeas();
     const newId = list.length > 0 ? Math.max(...list.map(i => i.id)) + 1 : 1;
     const newIdea: ClientIdea = {
       id: newId,
-      ...idea,
+      title_th: idea.title,
+      title_en: idea.title,
+      title_zh: idea.title,
+      desc_th: idea.desc,
+      desc_en: idea.desc,
+      desc_zh: idea.desc,
+      author_th: idea.author,
+      author_en: idea.author,
+      author_zh: idea.author,
+      date_th: 'ล่าสุด',
+      date_en: 'Recent',
+      date_zh: '剛剛',
+      category_th: idea.category_th,
+      category_en: idea.category_en,
+      category_zh: idea.category_zh,
       votes: 1,
+      hasVoted: false,
       status: 'submitted',
       created_at: new Date().toISOString().replace('T', ' ').substring(0, 19)
     };

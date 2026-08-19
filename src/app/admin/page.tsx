@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { clientDb, ClientBooking, ClientIdea, SiteCopyData, DEFAULT_SITE_COPY, DEFAULT_TIMELINE_DATA } from '@/lib/clientDb';
-import { EventItem, ArchivePhoto, GableSymbol, SystemUser, UserRole, UserStatus } from '@/types';
+import { EventItem, ArchivePhoto, GableSymbol, SystemUser, UserRole, UserStatus, AuditLogEntry, AuditActionType } from '@/types';
 
 type BookingRecord = ClientBooking;
 type IdeaRecord = ClientIdea;
@@ -30,7 +30,7 @@ export default function AdminDashboardPage() {
     notes: ''
   });
 
-  const [activeTab, setActiveTab] = useState<'events' | 'archive' | 'site_copy' | 'tickets' | 'spaces' | 'ideas' | 'users' | 'reports'>('events');
+  const [activeTab, setActiveTab] = useState<'events' | 'archive' | 'site_copy' | 'tickets' | 'spaces' | 'ideas' | 'users' | 'logs' | 'reports'>('events');
   const [events, setEvents] = useState<EventItem[]>([]);
   const [archivePhotos, setArchivePhotos] = useState<ArchivePhoto[]>([]);
   const [siteCopy, setSiteCopy] = useState<SiteCopyData>(DEFAULT_SITE_COPY);
@@ -40,10 +40,19 @@ export default function AdminDashboardPage() {
   const [spaceProposals, setSpaceProposals] = useState<BookingRecord[]>([]);
   const [ideas, setIdeas] = useState<IdeaRecord[]>([]);
   const [usersList, setUsersList] = useState<SystemUser[]>([]);
+  const [auditLogs, setAuditLogs] = useState<AuditLogEntry[]>([]);
   const [scanCode, setScanCode] = useState('');
   const [scanResult, setScanResult] = useState<any | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [feedbackMsg, setFeedbackMsg] = useState<string | null>(null);
+
+  // Audit Logs states (Admin only)
+  const [logSearch, setLogSearch] = useState('');
+  const [logActionFilter, setLogActionFilter] = useState('all');
+  const [logModuleFilter, setLogModuleFilter] = useState('all');
+  const [logUserFilter, setLogUserFilter] = useState('all');
+  const [selectedLogDetail, setSelectedLogDetail] = useState<AuditLogEntry | null>(null);
+  const [isLogDetailModalOpen, setIsLogDetailModalOpen] = useState(false);
 
   // Users Tab states & Modals
   const [userSearch, setUserSearch] = useState('');
@@ -165,6 +174,9 @@ export default function AdminDashboardPage() {
 
       const iList = clientDb.getIdeas();
       setIdeas(iList);
+
+      const logList = clientDb.getAuditLogs();
+      setAuditLogs(logList);
     } catch {
       // ignore
     }
@@ -190,6 +202,16 @@ export default function AdminDashboardPage() {
       }
     }
     setIsAuthChecked(true);
+
+    const handleAuditLogsUpdated = () => {
+      setAuditLogs(clientDb.getAuditLogs());
+    };
+    if (typeof window !== 'undefined') {
+      window.addEventListener('daoming_audit_logs_updated', handleAuditLogsUpdated);
+      return () => {
+        window.removeEventListener('daoming_audit_logs_updated', handleAuditLogsUpdated);
+      };
+    }
   }, []);
 
   useEffect(() => {
@@ -212,6 +234,18 @@ export default function AdminDashboardPage() {
       setIsAuthenticated(true);
       showFeedback(`ยินดีต้อนรับ ${res.user.full_name} (${res.user.role.toUpperCase()})`);
       fetchAllData();
+
+      clientDb.addAuditLog({
+        user_id: res.user.id,
+        username: res.user.username,
+        full_name: res.user.full_name,
+        role: res.user.role,
+        action_type: 'AUTH',
+        module: 'system',
+        module_name_th: 'ระบบหลัก & การเข้าสู่ระบบ',
+        description: `เข้าสู่ระบบสำเร็จ (@${res.user.username})`,
+        details: `สิทธิ์: ${res.user.role}, สังกัด: ${res.user.department || '-'}`
+      });
     } else {
       setAuthError(res.message);
     }
@@ -253,12 +287,37 @@ export default function AdminDashboardPage() {
         department: 'สมาชิกทั่วไป / อาสาสมัคร',
         notes: ''
       });
+
+      clientDb.addAuditLog({
+        user_id: 'reg-pending',
+        username: registerForm.username,
+        full_name: registerForm.full_name,
+        role: 'member',
+        action_type: 'AUTH',
+        module: 'users',
+        module_name_th: 'ระบบสมาชิก & สิทธิ์',
+        description: `ลงทะเบียนสมัครสมาชิกใหม่ (รออนุมัติ): ${registerForm.full_name} (@${registerForm.username})`,
+        details: `สังกัด: ${registerForm.department}, เบอร์: ${registerForm.phone || '-'}`
+      });
     } else {
       setAuthError(res.message);
     }
   };
 
   const handleLogout = () => {
+    if (currentUser) {
+      clientDb.addAuditLog({
+        user_id: currentUser.id,
+        username: currentUser.username,
+        full_name: currentUser.full_name,
+        role: currentUser.role,
+        action_type: 'AUTH',
+        module: 'system',
+        module_name_th: 'ระบบหลัก & การเข้าสู่ระบบ',
+        description: `ออกจากระบบ (@${currentUser.username})`,
+        details: `สิทธิ์: ${currentUser.role}`
+      });
+    }
     if (typeof window !== 'undefined') {
       sessionStorage.removeItem('daoming_admin_auth');
       sessionStorage.removeItem('daoming_current_user');
@@ -309,6 +368,18 @@ export default function AdminDashboardPage() {
         showFeedback(res.message);
         setIsUserModalOpen(false);
         fetchAllData();
+
+        clientDb.addAuditLog({
+          user_id: currentUser?.id,
+          username: currentUser?.username,
+          full_name: currentUser?.full_name,
+          role: currentUser?.role,
+          action_type: 'UPDATE',
+          module: 'users',
+          module_name_th: 'ระบบสมาชิก & สิทธิ์',
+          description: `แก้ไขข้อมูลสมาชิก: ${userForm.full_name} (@${userForm.username})`,
+          details: `สิทธิ์: ${userForm.role}, สถานะ: ${userForm.status}, แผนก: ${userForm.department || '-'}`
+        });
       } else {
         alert(res.message);
       }
@@ -322,6 +393,18 @@ export default function AdminDashboardPage() {
         showFeedback(res.message);
         setIsUserModalOpen(false);
         fetchAllData();
+
+        clientDb.addAuditLog({
+          user_id: currentUser?.id,
+          username: currentUser?.username,
+          full_name: currentUser?.full_name,
+          role: currentUser?.role,
+          action_type: 'CREATE',
+          module: 'users',
+          module_name_th: 'ระบบสมาชิก & สิทธิ์',
+          description: `เพิ่มสมาชิกใหม่: ${userForm.full_name} (@${userForm.username})`,
+          details: `สิทธิ์: ${userForm.role}, สถานะ: ${userForm.status}, แผนก: ${userForm.department || '-'}`
+        });
       } else {
         alert(res.message);
       }
@@ -333,6 +416,18 @@ export default function AdminDashboardPage() {
     if (res.success) {
       showFeedback(`✅ อนุมัติสิทธิ์เข้าใช้งานให้คุณ "${user.full_name}" เรียบร้อยแล้ว`);
       fetchAllData();
+
+      clientDb.addAuditLog({
+        user_id: currentUser?.id,
+        username: currentUser?.username,
+        full_name: currentUser?.full_name,
+        role: currentUser?.role,
+        action_type: 'AUTH',
+        module: 'users',
+        module_name_th: 'ระบบสมาชิก & สิทธิ์',
+        description: `อนุมัติสิทธิ์สมาชิก: ${user.full_name} (@${user.username})`,
+        details: `สิทธิ์ที่ได้รับ: ${user.role}, สังกัด: ${user.department || '-'}`
+      });
     }
   };
 
@@ -342,6 +437,18 @@ export default function AdminDashboardPage() {
     if (res.success) {
       showFeedback(`ปรับสถานะคุณ "${user.full_name}" เป็น ${newStatus === 'active' ? 'ใช้งานได้' : 'ระงับชั่วคราว'}`);
       fetchAllData();
+
+      clientDb.addAuditLog({
+        user_id: currentUser?.id,
+        username: currentUser?.username,
+        full_name: currentUser?.full_name,
+        role: currentUser?.role,
+        action_type: 'AUTH',
+        module: 'users',
+        module_name_th: 'ระบบสมาชิก & สิทธิ์',
+        description: `${newStatus === 'active' ? 'ปลดระงับการใช้งาน' : 'ระงับการใช้งาน'}: ${user.full_name} (@${user.username})`,
+        details: `สถานะใหม่: ${newStatus}`
+      });
     } else {
       alert(res.message);
     }
@@ -360,6 +467,18 @@ export default function AdminDashboardPage() {
       showFeedback(`👑 แต่งตั้งสิทธิ์คุณ "${roleTargetUser.full_name}" เป็น [${newSelectedRole.toUpperCase()}] สำเร็จ`);
       setIsRoleModalOpen(false);
       fetchAllData();
+
+      clientDb.addAuditLog({
+        user_id: currentUser?.id,
+        username: currentUser?.username,
+        full_name: currentUser?.full_name,
+        role: currentUser?.role,
+        action_type: 'AUTH',
+        module: 'users',
+        module_name_th: 'ระบบสมาชิก & สิทธิ์',
+        description: `แต่งตั้งระดับสิทธิ์: ${roleTargetUser.full_name} (@${roleTargetUser.username}) เป็น [${newSelectedRole.toUpperCase()}]`,
+        details: `สิทธิ์เดิม: ${roleTargetUser.role} -> สิทธิ์ใหม่: ${newSelectedRole}`
+      });
     } else {
       alert(res.message);
     }
@@ -381,6 +500,18 @@ export default function AdminDashboardPage() {
       showFeedback(`🔑 เปลี่ยนรหัสผ่านให้คุณ "${passwordTargetUser.full_name}" สำเร็จ`);
       setIsPasswordResetModalOpen(false);
       fetchAllData();
+
+      clientDb.addAuditLog({
+        user_id: currentUser?.id,
+        username: currentUser?.username,
+        full_name: currentUser?.full_name,
+        role: currentUser?.role,
+        action_type: 'AUTH',
+        module: 'users',
+        module_name_th: 'ระบบสมาชิก & สิทธิ์',
+        description: `เปลี่ยนรหัสผ่านให้สมาชิก: ${passwordTargetUser.full_name} (@${passwordTargetUser.username})`,
+        details: `ดำเนินการโดย @${currentUser?.username}`
+      });
     } else {
       alert(res.message);
     }
@@ -392,6 +523,18 @@ export default function AdminDashboardPage() {
       if (res.success) {
         showFeedback(res.message);
         fetchAllData();
+
+        clientDb.addAuditLog({
+          user_id: currentUser?.id,
+          username: currentUser?.username,
+          full_name: currentUser?.full_name,
+          role: currentUser?.role,
+          action_type: 'DELETE',
+          module: 'users',
+          module_name_th: 'ระบบสมาชิก & สิทธิ์',
+          description: `ลบสมาชิกออกจากระบบ: ${user.full_name} (@${user.username})`,
+          details: `สิทธิ์: ${user.role}, สังกัด: ${user.department || '-'}`
+        });
       } else {
         alert(res.message);
       }
@@ -403,6 +546,18 @@ export default function AdminDashboardPage() {
       clientDb.resetUsers();
       showFeedback('🔄 รีเซ็ตรายชื่อผู้ใช้งานเป็นค่าเริ่มต้นเรียบร้อย');
       fetchAllData();
+
+      clientDb.addAuditLog({
+        user_id: currentUser?.id,
+        username: currentUser?.username,
+        full_name: currentUser?.full_name,
+        role: currentUser?.role,
+        action_type: 'RESET',
+        module: 'users',
+        module_name_th: 'ระบบสมาชิก & สิทธิ์',
+        description: `คืนค่ารายชื่อสมาชิกเป็นค่าเริ่มต้น`,
+        details: `ล้างสมาชิกที่เพิ่มเองทั้งหมด`
+      });
     }
   };
 
@@ -485,9 +640,31 @@ export default function AdminDashboardPage() {
       if (editingEventId) {
         clientDb.updateEvent(editingEventId, eventForm);
         showFeedback(`แก้ไขกิจกรรม "${eventForm.title_th}" สำเร็จ`);
+        clientDb.addAuditLog({
+          user_id: currentUser?.id,
+          username: currentUser?.username,
+          full_name: currentUser?.full_name,
+          role: currentUser?.role,
+          action_type: 'UPDATE',
+          module: 'events',
+          module_name_th: 'กิจกรรม & เวิร์กช็อป',
+          description: `แก้ไขกิจกรรม: ${eventForm.title_th}`,
+          details: `หมวดหมู่: ${eventForm.category}, สถานที่: ${eventForm.loc_th}, วันที่: ${eventForm.day_th} ${eventForm.month_th}`
+        });
       } else {
         clientDb.createEvent(eventForm);
         showFeedback(`เพิ่มกิจกรรมใหม่ "${eventForm.title_th}" สำเร็จ`);
+        clientDb.addAuditLog({
+          user_id: currentUser?.id,
+          username: currentUser?.username,
+          full_name: currentUser?.full_name,
+          role: currentUser?.role,
+          action_type: 'CREATE',
+          module: 'events',
+          module_name_th: 'กิจกรรม & เวิร์กช็อป',
+          description: `เพิ่มกิจกรรมใหม่: ${eventForm.title_th}`,
+          details: `หมวดหมู่: ${eventForm.category}, สถานที่: ${eventForm.loc_th}, วันที่: ${eventForm.day_th} ${eventForm.month_th}`
+        });
       }
       setIsEventModalOpen(false);
       fetchAllData();
@@ -501,6 +678,18 @@ export default function AdminDashboardPage() {
       clientDb.deleteEvent(id);
       showFeedback(`ลบกิจกรรม "${title}" เรียบร้อยแล้ว`);
       fetchAllData();
+
+      clientDb.addAuditLog({
+        user_id: currentUser?.id,
+        username: currentUser?.username,
+        full_name: currentUser?.full_name,
+        role: currentUser?.role,
+        action_type: 'DELETE',
+        module: 'events',
+        module_name_th: 'กิจกรรม & เวิร์กช็อป',
+        description: `ลบกิจกรรม: ${title} (ID: ${id})`,
+        details: `ดำเนินการโดย @${currentUser?.username}`
+      });
     }
   };
 
@@ -509,6 +698,18 @@ export default function AdminDashboardPage() {
       clientDb.resetEvents();
       showFeedback('คืนค่ารายการกิจกรรมและเวิร์กช็อปเริ่มต้นเรียบร้อยแล้ว');
       fetchAllData();
+
+      clientDb.addAuditLog({
+        user_id: currentUser?.id,
+        username: currentUser?.username,
+        full_name: currentUser?.full_name,
+        role: currentUser?.role,
+        action_type: 'RESET',
+        module: 'events',
+        module_name_th: 'กิจกรรม & เวิร์กช็อป',
+        description: `คืนค่ารายการกิจกรรมและเวิร์กช็อปเป็นค่าเริ่มต้น`,
+        details: `ล้างการแก้ไขกิจกรรมทั้งหมด`
+      });
     }
   };
 
@@ -564,9 +765,31 @@ export default function AdminDashboardPage() {
       if (editingPhotoId !== null) {
         clientDb.updateArchivePhoto(editingPhotoId, archiveForm);
         showFeedback(`แก้ไขภาพประวัติศาสตร์ "${archiveForm.title_th}" สำเร็จ`);
+        clientDb.addAuditLog({
+          user_id: currentUser?.id,
+          username: currentUser?.username,
+          full_name: currentUser?.full_name,
+          role: currentUser?.role,
+          action_type: 'UPDATE',
+          module: 'archive',
+          module_name_th: 'คลังภาพประวัติศาสตร์',
+          description: `แก้ไขภาพมรดก: ${archiveForm.title_th}`,
+          details: `หมวดหมู่: ${archiveForm.category}, ยุคสมัย: ${archiveForm.tag_th}`
+        });
       } else {
         clientDb.createArchivePhoto(archiveForm);
         showFeedback(`เพิ่มภาพประวัติศาสตร์ใหม่ "${archiveForm.title_th}" สำเร็จ`);
+        clientDb.addAuditLog({
+          user_id: currentUser?.id,
+          username: currentUser?.username,
+          full_name: currentUser?.full_name,
+          role: currentUser?.role,
+          action_type: 'CREATE',
+          module: 'archive',
+          module_name_th: 'คลังภาพประวัติศาสตร์',
+          description: `เพิ่มภาพมรดกใหม่: ${archiveForm.title_th}`,
+          details: `หมวดหมู่: ${archiveForm.category}, ยุคสมัย: ${archiveForm.tag_th}`
+        });
       }
       setIsArchiveModalOpen(false);
       fetchAllData();
@@ -580,6 +803,18 @@ export default function AdminDashboardPage() {
       clientDb.deleteArchivePhoto(id);
       showFeedback(`ลบภาพ "${title}" เรียบร้อยแล้ว`);
       fetchAllData();
+
+      clientDb.addAuditLog({
+        user_id: currentUser?.id,
+        username: currentUser?.username,
+        full_name: currentUser?.full_name,
+        role: currentUser?.role,
+        action_type: 'DELETE',
+        module: 'archive',
+        module_name_th: 'คลังภาพประวัติศาสตร์',
+        description: `ลบภาพมรดก: ${title} (ID: ${id})`,
+        details: `ดำเนินการโดย @${currentUser?.username}`
+      });
     }
   };
 
@@ -588,6 +823,18 @@ export default function AdminDashboardPage() {
       clientDb.resetArchivePhotos();
       showFeedback('คืนค่ารายการภาพประวัติศาสตร์เริ่มต้นเรียบร้อยแล้ว');
       fetchAllData();
+
+      clientDb.addAuditLog({
+        user_id: currentUser?.id,
+        username: currentUser?.username,
+        full_name: currentUser?.full_name,
+        role: currentUser?.role,
+        action_type: 'RESET',
+        module: 'archive',
+        module_name_th: 'คลังภาพประวัติศาสตร์',
+        description: `คืนค่าคลังภาพประวัติศาสตร์เริ่มต้น`,
+        details: `ล้างการแก้ไขภาพมรดกทั้งหมด`
+      });
     }
   };
 
@@ -642,6 +889,20 @@ export default function AdminDashboardPage() {
       const result = clientDb.checkInTicket(scanCode.trim());
       setScanResult(result);
       fetchAllData();
+
+      if (result.success && result.data) {
+        clientDb.addAuditLog({
+          user_id: currentUser?.id,
+          username: currentUser?.username,
+          full_name: currentUser?.full_name,
+          role: currentUser?.role,
+          action_type: 'UPDATE',
+          module: 'bookings',
+          module_name_th: 'ระบบตั๋ว & เช็คอิน',
+          description: `เช็คอินตั๋วสำเร็จ: รหัส ${result.data.ticket_code} (${result.data.guest_name})`,
+          details: `กิจกรรม: ${result.data.event_title}`
+        });
+      }
     } catch (err: any) {
       setScanResult({ success: false, message: err.message });
     } finally {
@@ -655,6 +916,18 @@ export default function AdminDashboardPage() {
       if (success) {
         showFeedback(`ปรับสถานะคำขอ ${ticketCode} เป็น ${newStatus} สำเร็จ`);
         fetchAllData();
+
+        clientDb.addAuditLog({
+          user_id: currentUser?.id,
+          username: currentUser?.username,
+          full_name: currentUser?.full_name,
+          role: currentUser?.role,
+          action_type: 'UPDATE',
+          module: 'bookings',
+          module_name_th: 'ระบบตั๋ว & เช็คอิน',
+          description: `ปรับสถานะคำขอ/ตั๋ว ${ticketCode} เป็น [${newStatus}]`,
+          details: `ดำเนินการโดย @${currentUser?.username}`
+        });
       }
     } catch (err: any) {
       showFeedback(`Error: ${err.message}`);
@@ -667,6 +940,18 @@ export default function AdminDashboardPage() {
       if (success) {
         showFeedback(`ปรับสถานะไอเดีย #${ideaId} สำเร็จ`);
         fetchAllData();
+
+        clientDb.addAuditLog({
+          user_id: currentUser?.id,
+          username: currentUser?.username,
+          full_name: currentUser?.full_name,
+          role: currentUser?.role,
+          action_type: 'UPDATE',
+          module: 'ideas',
+          module_name_th: 'ไอเดียชุมชน',
+          description: `ปรับสถานะไอเดีย #${ideaId} เป็น [${newStatus}]`,
+          details: `ดำเนินการโดย @${currentUser?.username}`
+        });
       }
     } catch (err: any) {
       showFeedback(`Error: ${err.message}`);
@@ -713,6 +998,18 @@ export default function AdminDashboardPage() {
     e.preventDefault();
     clientDb.updateSiteCopy(siteCopy);
     showFeedback("✓ บันทึกข้อความและเนื้อหาเว็บไซต์สำเร็จ (อัปเดตแบบ Realtime ทันที)");
+
+    clientDb.addAuditLog({
+      user_id: currentUser?.id,
+      username: currentUser?.username,
+      full_name: currentUser?.full_name,
+      role: currentUser?.role,
+      action_type: 'UPDATE',
+      module: 'site_copy',
+      module_name_th: 'เนื้อหาเว็บไซต์หลัก',
+      description: `บันทึกการแก้ไขข้อความและเนื้อหาเว็บไซต์ทั้งหมด 3 ภาษา`,
+      details: `อัปเดตข้อมูลถาวรในฐานข้อมูล Master`
+    });
   };
 
   const handleResetSiteCopy = () => {
@@ -720,6 +1017,18 @@ export default function AdminDashboardPage() {
       const reset = clientDb.resetSiteCopy();
       setSiteCopy(reset);
       showFeedback("✓ คืนค่าข้อความและเนื้อหาเริ่มต้นเรียบร้อยแล้ว");
+
+      clientDb.addAuditLog({
+        user_id: currentUser?.id,
+        username: currentUser?.username,
+        full_name: currentUser?.full_name,
+        role: currentUser?.role,
+        action_type: 'RESET',
+        module: 'site_copy',
+        module_name_th: 'เนื้อหาเว็บไซต์หลัก',
+        description: `คืนค่าข้อความและเนื้อหาเว็บไซต์เป็นค่าเริ่มต้น`,
+        details: `ล้างข้อความที่แก้ไขทั้งหมด`
+      });
     }
   };
 
@@ -736,6 +1045,18 @@ export default function AdminDashboardPage() {
     setIsGableModalOpen(false);
     fetchAllData();
     showFeedback(`✓ บันทึกข้อมูลสัญลักษณ์ ${gableForm.name_th || editingGableId} สำเร็จ`);
+
+    clientDb.addAuditLog({
+      user_id: currentUser?.id,
+      username: currentUser?.username,
+      full_name: currentUser?.full_name,
+      role: currentUser?.role,
+      action_type: 'UPDATE',
+      module: 'gables',
+      module_name_th: 'ปรัชญาหน้าจั่ว',
+      description: `บันทึกข้อมูลสัญลักษณ์หน้าจั่ว: ${gableForm.name_th || editingGableId}`,
+      details: `อัปเดตคำอธิบายและตำแหน่งจุดสัญลักษณ์`
+    });
   };
 
   const handleResetGables = () => {
@@ -743,6 +1064,18 @@ export default function AdminDashboardPage() {
       const reset = clientDb.resetGableSymbols();
       setGables(reset);
       showFeedback("✓ คืนค่าสัญลักษณ์หน้าจั่วเริ่มต้นเรียบร้อยแล้ว");
+
+      clientDb.addAuditLog({
+        user_id: currentUser?.id,
+        username: currentUser?.username,
+        full_name: currentUser?.full_name,
+        role: currentUser?.role,
+        action_type: 'RESET',
+        module: 'gables',
+        module_name_th: 'ปรัชญาหน้าจั่ว',
+        description: `คืนค่าสัญลักษณ์หน้าจั่ว 8 จุดเป็นค่าเริ่มต้น`,
+        details: `ล้างการแก้ไขข้อมูลหน้าจั่ว`
+      });
     }
   };
 
@@ -760,6 +1093,18 @@ export default function AdminDashboardPage() {
     setIsTimelineModalOpen(false);
     fetchAllData();
     showFeedback(`✓ บันทึกข้อมูลยุคสมัย ${timelineForm.badge_th || editingTimelineYear} สำเร็จ`);
+
+    clientDb.addAuditLog({
+      user_id: currentUser?.id,
+      username: currentUser?.username,
+      full_name: currentUser?.full_name,
+      role: currentUser?.role,
+      action_type: 'UPDATE',
+      module: 'timeline',
+      module_name_th: 'ลำดับกาลเวลา ๑๒๐ ปี',
+      description: `บันทึกข้อมูลยุคสมัย: ${timelineForm.badge_th || editingTimelineYear}`,
+      details: `อัปเดตเนื้อหาประวัติศาสตร์และหลักฐาน`
+    });
   };
 
   const handleResetTimeline = () => {
@@ -767,6 +1112,18 @@ export default function AdminDashboardPage() {
       const reset = clientDb.resetTimelineData();
       setTimelineData(reset);
       showFeedback("✓ คืนค่าประวัติศาสตร์เริ่มต้นเรียบร้อยแล้ว");
+
+      clientDb.addAuditLog({
+        user_id: currentUser?.id,
+        username: currentUser?.username,
+        full_name: currentUser?.full_name,
+        role: currentUser?.role,
+        action_type: 'RESET',
+        module: 'timeline',
+        module_name_th: 'ลำดับกาลเวลา ๑๒๐ ปี',
+        description: `คืนค่าข้อมูลประวัติศาสตร์กาลเวลาเป็นค่าเริ่มต้น`,
+        details: `ล้างการแก้ไขข้อมูลไทม์ไลน์ทั้งหมด`
+      });
     }
   };
 
@@ -794,6 +1151,18 @@ export default function AdminDashboardPage() {
         if (result.success) {
           showFeedback(result.message);
           fetchAllData();
+
+          clientDb.addAuditLog({
+            user_id: currentUser?.id,
+            username: currentUser?.username,
+            full_name: currentUser?.full_name,
+            role: currentUser?.role,
+            action_type: 'UPDATE',
+            module: 'system',
+            module_name_th: 'ระบบหลัก & ฐานข้อมูล',
+            description: `นำเข้าไฟล์สำรองฐานข้อมูล Master JSON`,
+            details: result.message
+          });
         } else {
           alert('เกิดข้อผิดพลาดในการนำเข้า: ' + result.message);
         }
@@ -803,6 +1172,50 @@ export default function AdminDashboardPage() {
     };
     reader.readAsText(file);
     e.target.value = '';
+  };
+
+  // Audit Logs Actions (Admin Only)
+  const handleExportLogsCSV = () => {
+    const headers = ["ID", "Timestamp", "Username", "FullName", "Role", "ActionType", "Module", "Description", "Details"];
+    const rows = auditLogs.map(l => [
+      `"${l.id}"`,
+      `"${l.timestamp}"`,
+      `"${l.username}"`,
+      `"${l.full_name}"`,
+      `"${l.role}"`,
+      `"${l.action_type}"`,
+      `"${l.module_name_th}"`,
+      `"${(l.description || '').replace(/"/g, '""')}"`,
+      `"${(l.details || '').replace(/"/g, '""')}"`
+    ]);
+    const csvContent = "\uFEFF" + [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `daoming_audit_logs_${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showFeedback("📥 ดาวน์โหลดรายงานประวัติ Audit Logs (CSV) เรียบร้อยแล้ว");
+  };
+
+  const handleExportLogsJSON = () => {
+    const jsonStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(auditLogs, null, 2));
+    const link = document.createElement("a");
+    link.setAttribute("href", jsonStr);
+    link.setAttribute("download", `daoming_audit_logs_${new Date().toISOString().slice(0, 10)}.json`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showFeedback("📥 ดาวน์โหลดไฟล์ประวัติ Audit Logs (JSON) เรียบร้อยแล้ว");
+  };
+
+  const handleClearLogs = () => {
+    if (confirm("คุณแน่ใจหรือไม่ว่าต้องการล้างประวัติการแก้ไข (Audit Logs) ทั้งหมด? การกระทำนี้ไม่สามารถย้อนกลับได้")) {
+      clientDb.clearAuditLogs();
+      showFeedback("🗑️ ล้างประวัติการแก้ไขทั้งหมดเรียบร้อยแล้ว");
+      fetchAllData();
+    }
   };
 
   if (!isAuthChecked) {
@@ -1414,6 +1827,26 @@ export default function AdminDashboardPage() {
           >
             📊 สถิติ & ส่งออกรายงาน
           </button>
+          {(currentUser?.username === 'admin' || currentUser?.role === 'superadmin') && (
+            <button
+              style={{
+                padding: '10px 18px',
+                borderRadius: '10px',
+                border: 'none',
+                fontSize: '0.82rem',
+                fontWeight: 'bold',
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+                backgroundColor: activeTab === 'logs' ? '#E5A31E' : 'rgba(255, 255, 255, 0.06)',
+                color: activeTab === 'logs' ? '#122421' : '#FAF2DD',
+                transition: 'all 0.2s ease',
+                boxShadow: activeTab === 'logs' ? '0 2px 10px rgba(229, 163, 30, 0.3)' : 'none'
+              }}
+              onClick={() => setActiveTab('logs')}
+            >
+              📜 ประวัติการแก้ไข ({auditLogs.length})
+            </button>
+          )}
         </div>
 
         {/* ========================================================================= */}
@@ -3206,6 +3639,335 @@ export default function AdminDashboardPage() {
           </div>
         )}
 
+        {/* ========================================================================= */}
+        {/* TAB: AUDIT LOGS (ADMIN ONLY) */}
+        {/* ========================================================================= */}
+        {activeTab === 'logs' && (currentUser?.username === 'admin' || currentUser?.role === 'superadmin') && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+            {/* Header & Controls Bar */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '14px', backgroundColor: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(229, 163, 30, 0.25)', borderRadius: '16px', padding: '16px 20px' }}>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '3px' }}>
+                  <span style={{ fontSize: '1.2rem' }}>📜</span>
+                  <h2 style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#E5A31E', margin: 0 }}>
+                    ประวัติการแก้ไข & ความปลอดภัย (Activity & Audit Logs)
+                  </h2>
+                </div>
+                <p style={{ fontSize: '0.78rem', color: 'rgba(250, 242, 221, 0.7)', margin: 0 }}>
+                  บันทึกประวัติการกระทำ การแก้ไขเนื้อหา การแต่งตั้งสิทธิ์ และการจัดการระบบแบบเรียลไทม์ (สงวนสิทธิ์เฉพาะ Admin สูงสุด)
+                </p>
+              </div>
+
+              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
+                <button
+                  onClick={handleExportLogsCSV}
+                  style={{
+                    padding: '8px 16px',
+                    borderRadius: '8px',
+                    backgroundColor: 'rgba(229, 163, 30, 0.15)',
+                    border: '1px solid rgba(229, 163, 30, 0.4)',
+                    color: '#E5A31E',
+                    fontSize: '0.8rem',
+                    fontWeight: 'bold',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}
+                >
+                  📥 ส่งออกรายงาน CSV
+                </button>
+                <button
+                  onClick={handleExportLogsJSON}
+                  style={{
+                    padding: '8px 16px',
+                    borderRadius: '8px',
+                    backgroundColor: 'rgba(56, 189, 248, 0.15)',
+                    border: '1px solid rgba(56, 189, 248, 0.4)',
+                    color: '#38BDF8',
+                    fontSize: '0.8rem',
+                    fontWeight: 'bold',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}
+                >
+                  💾 สำรอง JSON
+                </button>
+                <button
+                  onClick={handleClearLogs}
+                  style={{
+                    padding: '8px 16px',
+                    borderRadius: '8px',
+                    backgroundColor: 'rgba(248, 113, 113, 0.15)',
+                    border: '1px solid rgba(248, 113, 113, 0.3)',
+                    color: '#F87171',
+                    fontSize: '0.8rem',
+                    fontWeight: 'bold',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}
+                >
+                  🗑️ ล้างประวัติ
+                </button>
+              </div>
+            </div>
+
+            {/* Metrics Overview */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px' }}>
+              <div style={{ padding: '14px 16px', borderRadius: '12px', backgroundColor: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                <span style={{ fontSize: '0.72rem', color: 'rgba(250, 242, 221, 0.6)', display: 'block', marginBottom: '4px' }}>📊 บันทึกกิจกรรมทั้งหมด</span>
+                <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#FAF2DD' }}>{auditLogs.length} <span style={{ fontSize: '0.8rem', fontWeight: 'normal' }}>รายการ</span></div>
+              </div>
+              <div style={{ padding: '14px 16px', borderRadius: '12px', backgroundColor: 'rgba(56, 189, 248, 0.06)', border: '1px solid rgba(56, 189, 248, 0.2)' }}>
+                <span style={{ fontSize: '0.72rem', color: '#38BDF8', display: 'block', marginBottom: '4px' }}>✏️ แก้ไขข้อมูล (UPDATE)</span>
+                <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#38BDF8' }}>{auditLogs.filter(l => l.action_type === 'UPDATE').length} <span style={{ fontSize: '0.8rem', fontWeight: 'normal' }}>ครั้ง</span></div>
+              </div>
+              <div style={{ padding: '14px 16px', borderRadius: '12px', backgroundColor: 'rgba(52, 211, 153, 0.06)', border: '1px solid rgba(52, 211, 153, 0.2)' }}>
+                <span style={{ fontSize: '0.72rem', color: '#34D399', display: 'block', marginBottom: '4px' }}>➕ สร้าง/เพิ่มข้อมูล (CREATE)</span>
+                <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#34D399' }}>{auditLogs.filter(l => l.action_type === 'CREATE').length} <span style={{ fontSize: '0.8rem', fontWeight: 'normal' }}>รายการ</span></div>
+              </div>
+              <div style={{ padding: '14px 16px', borderRadius: '12px', backgroundColor: 'rgba(229, 163, 30, 0.06)', border: '1px solid rgba(229, 163, 30, 0.2)' }}>
+                <span style={{ fontSize: '0.72rem', color: '#E5A31E', display: 'block', marginBottom: '4px' }}>👑 สิทธิ์ & ความปลอดภัย (AUTH)</span>
+                <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#E5A31E' }}>{auditLogs.filter(l => l.action_type === 'AUTH').length} <span style={{ fontSize: '0.8rem', fontWeight: 'normal' }}>เหตุการณ์</span></div>
+              </div>
+            </div>
+
+            {/* Filter Toolbar */}
+            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.25)', padding: '12px 16px', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+              {/* Search */}
+              <div style={{ flex: '1 1 220px' }}>
+                <input
+                  type="text"
+                  placeholder="🔍 ค้นหา (ผู้ดำเนินการ, รายละเอียด, ข้อความ)..."
+                  value={logSearch}
+                  onChange={(e) => setLogSearch(e.target.value)}
+                  style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.15)', color: '#FFF', fontSize: '0.82rem', outline: 'none', boxSizing: 'border-box' }}
+                />
+              </div>
+
+              {/* Action Filter */}
+              <div style={{ flex: '0 1 170px' }}>
+                <select
+                  value={logActionFilter}
+                  onChange={(e) => setLogActionFilter(e.target.value)}
+                  style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', backgroundColor: '#132422', border: '1px solid rgba(255, 255, 255, 0.15)', color: '#FAF2DD', fontSize: '0.82rem', outline: 'none', cursor: 'pointer' }}
+                >
+                  <option value="all">ทุกประเภทการกระทำ</option>
+                  <option value="UPDATE">✏️ แก้ไข (UPDATE)</option>
+                  <option value="CREATE">➕ เพิ่มข้อมูล (CREATE)</option>
+                  <option value="DELETE">🗑️ ลบข้อมูล (DELETE)</option>
+                  <option value="AUTH">👑 สิทธิ์/เข้าสู่ระบบ (AUTH)</option>
+                  <option value="RESET">🔄 คืนค่าเริ่มต้น (RESET)</option>
+                </select>
+              </div>
+
+              {/* Module Filter */}
+              <div style={{ flex: '0 1 180px' }}>
+                <select
+                  value={logModuleFilter}
+                  onChange={(e) => setLogModuleFilter(e.target.value)}
+                  style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', backgroundColor: '#132422', border: '1px solid rgba(255, 255, 255, 0.15)', color: '#FAF2DD', fontSize: '0.82rem', outline: 'none', cursor: 'pointer' }}
+                >
+                  <option value="all">ทุกหมวดหมู่ระบบ</option>
+                  <option value="users">👥 ระบบสมาชิก & สิทธิ์</option>
+                  <option value="site_copy">📝 ข้อความ & เนื้อหาเว็บ</option>
+                  <option value="gables">🏛️ ปรัชญาหน้าจั่ว</option>
+                  <option value="timeline">📜 ลำดับกาลเวลา ๑๒๐ ปี</option>
+                  <option value="events">📅 กิจกรรม & เวิร์กช็อป</option>
+                  <option value="archive">🖼️ คลังภาพประวัติศาสตร์</option>
+                  <option value="bookings">🎫 ระบบตั๋ว & เช็คอิน</option>
+                  <option value="ideas">💡 ไอเดียชุมชน</option>
+                  <option value="system">⚙️ ระบบหลัก & ฐานข้อมูล</option>
+                </select>
+              </div>
+
+              {/* User Filter */}
+              <div style={{ flex: '0 1 160px' }}>
+                <select
+                  value={logUserFilter}
+                  onChange={(e) => setLogUserFilter(e.target.value)}
+                  style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', backgroundColor: '#132422', border: '1px solid rgba(255, 255, 255, 0.15)', color: '#FAF2DD', fontSize: '0.82rem', outline: 'none', cursor: 'pointer' }}
+                >
+                  <option value="all">ทุกผู้ดำเนินการ</option>
+                  {Array.from(new Set(auditLogs.map(l => l.username))).map(u => (
+                    <option key={u} value={u}>@{u}</option>
+                  ))}
+                </select>
+              </div>
+
+              {(logSearch || logActionFilter !== 'all' || logModuleFilter !== 'all' || logUserFilter !== 'all') && (
+                <button
+                  onClick={() => { setLogSearch(''); setLogActionFilter('all'); setLogModuleFilter('all'); setLogUserFilter('all'); }}
+                  style={{ padding: '9px 14px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255, 255, 255, 0.15)', color: '#FAF2DD', fontSize: '0.8rem', cursor: 'pointer' }}
+                >
+                  ✕ ล้างตัวกรอง
+                </button>
+              )}
+            </div>
+
+            {/* Audit Logs Table / Feed */}
+            {(() => {
+              const filteredLogs = auditLogs.filter(log => {
+                const matchSearch =
+                  !logSearch ||
+                  log.description.toLowerCase().includes(logSearch.toLowerCase()) ||
+                  (log.details && log.details.toLowerCase().includes(logSearch.toLowerCase())) ||
+                  log.username.toLowerCase().includes(logSearch.toLowerCase()) ||
+                  (log.full_name && log.full_name.toLowerCase().includes(logSearch.toLowerCase())) ||
+                  log.module_name_th.toLowerCase().includes(logSearch.toLowerCase());
+
+                const matchAction = logActionFilter === 'all' || log.action_type === logActionFilter;
+                const matchModule = logModuleFilter === 'all' || log.module === logModuleFilter;
+                const matchUser = logUserFilter === 'all' || log.username === logUserFilter;
+
+                return matchSearch && matchAction && matchModule && matchUser;
+              });
+
+              const formatThaiLogTime = (isoString: string) => {
+                try {
+                  const d = new Date(isoString);
+                  if (isNaN(d.getTime())) return isoString;
+                  return d.toLocaleString('th-TH', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                  }) + ' น.';
+                } catch {
+                  return isoString;
+                }
+              };
+
+              const getActionBadge = (type: AuditActionType) => {
+                switch (type) {
+                  case 'CREATE':
+                    return { label: '➕ เพิ่มข้อมูล', bg: 'rgba(52, 211, 153, 0.15)', color: '#34D399', border: 'rgba(52, 211, 153, 0.35)' };
+                  case 'UPDATE':
+                    return { label: '✏️ แก้ไขข้อมูล', bg: 'rgba(56, 189, 248, 0.15)', color: '#38BDF8', border: 'rgba(56, 189, 248, 0.35)' };
+                  case 'DELETE':
+                    return { label: '🗑️ ลบข้อมูล', bg: 'rgba(248, 113, 113, 0.15)', color: '#F87171', border: 'rgba(248, 113, 113, 0.35)' };
+                  case 'AUTH':
+                    return { label: '👑 สิทธิ์/เข้าสู่ระบบ', bg: 'rgba(229, 163, 30, 0.15)', color: '#E5A31E', border: 'rgba(229, 163, 30, 0.35)' };
+                  case 'RESET':
+                    return { label: '🔄 คืนค่าเริ่มต้น', bg: 'rgba(168, 85, 247, 0.15)', color: '#C084FC', border: 'rgba(168, 85, 247, 0.35)' };
+                  default:
+                    return { label: type, bg: 'rgba(255, 255, 255, 0.1)', color: '#FAF2DD', border: 'rgba(255, 255, 255, 0.2)' };
+                }
+              };
+
+              if (filteredLogs.length === 0) {
+                return (
+                  <div style={{ textAlign: 'center', padding: '60px 20px', backgroundColor: 'rgba(255, 255, 255, 0.02)', borderRadius: '16px', border: '1px dashed rgba(255, 255, 255, 0.1)' }}>
+                    <div style={{ fontSize: '2.5rem', marginBottom: '10px' }}>📜</div>
+                    <h3 style={{ color: '#FAF2DD', fontSize: '1.05rem', margin: '0 0 6px 0' }}>ไม่พบประวัติการแก้ไขตามเงื่อนไข</h3>
+                    <p style={{ color: 'rgba(250, 242, 221, 0.6)', fontSize: '0.8rem', margin: 0 }}>ลองปรับคำค้นหา หรือกดล้างตัวกรอง</p>
+                  </div>
+                );
+              }
+
+              return (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <div style={{ fontSize: '0.78rem', color: 'rgba(250, 242, 221, 0.6)', paddingLeft: '4px' }}>
+                    แสดงผล {filteredLogs.length} รายการ (เรียงจากล่าสุด)
+                  </div>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    {filteredLogs.map(log => {
+                      const badge = getActionBadge(log.action_type);
+                      return (
+                        <div
+                          key={log.id}
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '8px',
+                            backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                            border: '1px solid rgba(255, 255, 255, 0.08)',
+                            borderRadius: '12px',
+                            padding: '12px 16px',
+                            transition: 'all 0.15s ease'
+                          }}
+                        >
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+                            {/* Left Meta: Timestamp & Action Badge & Module */}
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                              <span style={{ fontSize: '0.75rem', fontFamily: 'monospace', color: '#FAF2DD', backgroundColor: 'rgba(255, 255, 255, 0.06)', padding: '3px 8px', borderRadius: '6px' }}>
+                                🕒 {formatThaiLogTime(log.timestamp)}
+                              </span>
+
+                              <span style={{ fontSize: '0.72rem', fontWeight: 'bold', padding: '3px 9px', borderRadius: '6px', backgroundColor: badge.bg, color: badge.color, border: `1px solid ${badge.border}` }}>
+                                {badge.label}
+                              </span>
+
+                              <span style={{ fontSize: '0.72rem', color: '#E5A31E', backgroundColor: 'rgba(229, 163, 30, 0.08)', border: '1px solid rgba(229, 163, 30, 0.25)', padding: '3px 8px', borderRadius: '6px' }}>
+                                {log.module_name_th}
+                              </span>
+                            </div>
+
+                            {/* Right Operator */}
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                              <div style={{ width: '22px', height: '22px', borderRadius: '50%', backgroundColor: '#E5A31E', color: '#122421', fontSize: '0.65rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                {log.full_name?.charAt(0) || log.username.charAt(0).toUpperCase()}
+                              </div>
+                              <span style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#FAF2DD' }}>
+                                {log.full_name || log.username}
+                              </span>
+                              <span style={{ fontSize: '0.72rem', color: 'rgba(250, 242, 221, 0.5)', fontFamily: 'monospace' }}>
+                                @{log.username}
+                              </span>
+                              {log.role && (
+                                <span style={{ fontSize: '0.65rem', padding: '1px 6px', borderRadius: '4px', backgroundColor: log.role === 'superadmin' ? 'rgba(229, 163, 30, 0.2)' : 'rgba(255, 255, 255, 0.08)', color: log.role === 'superadmin' ? '#E5A31E' : '#FAF2DD', textTransform: 'uppercase', fontWeight: 'bold' }}>
+                                  {log.role}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Description & Detail */}
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px' }}>
+                            <div style={{ flex: 1 }}>
+                              <div style={{ fontSize: '0.86rem', color: '#FFF', fontWeight: '500', lineHeight: 1.4 }}>
+                                {log.description}
+                              </div>
+                              {log.details && (
+                                <div style={{ fontSize: '0.76rem', color: 'rgba(250, 242, 221, 0.65)', marginTop: '2px', lineHeight: 1.35 }}>
+                                  {log.details}
+                                </div>
+                              )}
+                            </div>
+
+                            <button
+                              onClick={() => { setSelectedLogDetail(log); setIsLogDetailModalOpen(true); }}
+                              style={{
+                                padding: '4px 10px',
+                                borderRadius: '6px',
+                                backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                                border: '1px solid rgba(255, 255, 255, 0.12)',
+                                color: '#FAF2DD',
+                                fontSize: '0.72rem',
+                                cursor: 'pointer',
+                                whiteSpace: 'nowrap'
+                              }}
+                            >
+                              🔍 ดูข้อมูลดิบ
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })()}
+          </div>
+        )}
+
         {/* EVENT CREATE / EDIT MODAL */}
         {isEventModalOpen && (
           <div style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
@@ -4437,6 +5199,88 @@ export default function AdminDashboardPage() {
                     style={{ padding: '9px 22px', borderRadius: '8px', backgroundColor: '#E5A31E', color: '#122421', fontSize: '0.82rem', fontWeight: 'bold', border: 'none', cursor: 'pointer', boxShadow: '0 4px 15px rgba(229, 163, 30, 0.35)' }}
                   >
                     🔑 บันทึกรหัสผ่านใหม่
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* MODAL: AUDIT LOG DETAIL (RAW DATA) */}
+        {/* ========================================================================= */}
+        {isLogDetailModalOpen && selectedLogDetail && (
+          <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0, 0, 0, 0.85)', backdropFilter: 'blur(8px)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
+            <div style={{ width: '100%', maxWidth: '560px', maxHeight: '90vh', overflowY: 'auto', backgroundColor: '#122421', border: '1.5px solid rgba(229, 163, 30, 0.5)', borderRadius: '20px', padding: '24px', boxShadow: '0 25px 60px rgba(0, 0, 0, 0.8)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', paddingBottom: '12px', borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                <div>
+                  <span style={{ fontSize: '0.72rem', color: '#E5A31E', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 'bold', display: 'block' }}>
+                    📜 AUDIT LOG ENTRY
+                  </span>
+                  <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', color: '#FFF', margin: 0 }}>
+                    รายละเอียดประวัติ #{selectedLogDetail.id}
+                  </h3>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setIsLogDetailModalOpen(false)}
+                  style={{ width: '30px', height: '30px', borderRadius: '50%', backgroundColor: 'rgba(255, 255, 255, 0.1)', border: 'none', color: '#FFF', fontSize: '0.9rem', cursor: 'pointer' }}
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', backgroundColor: 'rgba(255, 255, 255, 0.03)', padding: '12px', borderRadius: '10px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                  <div>
+                    <span style={{ fontSize: '0.7rem', color: 'rgba(250, 242, 221, 0.6)', display: 'block' }}>วัน-เวลา</span>
+                    <strong style={{ fontSize: '0.82rem', color: '#FAF2DD' }}>{selectedLogDetail.timestamp}</strong>
+                  </div>
+                  <div>
+                    <span style={{ fontSize: '0.7rem', color: 'rgba(250, 242, 221, 0.6)', display: 'block' }}>ประเภทการกระทำ</span>
+                    <strong style={{ fontSize: '0.82rem', color: '#E5A31E' }}>{selectedLogDetail.action_type}</strong>
+                  </div>
+                  <div>
+                    <span style={{ fontSize: '0.7rem', color: 'rgba(250, 242, 221, 0.6)', display: 'block' }}>ผู้ดำเนินการ</span>
+                    <strong style={{ fontSize: '0.82rem', color: '#FAF2DD' }}>{selectedLogDetail.full_name} (@{selectedLogDetail.username})</strong>
+                  </div>
+                  <div>
+                    <span style={{ fontSize: '0.7rem', color: 'rgba(250, 242, 221, 0.6)', display: 'block' }}>หมวดหมู่ระบบ</span>
+                    <strong style={{ fontSize: '0.82rem', color: '#38BDF8' }}>{selectedLogDetail.module_name_th} ({selectedLogDetail.module})</strong>
+                  </div>
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '4px' }}>คำอธิบาย</label>
+                  <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)', padding: '10px 12px', borderRadius: '8px', fontSize: '0.85rem', color: '#FFF' }}>
+                    {selectedLogDetail.description}
+                  </div>
+                </div>
+
+                {selectedLogDetail.details && (
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '4px' }}>รายละเอียดเพิ่มเติม</label>
+                    <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)', padding: '10px 12px', borderRadius: '8px', fontSize: '0.82rem', color: 'rgba(250, 242, 221, 0.85)' }}>
+                      {selectedLogDetail.details}
+                    </div>
+                  </div>
+                )}
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '4px' }}>JSON Payload</label>
+                  <pre style={{ backgroundColor: '#091312', padding: '10px 12px', borderRadius: '8px', fontSize: '0.72rem', color: '#34D399', overflowX: 'auto', border: '1px solid rgba(255, 255, 255, 0.1)', margin: 0 }}>
+                    {JSON.stringify(selectedLogDetail, null, 2)}
+                  </pre>
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'flex-end', paddingTop: '12px', borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                  <button
+                    type="button"
+                    onClick={() => setIsLogDetailModalOpen(false)}
+                    style={{ padding: '8px 18px', borderRadius: '8px', backgroundColor: '#E5A31E', color: '#122421', fontSize: '0.82rem', fontWeight: 'bold', border: 'none', cursor: 'pointer' }}
+                  >
+                    ปิดหน้าต่าง
                   </button>
                 </div>
               </div>

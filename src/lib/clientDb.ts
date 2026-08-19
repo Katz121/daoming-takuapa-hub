@@ -3,7 +3,23 @@ import { INITIAL_IDEAS } from '@/data/ideas';
 import { EVENTS_LIST } from '@/data/events';
 import { ARCHIVE_PHOTOS } from '@/data/archive';
 import { GABLE_SYMBOLS } from '@/data/gables';
-import { EventItem, ArchivePhoto, GableSymbol, SystemUser, UserRole, UserStatus } from '@/types';
+import { EventItem, ArchivePhoto, GableSymbol, SystemUser, UserRole, UserStatus, AuditLogEntry, AuditActionType } from '@/types';
+
+export const DEFAULT_AUDIT_LOGS: AuditLogEntry[] = [
+  {
+    id: "log-init-01",
+    timestamp: "2026-08-19T00:00:00.000Z",
+    user_id: "user-superadmin-01",
+    username: "admin",
+    full_name: "ผู้ดูแลระบบสูงสุด (Super Admin)",
+    role: "superadmin",
+    action_type: "AUTH",
+    module: "system",
+    module_name_th: "ระบบหลัก",
+    description: "ระบบเปิดใช้งานการบันทึก Audit Logs และการควบคุมสิทธิ์ความปลอดภัย",
+    details: "เริ่มต้นระบบฐานข้อมูลมรดกเต้าหมิงและศูนย์บันทึกประวัติการแก้ไข"
+  }
+];
 
 export const DEFAULT_USERS: SystemUser[] = [
   {
@@ -305,6 +321,7 @@ const MASTER_KEYS = {
   GABLES: 'daoming_permanent_gables_master',
   TIMELINE: 'daoming_permanent_timeline_master',
   USERS: 'daoming_permanent_users_master',
+  AUDIT_LOGS: 'daoming_permanent_audit_logs_master',
 };
 
 const LEGACY_KEYS = {
@@ -1134,11 +1151,72 @@ export const clientDb = {
   },
 
   // =========================================================================
+  // AUDIT LOGS (ADMIN ONLY ACTIVITY HISTORY)
+  // =========================================================================
+  getAuditLogs(): AuditLogEntry[] {
+    if (typeof window === 'undefined') return DEFAULT_AUDIT_LOGS;
+    try {
+      const stored = localStorage.getItem(MASTER_KEYS.AUDIT_LOGS);
+      if (!stored) {
+        localStorage.setItem(MASTER_KEYS.AUDIT_LOGS, JSON.stringify(DEFAULT_AUDIT_LOGS));
+        return DEFAULT_AUDIT_LOGS;
+      }
+      const parsed = JSON.parse(stored);
+      return Array.isArray(parsed) ? parsed : DEFAULT_AUDIT_LOGS;
+    } catch {
+      return DEFAULT_AUDIT_LOGS;
+    }
+  },
+
+  addAuditLog(entry: {
+    user_id?: string;
+    username?: string;
+    full_name?: string;
+    role?: UserRole;
+    action_type: AuditActionType;
+    module: 'site_copy' | 'gables' | 'timeline' | 'archive' | 'events' | 'users' | 'bookings' | 'ideas' | 'system';
+    module_name_th: string;
+    description: string;
+    details?: string;
+  }): AuditLogEntry {
+    const logs = this.getAuditLogs();
+    const newLog: AuditLogEntry = {
+      id: `log_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+      timestamp: new Date().toISOString(),
+      user_id: entry.user_id || 'system',
+      username: entry.username || 'admin',
+      full_name: entry.full_name || 'ผู้ดูแลระบบ',
+      role: entry.role || 'superadmin',
+      action_type: entry.action_type,
+      module: entry.module,
+      module_name_th: entry.module_name_th,
+      description: entry.description,
+      details: entry.details || ''
+    };
+
+    // Keep latest 1000 logs
+    const updated = [newLog, ...logs].slice(0, 1000);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(MASTER_KEYS.AUDIT_LOGS, JSON.stringify(updated));
+      window.dispatchEvent(new CustomEvent('daoming_audit_logs_updated'));
+    }
+    return newLog;
+  },
+
+  clearAuditLogs(): { success: boolean; message: string } {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(MASTER_KEYS.AUDIT_LOGS, JSON.stringify([]));
+      window.dispatchEvent(new CustomEvent('daoming_audit_logs_updated'));
+    }
+    return { success: true, message: 'ล้างประวัติการแก้ไขทั้งหมดเรียบร้อยแล้ว' };
+  },
+
+  // =========================================================================
   // DATABASE BACKUP & RESTORE UTILITIES
   // =========================================================================
   exportFullDatabase() {
     return {
-      version: "2.3",
+      version: "2.4",
       exported_at: new Date().toISOString(),
       organization: "Dao Ming Foundation Takua Pa",
       users: this.getUsers(),
@@ -1148,11 +1226,12 @@ export const clientDb = {
       archive: this.getArchivePhotos(),
       site_copy: this.getSiteCopy(),
       gables: this.getGableSymbols(),
-      timeline: this.getTimelineData()
+      timeline: this.getTimelineData(),
+      audit_logs: this.getAuditLogs()
     };
   },
 
-  importFullDatabase(jsonData: any): { success: boolean; message: string; count: { users?: number; bookings: number; ideas: number; events: number; archive?: number; site_copy?: boolean } } {
+  importFullDatabase(jsonData: any): { success: boolean; message: string; count: { users?: number; bookings: number; ideas: number; events: number; archive?: number; site_copy?: boolean; audit_logs?: number } } {
     try {
       if (!jsonData || typeof jsonData !== 'object') {
         return { success: false, message: 'Invalid JSON format', count: { bookings: 0, ideas: 0, events: 0, archive: 0 } };
@@ -1163,6 +1242,7 @@ export const clientDb = {
       let iCount = 0;
       let eCount = 0;
       let aCount = 0;
+      let lCount = 0;
       let copyImported = false;
 
       if (Array.isArray(jsonData.users)) {
@@ -1223,18 +1303,28 @@ export const clientDb = {
         localStorage.setItem(MASTER_KEYS.TIMELINE, JSON.stringify(jsonData.timeline));
       }
 
+      if (Array.isArray(jsonData.audit_logs)) {
+        const current = this.getAuditLogs();
+        const existingIds = new Set(current.map(l => l.id));
+        const toAdd = jsonData.audit_logs.filter((l: AuditLogEntry) => l && l.id && !existingIds.has(l.id));
+        const merged = [...toAdd, ...current].slice(0, 1000);
+        localStorage.setItem(MASTER_KEYS.AUDIT_LOGS, JSON.stringify(merged));
+        lCount = toAdd.length;
+      }
+
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('daoming_users_updated'));
         window.dispatchEvent(new CustomEvent('daoming_archive_updated'));
         window.dispatchEvent(new CustomEvent('daoming_site_copy_updated'));
         window.dispatchEvent(new CustomEvent('daoming_gables_updated'));
         window.dispatchEvent(new CustomEvent('daoming_timeline_updated'));
+        window.dispatchEvent(new CustomEvent('daoming_audit_logs_updated'));
       }
 
       return {
         success: true,
-        message: `ผสานข้อมูลสำเร็จ: นำเข้าสมาชิก ${uCount} ท่าน, ตั๋ว/คำขอ ${bCount} รายการ, ไอเดีย ${iCount} ข้อเสนอ, กิจกรรม ${eCount} รายการ, คลังภาพ ${aCount} ภาพ${copyImported ? ', ข้อความเว็บไซต์' : ''}`,
-        count: { users: uCount, bookings: bCount, ideas: iCount, events: eCount, archive: aCount, site_copy: copyImported }
+        message: `ผสานข้อมูลสำเร็จ: นำเข้าสมาชิก ${uCount} ท่าน, ตั๋ว/คำขอ ${bCount} รายการ, ไอเดีย ${iCount} ข้อเสนอ, กิจกรรม ${eCount} รายการ, คลังภาพ ${aCount} ภาพ, ประวัติ ${lCount} รายการ${copyImported ? ', ข้อความเว็บไซต์' : ''}`,
+        count: { users: uCount, bookings: bCount, ideas: iCount, events: eCount, archive: aCount, site_copy: copyImported, audit_logs: lCount }
       };
     } catch (err: any) {
       return { success: false, message: err.message, count: { bookings: 0, ideas: 0, events: 0, archive: 0 } };

@@ -159,3 +159,19 @@ export interface SystemUser {
   last_login?: string | null;
   notes?: string;
 }
+
+export type AuditActionType = 'CREATE' | 'UPDATE' | 'DELETE' | 'AUTH' | 'RESET';
+
+export interface AuditLogEntry {
+  id: string;
+  timestamp: string; // ISO 8601 string
+  user_id: string;
+  username: string;
+  full_name: string;
+  role: UserRole;
+  action_type: AuditActionType;
+  module: 'site_copy' | 'gables' | 'timeline' | 'archive' | 'events' | 'users' | 'bookings' | 'ideas' | 'system';
+  module_name_th: string;
+  description: string;
+  details?: string;
+}

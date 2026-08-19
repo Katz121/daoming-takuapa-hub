@@ -337,68 +337,26 @@ export function TimelineSection() {
                   ))}
                 </div>
 
-                {/* Inline Oral History Narration Audio Player Card */}
-                <div className={`inline-narration-card ${isNarrating ? 'playing' : ''}`}>
-                  <div className="narration-player-header">
-                    <div className="narration-title-group">
-                      <span className="narration-badge">
-                        <span className="narration-live-dot"></span>
-                        🎧 {isZh ? "歷史口述原音" : isEn ? "ORAL HISTORY AUDIO" : "เสียงบรรยายประวัติศาสตร์"}
-                      </span>
-                      <span className="narration-track-name">
-                        {isZh ? audioTrack.title_zh : isEn ? audioTrack.title_en : audioTrack.title_th}
-                      </span>
-                    </div>
+                {/* Compact Inline Narration Audio Button & Time */}
+                <div className="tl-narration-compact-row">
+                  <button
+                    className={`tl-narration-btn ${isNarrating ? 'playing' : ''}`}
+                    onClick={togglePlayNarration}
+                    aria-label="Toggle Narration Audio"
+                  >
+                    <span className="tl-narrate-icon">{isNarrating ? "⏸" : "▶"}</span>
+                    <span className="tl-narrate-text">
+                      {isNarrating
+                        ? (isZh ? "暫停聲音導覽" : isEn ? "Pause Narration" : "หยุดเสียงบรรยาย")
+                        : (isZh ? "收聽歷史原音導覽" : isEn ? "Listen Narration" : "ฟังเสียงบรรยาย")}
+                    </span>
+                  </button>
 
-                    <button
-                      className="narration-transcript-toggle"
-                      onClick={() => setShowTranscript(!showTranscript)}
-                      title="ดูบทบรรยาย"
-                    >
-                      {showTranscript ? (isZh ? "收起文字" : isEn ? "Hide Text" : "ซ่อนบทบรรยาย") : (isZh ? "📜 查閱全文" : isEn ? "📜 View Transcript" : "📜 อ่านบทบรรยาย")}
-                    </button>
+                  <div className="tl-narrate-time-counter">
+                    <span>{formatTime(narrateTime)}</span>
+                    <span className="tl-time-sep">/</span>
+                    <span>{formatTime(narrateDuration)}</span>
                   </div>
-
-                  <div className="narration-controls-row">
-                    <button
-                      className="narration-play-btn"
-                      onClick={togglePlayNarration}
-                      aria-label="Play Narration Audio"
-                      title={isNarrating ? "หยุดชั่วคราว" : "กดฟังเสียงบรรยาย"}
-                    >
-                      <span className="play-icon">{isNarrating ? "⏸" : "▶"}</span>
-                      <span className="play-label">
-                        {isNarrating
-                          ? (isZh ? "暫停收聽" : isEn ? "Pause Audio" : "หยุดชั่วคราว")
-                          : (isZh ? "點擊收聽原音" : isEn ? "Play Narration" : "กดฟังเสียงบรรยาย")}
-                      </span>
-                    </button>
-
-                    <div className="narration-progress-group">
-                      <input
-                        type="range"
-                        min="0"
-                        max={narrateDuration || 100}
-                        step="0.1"
-                        value={narrateTime}
-                        onChange={handleSeekNarration}
-                        className="narration-progress-slider"
-                      />
-                      <div className="narration-time-display">
-                        <span>{formatTime(narrateTime)}</span>
-                        <span>/</span>
-                        <span>{formatTime(narrateDuration)}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {showTranscript && (
-                    <div className="narration-transcript-box">
-                      <p>
-                        {isZh ? audioTrack.transcript_zh : isEn ? audioTrack.transcript_en : audioTrack.transcript_th}
-                      </p>
-                    </div>
-                  )}
                 </div>
               </div>
               <div className="tl-photo-card">

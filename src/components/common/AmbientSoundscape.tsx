@@ -143,16 +143,19 @@ export function AmbientSoundscape() {
   };
 
   return (
-    <div className="ambient-soundscape-container">
-      {/* Minimized Floating Disc Badge (Compact Mobile Mode) */}
+    <div className={`ambient-soundscape-container ${isMinimized ? 'minimized' : 'expanded'}`}>
+      {/* Retracted / Tucked Edge Pill Button */}
       {isMinimized ? (
         <button
-          className={`ambient-minimized-badge ${isPlaying ? 'playing' : ''}`}
+          className={`ambient-retracted-tab ${isPlaying ? 'playing' : ''}`}
           onClick={() => setIsMinimized(false)}
-          title={isZh ? "展開老城音景播放器" : isEn ? "Expand Soundscape Player" : "แตะเพื่อเปิดแถบเสียงบรรยากาศ"}
+          title={isZh ? "展開老城音景播放器" : isEn ? "Expand Music Player" : "แตะเพื่อเปิดแถบดนตรีคลอ"}
           aria-label="Expand Soundscape"
         >
-          <span className="minimized-icon">{isPlaying ? "🔊" : "🎵"}</span>
+          <span className="retracted-icon">{isPlaying ? "🔊" : "🎵"}</span>
+          <span className="retracted-label">
+            {isZh ? "老城音景" : isEn ? "Ambience" : "ดนตรีคลอ"}
+          </span>
           {isPlaying && (
             <div className="minimized-mini-bars">
               <span></span>
@@ -160,6 +163,7 @@ export function AmbientSoundscape() {
               <span></span>
             </div>
           )}
+          <span className="retracted-arrow">‹</span>
         </button>
       ) : (
         /* Expanded Floating Pill Controller */
@@ -189,18 +193,19 @@ export function AmbientSoundscape() {
             <span className="ambient-gear-icon">{isOpenPanel ? "✕" : "⚙️"}</span>
           </button>
 
-          {/* Minimize / Hide Button */}
+          {/* Retract / Tuck Button */}
           <button
-            className="ambient-minimize-btn"
+            className="ambient-retract-btn"
             onClick={(e) => {
               e.stopPropagation();
               setIsMinimized(true);
               setIsOpenPanel(false);
             }}
-            title={isZh ? "縮小隱藏 (Minimize)" : isEn ? "Minimize Player" : "ซ่อนแถบเสียงบรรยากาศ"}
-            aria-label="Minimize Player"
+            title={isZh ? "收起隱藏 (Hide)" : isEn ? "Hide / Retract" : "หุบซ่อนแถบเสียง"}
+            aria-label="Retract Player"
           >
-            <span>&minus;</span>
+            <span className="retract-text">ซ่อน</span>
+            <span className="retract-chevron">❯</span>
           </button>
         </div>
       )}

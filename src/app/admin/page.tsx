@@ -1446,29 +1446,35 @@ export default function AdminDashboardPage() {
         {/* TAB: USER & MEMBER MANAGEMENT */}
         {/* ========================================================================= */}
         {activeTab === 'users' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
             {/* Header & Controls Bar */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '14px', backgroundColor: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '16px', padding: '18px 24px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '14px', backgroundColor: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(229, 163, 30, 0.25)', borderRadius: '16px', padding: '16px 20px' }}>
               <div>
-                <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#E5A31E', margin: '0 0 4px 0' }}>
-                  👥 จัดการสมาชิก & สิทธิ์การเข้าใช้งาน (Member & Role Management)
-                </h2>
-                <p style={{ fontSize: '0.82rem', color: 'rgba(250, 242, 221, 0.7)', margin: 0 }}>
-                  Super Admin (admin/takuapa2569) มีสิทธิ์แต่งตั้งสิทธิ์ อนุมัติผู้สมัครใหม่ และกำหนดบทบาทผู้ใช้งานในระบบ
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '3px' }}>
+                  <span style={{ fontSize: '1.2rem' }}>👥</span>
+                  <h2 style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#E5A31E', margin: 0 }}>
+                    จัดการสมาชิก & สิทธิ์การเข้าใช้งาน (Member & Role Management)
+                  </h2>
+                </div>
+                <p style={{ fontSize: '0.8rem', color: 'rgba(250, 242, 221, 0.7)', margin: 0 }}>
+                  Super Admin (admin/takuapa2569) มีอำนาจสูงสุดในการแต่งตั้งสิทธิ์ อนุมัติสมาชิกใหม่ รีเซ็ตรหัสผ่าน และควบคุมการเข้าถึงระบบ
                 </p>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                 <button
                   onClick={handleResetUsers}
                   style={{
-                    padding: '9px 16px',
+                    padding: '8px 14px',
                     borderRadius: '8px',
                     backgroundColor: 'rgba(255, 255, 255, 0.06)',
                     border: '1px solid rgba(255, 255, 255, 0.15)',
                     color: '#FAF2DD',
-                    fontSize: '0.8rem',
-                    cursor: 'pointer'
+                    fontSize: '0.78rem',
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '5px'
                   }}
                   title="คืนค่าสมาชิกตั้งต้น"
                 >
@@ -1478,7 +1484,7 @@ export default function AdminDashboardPage() {
                 <button
                   onClick={handleOpenAddUser}
                   style={{
-                    padding: '9px 18px',
+                    padding: '8px 16px',
                     borderRadius: '8px',
                     backgroundColor: '#E5A31E',
                     border: 'none',
@@ -1486,7 +1492,10 @@ export default function AdminDashboardPage() {
                     fontWeight: 'bold',
                     fontSize: '0.82rem',
                     cursor: 'pointer',
-                    boxShadow: '0 4px 15px rgba(229, 163, 30, 0.3)'
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    boxShadow: '0 4px 15px rgba(229, 163, 30, 0.35)'
                   }}
                 >
                   ➕ เพิ่มสมาชิกใหม่
@@ -1495,275 +1504,350 @@ export default function AdminDashboardPage() {
             </div>
 
             {/* Role Stat Breakdown Cards */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px' }}>
-              <div style={{ backgroundColor: 'rgba(229, 163, 30, 0.08)', border: '1px solid rgba(229, 163, 30, 0.3)', borderRadius: '12px', padding: '14px' }}>
-                <span style={{ fontSize: '0.74rem', color: '#E5A31E', fontWeight: 'bold', display: 'block' }}>👑 Super Admin (สูงสุด)</span>
-                <div style={{ fontSize: '1.6rem', fontWeight: 'bold', color: '#FFF' }}>
-                  {usersList.filter(u => u.role === 'superadmin').length} <span style={{ fontSize: '0.8rem', fontWeight: 'normal', color: 'rgba(255,255,255,0.6)' }}>ท่าน</span>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '10px' }}>
+              <div style={{ backgroundColor: 'rgba(229, 163, 30, 0.07)', border: '1px solid rgba(229, 163, 30, 0.25)', borderRadius: '12px', padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div>
+                  <span style={{ fontSize: '0.72rem', color: '#E5A31E', fontWeight: 'bold', display: 'block' }}>👑 Super Admin</span>
+                  <span style={{ fontSize: '1.45rem', fontWeight: 'bold', color: '#FFF' }}>
+                    {usersList.filter(u => u.role === 'superadmin').length}
+                  </span>
+                  <span style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.5)', marginLeft: '4px' }}>ท่าน</span>
                 </div>
+                <span style={{ fontSize: '1.8rem', opacity: 0.25 }}>👑</span>
               </div>
 
-              <div style={{ backgroundColor: 'rgba(52, 211, 153, 0.08)', border: '1px solid rgba(52, 211, 153, 0.3)', borderRadius: '12px', padding: '14px' }}>
-                <span style={{ fontSize: '0.74rem', color: '#34D399', fontWeight: 'bold', display: 'block' }}>🛡️ Officer (เจ้าหน้าที่มรดก)</span>
-                <div style={{ fontSize: '1.6rem', fontWeight: 'bold', color: '#FFF' }}>
-                  {usersList.filter(u => u.role === 'officer').length} <span style={{ fontSize: '0.8rem', fontWeight: 'normal', color: 'rgba(255,255,255,0.6)' }}>ท่าน</span>
+              <div style={{ backgroundColor: 'rgba(52, 211, 153, 0.07)', border: '1px solid rgba(52, 211, 153, 0.25)', borderRadius: '12px', padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div>
+                  <span style={{ fontSize: '0.72rem', color: '#34D399', fontWeight: 'bold', display: 'block' }}>🛡️ Officer (เจ้าหน้าที่)</span>
+                  <span style={{ fontSize: '1.45rem', fontWeight: 'bold', color: '#FFF' }}>
+                    {usersList.filter(u => u.role === 'officer').length}
+                  </span>
+                  <span style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.5)', marginLeft: '4px' }}>ท่าน</span>
                 </div>
+                <span style={{ fontSize: '1.8rem', opacity: 0.25 }}>🛡️</span>
               </div>
 
-              <div style={{ backgroundColor: 'rgba(56, 189, 248, 0.08)', border: '1px solid rgba(56, 189, 248, 0.3)', borderRadius: '12px', padding: '14px' }}>
-                <span style={{ fontSize: '0.74rem', color: '#38BDF8', fontWeight: 'bold', display: 'block' }}>🎫 Staff (เจ้าหน้าที่ตั๋ว/ต้อนรับ)</span>
-                <div style={{ fontSize: '1.6rem', fontWeight: 'bold', color: '#FFF' }}>
-                  {usersList.filter(u => u.role === 'staff').length} <span style={{ fontSize: '0.8rem', fontWeight: 'normal', color: 'rgba(255,255,255,0.6)' }}>ท่าน</span>
+              <div style={{ backgroundColor: 'rgba(56, 189, 248, 0.07)', border: '1px solid rgba(56, 189, 248, 0.25)', borderRadius: '12px', padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div>
+                  <span style={{ fontSize: '0.72rem', color: '#38BDF8', fontWeight: 'bold', display: 'block' }}>🎫 Staff (สตาฟฟ์ต้อนรับ)</span>
+                  <span style={{ fontSize: '1.45rem', fontWeight: 'bold', color: '#FFF' }}>
+                    {usersList.filter(u => u.role === 'staff').length}
+                  </span>
+                  <span style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.5)', marginLeft: '4px' }}>ท่าน</span>
                 </div>
+                <span style={{ fontSize: '1.8rem', opacity: 0.25 }}>🎫</span>
               </div>
 
-              <div style={{ backgroundColor: 'rgba(251, 191, 36, 0.08)', border: '1px solid rgba(251, 191, 36, 0.3)', borderRadius: '12px', padding: '14px' }}>
-                <span style={{ fontSize: '0.74rem', color: '#FCD34D', fontWeight: 'bold', display: 'block' }}>⏳ รออนุมัติสิทธิ์ (Pending)</span>
-                <div style={{ fontSize: '1.6rem', fontWeight: 'bold', color: '#FFF' }}>
-                  {usersList.filter(u => u.status === 'pending').length} <span style={{ fontSize: '0.8rem', fontWeight: 'normal', color: 'rgba(255,255,255,0.6)' }}>ท่าน</span>
+              <div style={{ backgroundColor: usersList.filter(u => u.status === 'pending').length > 0 ? 'rgba(245, 158, 11, 0.15)' : 'rgba(255, 255, 255, 0.04)', border: usersList.filter(u => u.status === 'pending').length > 0 ? '1.5px solid #F59E0B' : '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '12px', padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div>
+                  <span style={{ fontSize: '0.72rem', color: usersList.filter(u => u.status === 'pending').length > 0 ? '#FCD34D' : 'rgba(250, 242, 221, 0.7)', fontWeight: 'bold', display: 'block' }}>⏳ รออนุมัติสิทธิ์</span>
+                  <span style={{ fontSize: '1.45rem', fontWeight: 'bold', color: usersList.filter(u => u.status === 'pending').length > 0 ? '#FCD34D' : '#FFF' }}>
+                    {usersList.filter(u => u.status === 'pending').length}
+                  </span>
+                  <span style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.5)', marginLeft: '4px' }}>คำขอ</span>
                 </div>
+                <span style={{ fontSize: '1.8rem', opacity: 0.3 }}>⏳</span>
               </div>
             </div>
 
-            {/* Filter and Search Bar */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', alignItems: 'center', backgroundColor: 'rgba(255, 255, 255, 0.02)', padding: '14px', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
-              <div style={{ flex: 1, minWidth: '240px' }}>
+            {/* Filter, Search & Status Bar */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', alignItems: 'center', justifyContent: 'space-between', backgroundColor: 'rgba(255, 255, 255, 0.02)', padding: '12px 16px', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+              <div style={{ flex: '1 1 240px', minWidth: '200px' }}>
                 <input
                   type="text"
                   placeholder="🔍 ค้นหาชื่อ, Username, เบอร์โทร, หรือฝ่าย..."
                   value={userSearch}
                   onChange={(e) => setUserSearch(e.target.value)}
-                  style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.15)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box' }}
+                  style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.15)', color: '#FFF', fontSize: '0.82rem', outline: 'none', boxSizing: 'border-box' }}
                 />
               </div>
 
-              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
                 <select
                   value={userRoleFilter}
                   onChange={(e) => setUserRoleFilter(e.target.value)}
-                  style={{ padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FAF2DD', fontSize: '0.82rem', outline: 'none' }}
+                  style={{ padding: '8px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FAF2DD', fontSize: '0.8rem', outline: 'none' }}
                 >
-                  <option value="all" style={{ background: '#122421' }}>🎭 ทุกระดับสิทธิ์ (All Roles)</option>
+                  <option value="all" style={{ background: '#122421' }}>🎭 ทุกสิทธิ์ ({usersList.length})</option>
                   <option value="superadmin" style={{ background: '#122421' }}>👑 Super Admin</option>
-                  <option value="officer" style={{ background: '#122421' }}>🛡️ Officer (เจ้าหน้าที่)</option>
-                  <option value="staff" style={{ background: '#122421' }}>🎫 Staff (สตาฟฟ์)</option>
-                  <option value="member" style={{ background: '#122421' }}>👤 Member (สมาชิกทั่วไป)</option>
+                  <option value="officer" style={{ background: '#122421' }}>🛡️ Officer</option>
+                  <option value="staff" style={{ background: '#122421' }}>🎫 Staff</option>
+                  <option value="member" style={{ background: '#122421' }}>👤 Member</option>
                 </select>
 
                 <select
                   value={userStatusFilter}
                   onChange={(e) => setUserStatusFilter(e.target.value)}
-                  style={{ padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FAF2DD', fontSize: '0.82rem', outline: 'none' }}
+                  style={{ padding: '8px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FAF2DD', fontSize: '0.8rem', outline: 'none' }}
                 >
-                  <option value="all" style={{ background: '#122421' }}>🚦 ทุกสถานะ (All Status)</option>
+                  <option value="all" style={{ background: '#122421' }}>🚦 ทุกสถานะ</option>
                   <option value="active" style={{ background: '#122421' }}>✅ ใช้งานได้ (Active)</option>
                   <option value="pending" style={{ background: '#122421' }}>⏳ รออนุมัติ (Pending)</option>
-                  <option value="suspended" style={{ background: '#122421' }}>⛔ ระงับการใช้งาน (Suspended)</option>
+                  <option value="suspended" style={{ background: '#122421' }}>⛔ ระงับ (Suspended)</option>
                 </select>
+
+                {(userSearch || userRoleFilter !== 'all' || userStatusFilter !== 'all') && (
+                  <button
+                    onClick={() => { setUserSearch(''); setUserRoleFilter('all'); setUserStatusFilter('all'); }}
+                    style={{ padding: '8px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.08)', border: 'none', color: '#FCD34D', fontSize: '0.75rem', cursor: 'pointer' }}
+                  >
+                    ✕ ล้างตัวกรอง
+                  </button>
+                )}
               </div>
             </div>
 
-            {/* Users Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '16px' }}>
-              {usersList
-                .filter(u => {
-                  const matchSearch = !userSearch ||
-                    u.full_name.toLowerCase().includes(userSearch.toLowerCase()) ||
-                    u.username.toLowerCase().includes(userSearch.toLowerCase()) ||
-                    (u.phone && u.phone.includes(userSearch)) ||
-                    (u.email && u.email.toLowerCase().includes(userSearch.toLowerCase())) ||
-                    (u.department && u.department.toLowerCase().includes(userSearch.toLowerCase()));
-                  const matchRole = userRoleFilter === 'all' || u.role === userRoleFilter;
-                  const matchStatus = userStatusFilter === 'all' || u.status === userStatusFilter;
-                  return matchSearch && matchRole && matchStatus;
-                })
-                .map(user => {
-                  const isPrimaryAdmin = user.username === 'admin';
-                  const isCurrentLoggedUser = currentUser?.id === user.id;
+            {/* Member List - Modern Data Table & Cards */}
+            {(() => {
+              const filtered = usersList.filter(u => {
+                const matchSearch = !userSearch ||
+                  u.full_name.toLowerCase().includes(userSearch.toLowerCase()) ||
+                  u.username.toLowerCase().includes(userSearch.toLowerCase()) ||
+                  (u.phone && u.phone.includes(userSearch)) ||
+                  (u.email && u.email.toLowerCase().includes(userSearch.toLowerCase())) ||
+                  (u.department && u.department.toLowerCase().includes(userSearch.toLowerCase()));
+                const matchRole = userRoleFilter === 'all' || u.role === userRoleFilter;
+                const matchStatus = userStatusFilter === 'all' || u.status === userStatusFilter;
+                return matchSearch && matchRole && matchStatus;
+              });
 
-                  return (
-                    <div
-                      key={user.id}
-                      style={{
-                        backgroundColor: 'rgba(255, 255, 255, 0.03)',
-                        border: user.status === 'pending'
-                          ? '1.5px solid #F59E0B'
-                          : user.role === 'superadmin'
-                            ? '1.5px solid rgba(229, 163, 30, 0.5)'
-                            : '1px solid rgba(255, 255, 255, 0.1)',
-                        borderRadius: '16px',
-                        padding: '20px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
-                        gap: '14px',
-                        boxShadow: user.role === 'superadmin' ? '0 4px 20px rgba(229, 163, 30, 0.12)' : 'none',
-                        position: 'relative'
-                      }}
+              if (filtered.length === 0) {
+                return (
+                  <div style={{ textAlign: 'center', padding: '48px 20px', backgroundColor: 'rgba(255, 255, 255, 0.02)', borderRadius: '16px', border: '1px dashed rgba(255, 255, 255, 0.15)' }}>
+                    <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: '8px' }}>🔍</span>
+                    <h3 style={{ fontSize: '1.1rem', color: '#FAF2DD', margin: '0 0 6px 0' }}>ไม่พบรายชื่อสมาชิกตามเงื่อนไข</h3>
+                    <p style={{ fontSize: '0.8rem', color: 'rgba(250, 242, 221, 0.6)', margin: '0 0 16px 0' }}>ลองเปลี่ยนคำค้นหา หรือปรับตัวกรองสิทธิ์/สถานะ</p>
+                    <button
+                      onClick={() => { setUserSearch(''); setUserRoleFilter('all'); setUserStatusFilter('all'); }}
+                      style={{ padding: '8px 18px', borderRadius: '8px', backgroundColor: '#E5A31E', color: '#122421', fontWeight: 'bold', fontSize: '0.8rem', border: 'none', cursor: 'pointer' }}
                     >
-                      {/* Top Row: User Avatar & Role */}
-                      <div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '10px', marginBottom: '12px' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                            <div
-                              style={{
-                                width: '44px',
-                                height: '44px',
-                                borderRadius: '50%',
-                                backgroundColor: user.role === 'superadmin' ? '#E5A31E' : user.role === 'officer' ? '#34D399' : user.role === 'staff' ? '#38BDF8' : '#64748B',
-                                color: '#122421',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                fontWeight: 'bold',
-                                fontSize: '1.2rem',
-                                boxShadow: '0 2px 10px rgba(0,0,0,0.3)'
-                              }}
-                            >
-                              {user.role === 'superadmin' ? '👑' : user.role === 'officer' ? '🛡️' : user.role === 'staff' ? '🎫' : '👤'}
-                            </div>
-                            <div>
-                              <h3 style={{ fontSize: '1.05rem', fontWeight: 'bold', color: '#FFF', margin: '0 0 2px 0' }}>
-                                {user.full_name} {isCurrentLoggedUser && <span style={{ fontSize: '0.7rem', color: '#E5A31E' }}>(คุณ)</span>}
-                              </h3>
-                              <span style={{ fontSize: '0.78rem', color: '#E5A31E', fontFamily: 'monospace' }}>
-                                @{user.username}
-                              </span>
-                            </div>
-                          </div>
+                      ล้างตัวกรองทั้งหมด
+                    </button>
+                  </div>
+                );
+              }
 
-                          {/* Status Badge */}
+              return (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {filtered.map(user => {
+                    const isPrimaryAdmin = user.username === 'admin';
+                    const isCurrentLoggedUser = currentUser?.id === user.id;
+
+                    const roleConfig = {
+                      superadmin: { label: '👑 Super Admin', bg: 'rgba(229, 163, 30, 0.15)', border: '#E5A31E', color: '#E5A31E', icon: '👑' },
+                      officer: { label: '🛡️ เจ้าหน้าที่มรดก', bg: 'rgba(52, 211, 153, 0.15)', border: '#34D399', color: '#6EE7B7', icon: '🛡️' },
+                      staff: { label: '🎫 สตาฟฟ์ต้อนรับ', bg: 'rgba(56, 189, 248, 0.15)', border: '#38BDF8', color: '#7DD3FC', icon: '🎫' },
+                      member: { label: '👤 สมาชิกทั่วไป', bg: 'rgba(255, 255, 255, 0.07)', border: 'rgba(255, 255, 255, 0.2)', color: '#E2E8F0', icon: '👤' }
+                    }[user.role] || { label: user.role, bg: 'rgba(255,255,255,0.05)', border: 'rgba(255,255,255,0.1)', color: '#FFF', icon: '👤' };
+
+                    return (
+                      <div
+                        key={user.id}
+                        style={{
+                          backgroundColor: user.status === 'pending'
+                            ? 'rgba(245, 158, 11, 0.05)'
+                            : user.role === 'superadmin'
+                              ? 'rgba(229, 163, 30, 0.03)'
+                              : 'rgba(255, 255, 255, 0.02)',
+                          border: user.status === 'pending'
+                            ? '1.5px solid rgba(245, 158, 11, 0.6)'
+                            : user.role === 'superadmin'
+                              ? '1.5px solid rgba(229, 163, 30, 0.35)'
+                              : '1px solid rgba(255, 255, 255, 0.08)',
+                          borderRadius: '14px',
+                          padding: '14px 18px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          flexWrap: 'wrap',
+                          gap: '14px',
+                          transition: 'all 0.2s ease'
+                        }}
+                      >
+                        {/* Member Identity (Avatar + Name + Username) */}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: '220px', flex: '1 1 220px' }}>
+                          <div
+                            style={{
+                              width: '40px',
+                              height: '40px',
+                              borderRadius: '10px',
+                              backgroundColor: roleConfig.bg,
+                              border: `1.5px solid ${roleConfig.border}`,
+                              color: roleConfig.color,
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              fontWeight: 'bold',
+                              fontSize: '1.15rem',
+                              flexShrink: 0
+                            }}
+                          >
+                            {roleConfig.icon}
+                          </div>
                           <div>
-                            {user.status === 'active' && (
-                              <span style={{ padding: '3px 8px', borderRadius: '6px', backgroundColor: 'rgba(52, 211, 153, 0.15)', border: '1px solid #34D399', color: '#6EE7B7', fontSize: '0.72rem', fontWeight: 'bold' }}>
-                                ✅ ใช้งานได้
-                              </span>
-                            )}
-                            {user.status === 'pending' && (
-                              <span style={{ padding: '3px 8px', borderRadius: '6px', backgroundColor: 'rgba(245, 158, 11, 0.2)', border: '1px solid #F59E0B', color: '#FCD34D', fontSize: '0.72rem', fontWeight: 'bold' }}>
-                                ⏳ รออนุมัติ
-                              </span>
-                            )}
-                            {user.status === 'suspended' && (
-                              <span style={{ padding: '3px 8px', borderRadius: '6px', backgroundColor: 'rgba(239, 68, 68, 0.2)', border: '1px solid #EF4444', color: '#FCA5A5', fontSize: '0.72rem', fontWeight: 'bold' }}>
-                                ⛔ ระงับชั่วคราว
-                              </span>
-                            )}
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                              <h3 style={{ fontSize: '0.95rem', fontWeight: 'bold', color: '#FFF', margin: 0 }}>
+                                {user.full_name}
+                              </h3>
+                              {isCurrentLoggedUser && (
+                                <span style={{ fontSize: '0.68rem', padding: '1px 6px', borderRadius: '4px', backgroundColor: 'rgba(229, 163, 30, 0.2)', color: '#E5A31E', fontWeight: 'bold' }}>
+                                  คุณ
+                                </span>
+                              )}
+                            </div>
+                            <span style={{ fontSize: '0.74rem', color: '#E5A31E', fontFamily: 'monospace' }}>
+                              @{user.username}
+                            </span>
                           </div>
                         </div>
 
-                        {/* Role Pill */}
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
+                        {/* Role & Department */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', minWidth: '160px', flex: '1 1 160px' }}>
                           <span
                             style={{
-                              padding: '4px 10px',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              width: 'fit-content',
+                              padding: '3px 9px',
                               borderRadius: '6px',
-                              backgroundColor: user.role === 'superadmin' ? 'rgba(229, 163, 30, 0.2)' : user.role === 'officer' ? 'rgba(52, 211, 153, 0.2)' : user.role === 'staff' ? 'rgba(56, 189, 248, 0.2)' : 'rgba(255, 255, 255, 0.08)',
-                              border: `1px solid ${user.role === 'superadmin' ? '#E5A31E' : user.role === 'officer' ? '#34D399' : user.role === 'staff' ? '#38BDF8' : 'rgba(255, 255, 255, 0.2)'}`,
-                              color: user.role === 'superadmin' ? '#E5A31E' : user.role === 'officer' ? '#A7F3D0' : user.role === 'staff' ? '#BAE6FD' : '#E2E8F0',
-                              fontSize: '0.76rem',
+                              backgroundColor: roleConfig.bg,
+                              border: `1px solid ${roleConfig.border}`,
+                              color: roleConfig.color,
+                              fontSize: '0.72rem',
                               fontWeight: 'bold'
                             }}
                           >
-                            {user.role === 'superadmin' ? '👑 ผู้ดูแลระบบสูงสุด (Super Admin)' : user.role === 'officer' ? '🛡️ เจ้าหน้าที่มรดก (Officer)' : user.role === 'staff' ? '🎫 เจ้าหน้าที่ต้อนรับ & สแกนตั๋ว (Staff)' : '👤 สมาชิกทั่วไป (Member)'}
+                            {roleConfig.label}
                           </span>
+                          {user.department ? (
+                            <span style={{ fontSize: '0.72rem', color: 'rgba(250, 242, 221, 0.7)' }}>
+                              🏢 {user.department}
+                            </span>
+                          ) : (
+                            <span style={{ fontSize: '0.72rem', color: 'rgba(250, 242, 221, 0.4)' }}>
+                              —
+                            </span>
+                          )}
                         </div>
 
-                        {/* Metadata Details */}
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '0.78rem', color: 'rgba(250, 242, 221, 0.75)' }}>
-                          {user.department && (
-                            <div>
-                              <span style={{ color: '#E5A31E' }}>🏢 ฝ่าย/สังกัด:</span> {user.department}
-                            </div>
-                          )}
-                          {user.phone && (
-                            <div>
-                              <span style={{ color: '#E5A31E' }}>📞 เบอร์โทร:</span> {user.phone}
-                            </div>
+                        {/* Contact Information */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', minWidth: '150px', flex: '1 1 150px' }}>
+                          {user.phone ? (
+                            <span style={{ fontSize: '0.74rem', color: '#FAF2DD' }}>
+                              📞 {user.phone}
+                            </span>
+                          ) : (
+                            <span style={{ fontSize: '0.72rem', color: 'rgba(250, 242, 221, 0.4)' }}>
+                              📞 ไม่ได้ระบุเบอร์
+                            </span>
                           )}
                           {user.email && (
-                            <div>
-                              <span style={{ color: '#E5A31E' }}>✉️ อีเมล:</span> {user.email}
-                            </div>
+                            <span style={{ fontSize: '0.7rem', color: 'rgba(250, 242, 221, 0.65)' }}>
+                              ✉️ {user.email}
+                            </span>
                           )}
-                          {user.notes && (
-                            <div style={{ fontStyle: 'italic', color: 'rgba(250, 242, 221, 0.6)' }}>
-                              💬 {user.notes}
-                            </div>
+                        </div>
+
+                        {/* Status Badge */}
+                        <div style={{ minWidth: '100px', flexShrink: 0 }}>
+                          {user.status === 'active' && (
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '3px 8px', borderRadius: '6px', backgroundColor: 'rgba(52, 211, 153, 0.12)', border: '1px solid rgba(52, 211, 153, 0.4)', color: '#6EE7B7', fontSize: '0.72rem', fontWeight: 'bold' }}>
+                              <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#34D399' }}></span>
+                              ใช้งานได้
+                            </span>
+                          )}
+                          {user.status === 'pending' && (
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '3px 8px', borderRadius: '6px', backgroundColor: 'rgba(245, 158, 11, 0.2)', border: '1px solid #F59E0B', color: '#FCD34D', fontSize: '0.72rem', fontWeight: 'bold' }}>
+                              <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#F59E0B' }}></span>
+                              รออนุมัติ
+                            </span>
+                          )}
+                          {user.status === 'suspended' && (
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '3px 8px', borderRadius: '6px', backgroundColor: 'rgba(239, 68, 68, 0.15)', border: '1px solid rgba(239, 68, 68, 0.5)', color: '#FCA5A5', fontSize: '0.72rem', fontWeight: 'bold' }}>
+                              <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#EF4444' }}></span>
+                              ระงับชั่วคราว
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Action Buttons Toolbar */}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '5px', flexWrap: 'wrap', justifyContent: 'flex-end', flexShrink: 0 }}>
+                          {/* Approve for Pending users */}
+                          {user.status === 'pending' && (
+                            <button
+                              onClick={() => handleApproveUser(user)}
+                              style={{ padding: '6px 12px', borderRadius: '6px', backgroundColor: '#34D399', color: '#122421', border: 'none', fontSize: '0.74rem', fontWeight: 'bold', cursor: 'pointer' }}
+                              title="อนุมัติการสมัครสมาชิก"
+                            >
+                              ✅ อนุมัติ
+                            </button>
+                          )}
+
+                          {/* Appoint Role (Super Admin power) */}
+                          {!isPrimaryAdmin && (
+                            <button
+                              onClick={() => handleOpenRoleModal(user)}
+                              style={{ padding: '5px 9px', borderRadius: '6px', backgroundColor: 'rgba(229, 163, 30, 0.12)', border: '1px solid rgba(229, 163, 30, 0.4)', color: '#E5A31E', fontSize: '0.72rem', fontWeight: 'bold', cursor: 'pointer' }}
+                              title="แต่งตั้งระดับสิทธิ์ผู้ใช้"
+                            >
+                              👑 สิทธิ์
+                            </button>
+                          )}
+
+                          {/* Reset Password */}
+                          <button
+                            onClick={() => handleOpenPasswordReset(user)}
+                            style={{ padding: '5px 9px', borderRadius: '6px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.15)', color: '#FAF2DD', fontSize: '0.72rem', cursor: 'pointer' }}
+                            title="เปลี่ยนรหัสผ่าน"
+                          >
+                            🔑 รหัส
+                          </button>
+
+                          {/* Edit Details */}
+                          <button
+                            onClick={() => handleOpenEditUser(user)}
+                            style={{ padding: '5px 9px', borderRadius: '6px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.15)', color: '#FAF2DD', fontSize: '0.72rem', cursor: 'pointer' }}
+                            title="แก้ไขข้อมูลส่วนตัว"
+                          >
+                            ✏️
+                          </button>
+
+                          {/* Suspend / Activate toggle */}
+                          {!isPrimaryAdmin && user.status !== 'pending' && (
+                            <button
+                              onClick={() => handleToggleSuspendUser(user)}
+                              style={{
+                                padding: '5px 8px',
+                                borderRadius: '6px',
+                                backgroundColor: user.status === 'suspended' ? 'rgba(52, 211, 153, 0.12)' : 'rgba(239, 68, 68, 0.12)',
+                                border: `1px solid ${user.status === 'suspended' ? 'rgba(52, 211, 153, 0.4)' : 'rgba(239, 68, 68, 0.3)'}`,
+                                color: user.status === 'suspended' ? '#6EE7B7' : '#FCA5A5',
+                                fontSize: '0.72rem',
+                                cursor: 'pointer'
+                              }}
+                              title={user.status === 'suspended' ? 'ปลดระงับการใช้งาน' : 'ระงับการใช้งานชั่วคราว'}
+                            >
+                              {user.status === 'suspended' ? '▶️' : '⏸️'}
+                            </button>
+                          )}
+
+                          {/* Delete user */}
+                          {!isPrimaryAdmin && (
+                            <button
+                              onClick={() => handleDeleteUser(user)}
+                              style={{ padding: '5px 8px', borderRadius: '6px', backgroundColor: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.25)', color: '#FCA5A5', fontSize: '0.72rem', cursor: 'pointer' }}
+                              title="ลบสมาชิกออกจากระบบ"
+                            >
+                              🗑️
+                            </button>
                           )}
                         </div>
                       </div>
-
-                      {/* Action Buttons Toolbar */}
-                      <div style={{ paddingTop: '12px', borderTop: '1px solid rgba(255, 255, 255, 0.08)', display: 'flex', flexWrap: 'wrap', gap: '6px', justifyContent: 'flex-end' }}>
-                        {/* If Pending: Approve button */}
-                        {user.status === 'pending' && (
-                          <button
-                            onClick={() => handleApproveUser(user)}
-                            style={{ padding: '6px 12px', borderRadius: '6px', backgroundColor: '#34D399', color: '#122421', border: 'none', fontSize: '0.76rem', fontWeight: 'bold', cursor: 'pointer' }}
-                          >
-                            ✅ อนุมัติสิทธิ์
-                          </button>
-                        )}
-
-                        {/* Toggle Suspend (except for primary admin) */}
-                        {!isPrimaryAdmin && user.status !== 'pending' && (
-                          <button
-                            onClick={() => handleToggleSuspendUser(user)}
-                            style={{
-                              padding: '6px 10px',
-                              borderRadius: '6px',
-                              backgroundColor: user.status === 'suspended' ? 'rgba(52, 211, 153, 0.15)' : 'rgba(239, 68, 68, 0.15)',
-                              border: `1px solid ${user.status === 'suspended' ? '#34D399' : '#EF4444'}`,
-                              color: user.status === 'suspended' ? '#6EE7B7' : '#FCA5A5',
-                              fontSize: '0.74rem',
-                              cursor: 'pointer'
-                            }}
-                          >
-                            {user.status === 'suspended' ? '▶️ ปลดระงับ' : '⏸️ ระงับ'}
-                          </button>
-                        )}
-
-                        {/* Change Role Button (Super Admin Power) */}
-                        {!isPrimaryAdmin && (
-                          <button
-                            onClick={() => handleOpenRoleModal(user)}
-                            style={{ padding: '6px 10px', borderRadius: '6px', backgroundColor: 'rgba(229, 163, 30, 0.15)', border: '1px solid rgba(229, 163, 30, 0.4)', color: '#E5A31E', fontSize: '0.74rem', fontWeight: 'bold', cursor: 'pointer' }}
-                          >
-                            👑 แต่งตั้งสิทธิ์
-                          </button>
-                        )}
-
-                        {/* Reset Password Button */}
-                        <button
-                          onClick={() => handleOpenPasswordReset(user)}
-                          style={{ padding: '6px 10px', borderRadius: '6px', backgroundColor: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255, 255, 255, 0.15)', color: '#FAF2DD', fontSize: '0.74rem', cursor: 'pointer' }}
-                        >
-                          🔑 รหัสผ่าน
-                        </button>
-
-                        {/* Edit Info */}
-                        <button
-                          onClick={() => handleOpenEditUser(user)}
-                          style={{ padding: '6px 10px', borderRadius: '6px', backgroundColor: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255, 255, 255, 0.15)', color: '#FAF2DD', fontSize: '0.74rem', cursor: 'pointer' }}
-                        >
-                          ✏️ แก้ไข
-                        </button>
-
-                        {/* Delete User (disabled for admin) */}
-                        {!isPrimaryAdmin && (
-                          <button
-                            onClick={() => handleDeleteUser(user)}
-                            style={{ padding: '6px 10px', borderRadius: '6px', backgroundColor: 'rgba(239, 68, 68, 0.12)', border: '1px solid rgba(239, 68, 68, 0.3)', color: '#FCA5A5', fontSize: '0.74rem', cursor: 'pointer' }}
-                          >
-                            🗑️ ลบ
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-            </div>
+                    );
+                  })}
+                </div>
+              );
+            })()}
           </div>
         )}
 

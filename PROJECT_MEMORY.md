@@ -12,6 +12,7 @@
 - **Name:** Dao Ming Takua Pa Living Heritage & Creative Hub (โรงเรียนเต้าหมิง ตะกั่วป่า - บริบทใหม่ในเมืองเก่า)
 - **Foundation:** มูลนิธิโรงเรียนเต้าหมิง ตะกั่วป่า (Dao Ming Foundation Takua Pa)
 - **Award:** รางวัลอนุรักษ์ศิลปสถาปัตยกรรม ประจำปี ๒๕๖๙ โดยสมาคมสถาปนิกสยามฯ (ASA)
+- **Logo Branding:** ตราสัญลักษณ์หน้าจั่วและอักษรประดิษฐ์ "เต้าหมิง" (ดัดแปลงจาก `d:\Takuapa\images\logo-305.jpg`) ถอดพื้นหลังสีส้มออกเป็นโปร่งใส (Transparent PNG) และเส้นสายตัวอักษรเป็นสีแดงจีนมรดก (Heritage Crimson Red `#E11D48` / `#DC2626`) ให้ความคมชัดบนทุกพื้นหลัง
 - **Contact:** 
   - Phone: `0813703883`
   - Email: `pook.kanokpon@gmail.com`

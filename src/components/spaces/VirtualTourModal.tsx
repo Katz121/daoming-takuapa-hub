@@ -26,7 +26,7 @@ const TOUR_ZONES: TourZone[] = [
     id: 'hall',
     name_th: 'โถงอาคารไม้ประวัติศาสตร์ (Zone A)',
     name_en: 'Main Heritage Timber Hall (Zone A)',
-    image: '/img/นิทรรศการ3-โซน 1-โรงเรียนเต้าหมิง.jpg',
+    image: '/img/exhibit-zone1-school.jpg',
     subtitle_th: 'ชั้นล่าง · ไม้เนื้อแข็งขัดเงา บานเกล็ดรับลม ๔ ทิศทาง',
     subtitle_en: 'Ground Floor · Polished timber flooring & 4-way cross-ventilation',
     beacons: [
@@ -60,7 +60,7 @@ const TOUR_ZONES: TourZone[] = [
     id: 'veranda',
     name_th: 'ระเบียงมุขยื่น ๒ ชั้น & ลานหน้า (Zone E & B)',
     name_en: 'Double Porch & Courtyard Veranda',
-    image: '/img/อาคารกับชุมชน.jpg',
+    image: '/img/building-community.jpg',
     subtitle_th: 'มุขหน้าสถาปัตยกรรมอั้งม่อเหลา หัวเสากรีกโบราณ',
     subtitle_en: 'Front portico with classical capitals overlooking historic road',
     beacons: [

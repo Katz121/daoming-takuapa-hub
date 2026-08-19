@@ -4,7 +4,7 @@ export const ARCHIVE_PHOTOS: ArchivePhoto[] = [
   {
     id: 0,
     category: "diplomacy",
-    src: "/img/นิทรรศการ3-โซน 1-โรงเรียนเต้าหมิง.jpg",
+    src: "/img/exhibit-zone1-school.jpg",
     tag_th: "พ.ศ. ๒๔๖๕",
     tag_en: "1922 Early Era",
     tag_zh: "1922年 創校之初",
@@ -18,7 +18,7 @@ export const ARCHIVE_PHOTOS: ArchivePhoto[] = [
   {
     id: 1,
     category: "diplomacy",
-    src: "/img/นิทรรศการ3-โซน2-รับรองกงสุลจีน.jpg",
+    src: "/img/exhibit-zone2-consul.jpg",
     tag_th: "พ.ศ. ๒๔๙๓",
     tag_en: "1950 Diplomacy",
     tag_zh: "1950年 盛大外交",
@@ -32,7 +32,7 @@ export const ARCHIVE_PHOTOS: ArchivePhoto[] = [
   {
     id: 2,
     category: "school",
-    src: "/img/นิทรรศการ3-โซน2-ครู.jpg",
+    src: "/img/exhibit-zone2-teachers.jpg",
     tag_th: "ครูอาจารย์",
     tag_en: "Faculty Scholars",
     tag_zh: "先賢名師",
@@ -46,7 +46,7 @@ export const ARCHIVE_PHOTOS: ArchivePhoto[] = [
   {
     id: 3,
     category: "school",
-    src: "/img/นิทรรศการ3-โซน2-ครูนักเรียน.jpg",
+    src: "/img/exhibit-zone2-class.jpg",
     tag_th: "ป้ายโรงเรียนเต้าหมิง",
     tag_en: "Class Commemoration",
     tag_zh: "導明學校",
@@ -60,7 +60,7 @@ export const ARCHIVE_PHOTOS: ArchivePhoto[] = [
   {
     id: 4,
     category: "school",
-    src: "/img/นิทรรศการ3-โซน2-นักเรียนประพฤติดี.jpg",
+    src: "/img/exhibit-zone2-moral-awards.jpg",
     tag_th: "รางวัลเกียรติยศ",
     tag_en: "Moral Excellence",
     tag_zh: "德育表彰",
@@ -74,7 +74,7 @@ export const ARCHIVE_PHOTOS: ArchivePhoto[] = [
   {
     id: 5,
     category: "school",
-    src: "/img/นิทรรศการ3-โซน2-นักเรียนเรียนดี.jpg",
+    src: "/img/exhibit-zone2-academic-awards.jpg",
     tag_th: "เรียนดีเด่น",
     tag_en: "Academic Honors",
     tag_zh: "學業優異",
@@ -88,7 +88,7 @@ export const ARCHIVE_PHOTOS: ArchivePhoto[] = [
   {
     id: 6,
     category: "sports",
-    src: "/img/นิทรรศการ3-โซน2-ทีมบาสหน้าอาคาร.jpg",
+    src: "/img/exhibit-zone2-basketball-front.jpg",
     tag_th: "ทีมบาสเกตบอล",
     tag_en: "Basketball Squad",
     tag_zh: "男子籃球隊",
@@ -102,7 +102,7 @@ export const ARCHIVE_PHOTOS: ArchivePhoto[] = [
   {
     id: 7,
     category: "sports",
-    src: "/img/นิทรรศการ3-โซน2-ทีมบาสเกตบอล.1.jpg",
+    src: "/img/exhibit-zone2-basketball-1.jpg",
     tag_th: "บาสเกตบอล ๑",
     tag_en: "Team Lineup 1",
     tag_zh: "籃球名將 (一)",
@@ -116,7 +116,7 @@ export const ARCHIVE_PHOTOS: ArchivePhoto[] = [
   {
     id: 8,
     category: "sports",
-    src: "/img/นิทรรศการ3-โซน2-ทีมบาสเกตบอล.2.jpg",
+    src: "/img/exhibit-zone2-basketball-2.jpg",
     tag_th: "บาสเกตบอล ๒",
     tag_en: "Team Lineup 2",
     tag_zh: "籃球名將 (二)",
@@ -130,7 +130,7 @@ export const ARCHIVE_PHOTOS: ArchivePhoto[] = [
   {
     id: 9,
     category: "sports",
-    src: "/img/นิทรรศการ3-โซน2-ทีมบาสเกตบอล.3.jpg",
+    src: "/img/exhibit-zone2-basketball-3.jpg",
     tag_th: "กรรมการ & นักกีฬา",
     tag_en: "Referees & Players",
     tag_zh: "裁判與隊員",
@@ -144,7 +144,7 @@ export const ARCHIVE_PHOTOS: ArchivePhoto[] = [
   {
     id: 10,
     category: "sports",
-    src: "/img/นิทรรศการ3-โซน2-ทีมบาสเด็ก.jpg",
+    src: "/img/exhibit-zone2-basketball-youth.jpg",
     tag_th: "เยาวชนรุ่นเล็ก",
     tag_en: "Junior League",
     tag_zh: "少年幼獅隊",
@@ -158,7 +158,7 @@ export const ARCHIVE_PHOTOS: ArchivePhoto[] = [
   {
     id: 11,
     category: "community",
-    src: "/img/นิทรรศการ3-โซน2-พื้นที่นิทรรศการ1.jpg",
+    src: "/img/exhibit-zone2-area1.jpg",
     tag_th: "นิทรรศการ ๑",
     tag_en: "Exhibit I",
     tag_zh: "礦鄉展覽 (一)",
@@ -172,7 +172,7 @@ export const ARCHIVE_PHOTOS: ArchivePhoto[] = [
   {
     id: 12,
     category: "community",
-    src: "/img/นิทรรศการ3-โซน2-พื้นที่นิทรรศการ2.jpg",
+    src: "/img/exhibit-zone2-area2.jpg",
     tag_th: "นิทรรศการ ๒",
     tag_en: "Exhibit II",
     tag_zh: "礦鄉展覽 (二)",

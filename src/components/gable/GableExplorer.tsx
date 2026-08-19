@@ -124,7 +124,7 @@ export function GableExplorer() {
 
               <div className="gable-zoom-stage" id="gableZoomStage">
                 <img
-                  src="/img/อาคารกับชุมชน.jpg"
+                  src="/img/building-community.jpg"
                   alt="อาคารโรงเรียนเต้าหมิงและการซูมส่องจุดสัญลักษณ์"
                   id="gableZoomImg"
                   className="gable-interactive-img"

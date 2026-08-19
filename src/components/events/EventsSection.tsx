@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '@/lib/store';
-import { EVENTS_LIST } from '@/data/events';
+import { clientDb } from '@/lib/clientDb';
 import { EventItem } from '@/types';
 import { EventDetailModal } from './EventDetailModal';
 
@@ -10,13 +10,35 @@ export function EventsSection() {
   const { lang, t, setTeaModalOpen, showToast } = useApp();
   const [filter, setFilter] = useState<string>('all');
   const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
+  const [eventsList, setEventsList] = useState<EventItem[]>([]);
 
   const isEn = lang === 'en';
   const isZh = lang === 'zh';
 
+  const loadEvents = () => {
+    try {
+      const list = clientDb.getEvents();
+      setEventsList(list);
+    } catch {
+      // fallback
+    }
+  };
+
+  useEffect(() => {
+    loadEvents();
+    // Listen for storage events (e.g. if edited in another tab)
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === 'daoming_events_store_v2') {
+        loadEvents();
+      }
+    };
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
+  }, []);
+
   const filteredEvents = filter === 'all'
-    ? EVENTS_LIST
-    : EVENTS_LIST.filter(ev => ev.category === filter);
+    ? eventsList
+    : eventsList.filter(ev => ev.category === filter);
 
   const handleAction = (ev: EventItem) => {
     if (ev.btnType === 'tea_simulator') {

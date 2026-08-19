@@ -5,12 +5,14 @@ import { useApp } from '@/lib/store';
 
 export function HeroSection() {
   const { lang } = useApp();
+
   const isEn = lang === 'en';
   const isZh = lang === 'zh';
 
   return (
     <section className="hero-section" id="hero">
       <div className="hero-backdrop-pattern"></div>
+
       <div className="hero-container">
         <div className="hero-content">
           {/* Award Ribbon Banner */}
@@ -20,8 +22,8 @@ export function HeroSection() {
               {isZh
                 ? "泰國暹羅皇家建築師協會 (ASA) 2026年度傑出建築保護大獎"
                 : isEn 
-                  ? "Architectural Conservation Award 2026 · The Association of Siamese Architects under Royal Patronage (ASA)" 
-                  : "รางวัลอนุรักษ์ศิลปสถาปัตยกรรม ประจำปี 2569 · สมาคมสถาปนิกสยาม ในพระบรมราชูปถัมภ์ (ASA)"}
+                  ? "Architectural Conservation Award 2026 · The Association of Siamese Architects (ASA)" 
+                  : "รางวัลอนุรักษ์ศิลปสถาปัตยกรรม ประจำปี ๒๕๖๙ · สมาคมสถาปนิกสยามฯ (ASA)"}
             </span>
           </div>
 
@@ -32,7 +34,7 @@ export function HeroSection() {
                 ? "攀牙府首所也是唯一百年華校 · 1905年創辦 / 1922年建校舍"
                 : isEn 
                   ? "First & Only Chinese School in Phang Nga · Founded 1905 / Building 1922" 
-                  : "โรงเรียนจีนแห่งแรกและแห่งเดียวของ จ.พังงา · ก่อตั้ง พ.ศ. 2448 / อาคาร พ.ศ. 2465"}
+                  : "โรงเรียนจีนแห่งแรกและแห่งเดียวของ จ.พังงา · ก่อตั้ง พ.ศ. ๒๔๔๘ / อาคาร พ.ศ. ๒๔๖๕"}
             </span>
           </div>
 
@@ -40,7 +42,7 @@ export function HeroSection() {
             {isZh ? (
               <>重煥百年 <span className="highlight-wood">明德指引之路</span><br />賦能老城文創 <span className="highlight-terracotta">永續未來</span></>
             ) : isEn ? (
-              <>Revitalizing <span className="highlight-wood">The Path of Light</span><br />Empowering Creative <span className="highlight-terracotta">Future</span></>
+              <>Revitalizing a Century-Old <span className="highlight-wood">Path of Light</span><br />Empowering a <span className="highlight-terracotta">Creative Future</span></>
             ) : (
               <>คืนชีวิตให้ <span className="highlight-wood">เส้นทางแห่งแสงสว่าง</span><br />เติมพลังสร้างสรรค์สู่ <span className="highlight-terracotta">อนาคต</span></>
             )}
@@ -84,16 +86,23 @@ export function HeroSection() {
           </div>
         </div>
 
-        {/* Hero Visual Card */}
+        {/* Hero Visual Column */}
         <div className="hero-visual">
+          {/* Main Photo Card */}
           <div className="heritage-card-preview">
             <div className="visual-photo-wrapper">
-              <img src="/img/อาคารกับชุมชน.jpg" alt="อาคารโรงเรียนเต้าหมิงและชุมชนเยาวชนตะกั่วป่า" className="hero-real-building-img" />
+              <img
+                src="/img/building-community.jpg"
+                alt="อาคารโรงเรียนเต้าหมิงและชุมชนเยาวชนตะกั่วป่า"
+                className="hero-real-building-img"
+              />
+
               <div className="visual-badge-overlay">
                 <span className="tag-status">🏆 ASA 2026</span>
                 <span className="tag-location">📍 {isZh ? "德古巴老街" : isEn ? "Takua Pa Old Town" : "ย่านเมืองเก่าศรีตะกั่วป่า"}</span>
               </div>
             </div>
+
             <div className="visual-caption">
               <div className="caption-logo-mini">
                 <img src="/assets/logo-305.jpg" alt="ตราสัญลักษณ์เต้าหมิง" />
@@ -107,6 +116,15 @@ export function HeroSection() {
                 </span>
               </div>
             </div>
+          </div>
+
+          {/* Architectural Watermark Floating in the Open Right Space (Clean & Zero Crowding on Text) */}
+          <div className="hero-right-space-watermark" aria-hidden="true">
+            <img
+              src="/assets/line-305.webp"
+              alt=""
+              className="watermark-artwork-img"
+            />
           </div>
         </div>
       </div>

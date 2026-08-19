@@ -44,7 +44,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "โรงเรียนเต้าหมิง ตะกั่วป่า | Dao Ming Living Heritage & Creative Hub",
     description: "ชุบชีวิตอาคารประวัติศาสตร์ ๑๐๐ ปี สู่ Creative Living Space แห่งตะกั่วป่า",
-    images: ["/img/อาคารปัจจุบัน.jpg"],
+    images: ["/assets/og-daoming.jpg"],
     type: "website",
   }
 };
@@ -69,7 +69,7 @@ export default function RootLayout({
               "name": "โรงเรียนเต้าหมิง ตะกั่วป่า (Dao Ming School)",
               "alternateName": "Dao Ming Living Heritage & Creative Hub",
               "description": "โรงเรียนจีนแห่งแรกและแห่งเดียวของจังหวัดพังงา (พ.ศ. 2448/2465) สู่พื้นที่สร้างสรรค์และมรดกมีชีวิตแห่งเมืองเก่าตะกั่วป่า รางวัลอนุรักษ์ศิลปสถาปัตยกรรม ประจำปี 2569 สมาคมสถาปนิกสยามฯ",
-              "image": "/img/อาคารปัจจุบัน.jpg",
+              "image": "/img/building-current.jpg",
               "address": {
                 "@type": "PostalAddress",
                 "streetAddress": "ถนนศรีตะกั่วป่า ตำบลตลาดใหญ่",

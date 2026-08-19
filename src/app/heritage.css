@@ -467,7 +467,7 @@ button, input, select, textarea {
   position: relative;
   background: linear-gradient(140deg, #FFF4D5 0%, #F9E29D 48%, #F3CC60 100%);
   color: var(--text-main);
-  padding: 80px 0 70px;
+  padding: 95px 0 75px;
   overflow: hidden;
   border-bottom: 2px solid var(--border-ochre);
 }
@@ -595,11 +595,15 @@ button, input, select, textarea {
 
 /* Hero Visual Card */
 .hero-visual {
+  position: relative;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .heritage-card-preview {
+  position: relative;
+  z-index: 2;
   width: 100%;
   max-width: 470px;
   background-color: var(--bg-surface);
@@ -608,6 +612,44 @@ button, input, select, textarea {
   overflow: hidden;
   box-shadow: var(--shadow-ochre);
   transition: var(--transition);
+}
+
+/* Architectural Watermark Floating in Open Right Space (Zero Crowding on Text) */
+.hero-right-space-watermark {
+  position: absolute;
+  left: 100%;
+  margin-left: 28px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 380px;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.32;
+  mix-blend-mode: multiply;
+  filter: drop-shadow(0 4px 20px rgba(190, 126, 10, 0.4)) sepia(0.85);
+  transition: opacity 0.4s ease;
+}
+
+.watermark-artwork-img {
+  width: 100%;
+  height: auto;
+  max-height: 260px;
+  object-fit: contain;
+  display: block;
+}
+
+@media (max-width: 1380px) {
+  .hero-right-space-watermark {
+    width: 300px;
+    margin-left: 16px;
+    opacity: 0.22;
+  }
+}
+
+@media (max-width: 1100px) {
+  .hero-right-space-watermark {
+    display: none;
+  }
 }
 
 .heritage-card-preview:hover {
@@ -2833,28 +2875,29 @@ button, input, select, textarea {
 
 .ev-month {
   font-size: 0.78rem;
-  color: var(--text-muted);
+  font-weight: 600;
+  color: #5C5549;
 }
 
 .event-title {
   font-family: var(--font-display);
-  font-size: 1.02rem;
+  font-size: 1.05rem;
   font-weight: 700;
   margin-bottom: 6px;
   line-height: 1.35;
-  color: var(--color-cream);
+  color: var(--text-main);
   cursor: pointer;
   transition: color 0.2s ease;
 }
 
 .event-title:hover {
-  color: var(--color-tin-gold);
+  color: var(--color-terracotta);
 }
 
 .event-snippet {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  line-height: 1.45;
+  font-size: 0.84rem;
+  color: #4A453B;
+  line-height: 1.5;
   margin-bottom: 10px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -2866,9 +2909,11 @@ button, input, select, textarea {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  font-size: 0.74rem;
-  color: var(--text-main);
-  background-color: var(--bg-main);
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: #2D2821;
+  background-color: rgba(18, 36, 33, 0.05);
+  border: 1px solid rgba(18, 36, 33, 0.08);
   padding: 6px 10px;
   border-radius: var(--radius-sm);
   margin-bottom: 12px;
@@ -2885,8 +2930,9 @@ button, input, select, textarea {
 }
 
 .event-price {
-  font-size: 0.82rem;
-  font-weight: 600;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-terracotta);
 }
 
 /* ==========================================================================
@@ -4812,19 +4858,24 @@ button, input, select, textarea {
 }
 
 .event-card-btn-group .btn-secondary-sm {
-  background: rgba(229, 163, 30, 0.12);
-  border: 1px solid rgba(229, 163, 30, 0.35);
-  color: var(--color-tin-gold);
-  font-size: 0.75rem;
-  padding: 6px 10px;
+  background: #FFFFFF;
+  border: 1.5px solid var(--color-wood);
+  color: var(--color-wood);
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 6px 12px;
   border-radius: 6px;
   cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   transition: all 0.2s ease;
 }
 
 .event-card-btn-group .btn-secondary-sm:hover {
-  background: var(--color-tin-gold);
-  color: #122421;
+  background: var(--color-wood);
+  color: #FAF2DD;
+  border-color: var(--color-wood);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(92, 58, 30, 0.25);
 }
 
 /* Event Detail Pop-up Modal */
@@ -4957,9 +5008,9 @@ button, input, select, textarea {
 }
 
 .event-modal-title {
-  font-size: 1.4rem;
+  font-size: 1.45rem;
   font-weight: 700;
-  color: var(--color-cream);
+  color: #FFFFFF;
   line-height: 1.35;
   margin: 0;
 }
@@ -4968,8 +5019,8 @@ button, input, select, textarea {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
   gap: 10px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 12px;
   padding: 12px;
 }
@@ -4993,15 +5044,16 @@ button, input, select, textarea {
 }
 
 .meta-box p {
-  font-size: 0.78rem;
-  color: var(--color-cream);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #FFFFFF;
   margin: 2px 0 0;
   line-height: 1.3;
 }
 
 .price-highlight {
   color: #72E2AE !important;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .event-modal-section {
@@ -5011,8 +5063,8 @@ button, input, select, textarea {
 }
 
 .section-subhead {
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-size: 0.98rem;
+  font-weight: 700;
   color: var(--color-tin-gold);
   display: flex;
   align-items: center;
@@ -5021,9 +5073,9 @@ button, input, select, textarea {
 }
 
 .event-full-desc {
-  font-size: 0.85rem;
-  line-height: 1.6;
-  color: rgba(250, 242, 221, 0.88);
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: #F3EFE6;
   margin: 0;
 }
 
@@ -5033,16 +5085,16 @@ button, input, select, textarea {
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 .event-highlights-list li {
   display: flex;
   align-items: flex-start;
   gap: 8px;
-  font-size: 0.82rem;
-  color: var(--color-cream);
-  line-height: 1.45;
+  font-size: 0.85rem;
+  color: #F8F6F0;
+  line-height: 1.5;
 }
 
 .hl-bullet {
@@ -5054,10 +5106,10 @@ button, input, select, textarea {
 .event-schedule-timeline {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   position: relative;
-  padding-left: 12px;
-  border-left: 2px solid rgba(229, 163, 30, 0.3);
+  padding-left: 14px;
+  border-left: 2px solid rgba(229, 163, 30, 0.4);
   margin-left: 8px;
 }
 
@@ -5070,7 +5122,7 @@ button, input, select, textarea {
 
 .schedule-dot {
   position: absolute;
-  left: -18px;
+  left: -20px;
   top: 5px;
   width: 10px;
   height: 10px;
@@ -5080,24 +5132,24 @@ button, input, select, textarea {
 }
 
 .schedule-time {
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   font-weight: 700;
   color: var(--color-tin-gold);
   font-family: monospace;
 }
 
 .schedule-activity {
-  font-size: 0.82rem;
-  color: rgba(250, 242, 221, 0.88);
-  line-height: 1.4;
+  font-size: 0.85rem;
+  color: #F8F6F0;
+  line-height: 1.45;
 }
 
 .event-modal-instructor-box {
   display: flex;
   align-items: center;
   gap: 12px;
-  background: rgba(229, 163, 30, 0.08);
-  border: 1px dashed rgba(229, 163, 30, 0.35);
+  background: rgba(229, 163, 30, 0.12);
+  border: 1px dashed rgba(229, 163, 30, 0.45);
   border-radius: 12px;
   padding: 12px 16px;
 }
@@ -5113,8 +5165,9 @@ button, input, select, textarea {
 }
 
 .event-modal-instructor-box p {
-  font-size: 0.82rem;
-  color: var(--color-cream);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #FFFFFF;
   margin: 2px 0 0;
 }
 
@@ -5150,4 +5203,6 @@ button, input, select, textarea {
     justify-content: center;
   }
 }
+
+
 

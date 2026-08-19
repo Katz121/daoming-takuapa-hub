@@ -2,13 +2,19 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import { useApp } from '@/lib/store';
-import { ARCHIVE_PHOTOS } from '@/data/archive';
+import { clientDb } from '@/lib/clientDb';
+import { ArchivePhoto } from '@/types';
 
-const THAI_DIGITS = ['๑', '๒', '๓', '๔', '๕', '๖', '๗', '๘', '๙', '๑๐', '๑๑', '๑๒', '๑๓'];
+const THAI_DIGITS = ['๑', '๒', '๓', '๔', '๕', '๖', '๗', '๘', '๙', '๑๐', '๑๑', '๑๒', '๑๓', '๑๔', '๑๕', '๑๖', '๑๗', '๑๘', '๑๙', '๒๐'];
 
 export function PhotoLightbox() {
   const { lang, lightboxPhotoIndex, closeLightbox, openLightbox } = useApp();
+  const [allPhotos, setAllPhotos] = useState<ArchivePhoto[]>([]);
   const [touchStart, setTouchStart] = useState<number | null>(null);
+
+  useEffect(() => {
+    setAllPhotos(clientDb.getArchivePhotos());
+  }, [lightboxPhotoIndex]);
 
   const isEn = lang === 'en';
   const isZh = lang === 'zh';
@@ -28,16 +34,16 @@ export function PhotoLightbox() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [lightboxPhotoIndex]);
+  }, [lightboxPhotoIndex, allPhotos]);
 
   if (lightboxPhotoIndex === null) return null;
 
-  const photo = ARCHIVE_PHOTOS[lightboxPhotoIndex];
+  const photo = allPhotos[lightboxPhotoIndex] || allPhotos.find(p => p.id === lightboxPhotoIndex);
   if (!photo) return null;
 
   const navigate = (direction: number) => {
     const nextIdx = lightboxPhotoIndex + direction;
-    if (nextIdx >= 0 && nextIdx < ARCHIVE_PHOTOS.length) {
+    if (nextIdx >= 0 && nextIdx < allPhotos.length) {
       openLightbox(nextIdx);
     }
   };
@@ -155,7 +161,7 @@ export function PhotoLightbox() {
             zIndex: 20
           }}
         >
-          {toDigit(lightboxPhotoIndex + 1)} / {toDigit(ARCHIVE_PHOTOS.length)}
+          {toDigit(lightboxPhotoIndex + 1)} / {toDigit(allPhotos.length)}
         </span>
 
         {/* Prev Navigation Button */}
@@ -191,7 +197,7 @@ export function PhotoLightbox() {
         <button
           className="lightbox-nav-btn lightbox-next-btn"
           onClick={() => navigate(1)}
-          disabled={lightboxPhotoIndex === ARCHIVE_PHOTOS.length - 1}
+          disabled={lightboxPhotoIndex === allPhotos.length - 1}
           aria-label="ภาพถัดไป"
           style={{
             position: 'absolute',
@@ -205,8 +211,8 @@ export function PhotoLightbox() {
             color: '#FFFFFF',
             fontSize: '1.8rem',
             borderRadius: '50%',
-            cursor: lightboxPhotoIndex === ARCHIVE_PHOTOS.length - 1 ? 'not-allowed' : 'pointer',
-            opacity: lightboxPhotoIndex === ARCHIVE_PHOTOS.length - 1 ? 0.25 : 1,
+            cursor: lightboxPhotoIndex === allPhotos.length - 1 ? 'not-allowed' : 'pointer',
+            opacity: lightboxPhotoIndex === allPhotos.length - 1 ? 0.25 : 1,
             zIndex: 20,
             display: 'flex',
             alignItems: 'center',

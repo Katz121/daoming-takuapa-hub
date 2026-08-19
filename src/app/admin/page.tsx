@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { clientDb, ClientBooking, ClientIdea } from '@/lib/clientDb';
-import { EventItem } from '@/types';
+import { EventItem, ArchivePhoto } from '@/types';
 
 type BookingRecord = ClientBooking;
 type IdeaRecord = ClientIdea;
@@ -14,8 +14,9 @@ export default function AdminDashboardPage() {
   const [authError, setAuthError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  const [activeTab, setActiveTab] = useState<'events' | 'tickets' | 'spaces' | 'ideas' | 'reports'>('events');
+  const [activeTab, setActiveTab] = useState<'events' | 'archive' | 'tickets' | 'spaces' | 'ideas' | 'reports'>('events');
   const [events, setEvents] = useState<EventItem[]>([]);
+  const [archivePhotos, setArchivePhotos] = useState<ArchivePhoto[]>([]);
   const [bookings, setBookings] = useState<BookingRecord[]>([]);
   const [spaceProposals, setSpaceProposals] = useState<BookingRecord[]>([]);
   const [ideas, setIdeas] = useState<IdeaRecord[]>([]);
@@ -57,6 +58,23 @@ export default function AdminDashboardPage() {
     instructor_en: 'Heritage Master'
   });
 
+  // Archive photo modal form states
+  const [isArchiveModalOpen, setIsArchiveModalOpen] = useState(false);
+  const [editingPhotoId, setEditingPhotoId] = useState<number | null>(null);
+  const [archiveForm, setArchiveForm] = useState<Partial<ArchivePhoto>>({
+    category: 'diplomacy',
+    src: '/img/building-community.jpg',
+    tag_th: 'พ.ศ. ๒๔๙๓',
+    tag_en: '1950 Era',
+    tag_zh: '1950年',
+    title_th: '',
+    title_en: '',
+    title_zh: '',
+    caption_th: '',
+    caption_en: '',
+    caption_zh: ''
+  });
+
   const showFeedback = (msg: string) => {
     setFeedbackMsg(msg);
     setTimeout(() => setFeedbackMsg(null), 4000);
@@ -66,6 +84,9 @@ export default function AdminDashboardPage() {
     try {
       const eList = clientDb.getEvents();
       setEvents(eList);
+
+      const aList = clientDb.getArchivePhotos();
+      setArchivePhotos(aList);
 
       const bList = clientDb.getBookings('event');
       setBookings(bList);
@@ -224,6 +245,85 @@ export default function AdminDashboardPage() {
     if (confirm('คุณต้องการคืนค่ากิจกรรมเริ่มต้นทั้งหมดใช่หรือไม่? (กิจกรรมที่คุณเพิ่มเองจะถูกรีเซ็ต)')) {
       clientDb.resetEvents();
       showFeedback('คืนค่ารายการกิจกรรมและเวิร์กช็อปเริ่มต้นเรียบร้อยแล้ว');
+      fetchAllData();
+    }
+  };
+
+  // Archive Photo Handlers
+  const handleOpenCreateArchivePhoto = () => {
+    setEditingPhotoId(null);
+    setArchiveForm({
+      category: 'diplomacy',
+      src: '/img/building-community.jpg',
+      tag_th: 'พ.ศ. ๒๔๙๓',
+      tag_en: '1950 Era',
+      tag_zh: '1950年',
+      title_th: '',
+      title_en: '',
+      title_zh: '',
+      caption_th: '',
+      caption_en: '',
+      caption_zh: ''
+    });
+    setIsArchiveModalOpen(true);
+  };
+
+  const handleOpenEditArchivePhoto = (photo: ArchivePhoto) => {
+    setEditingPhotoId(photo.id);
+    setArchiveForm({
+      category: photo.category,
+      src: photo.src,
+      tag_th: photo.tag_th,
+      tag_en: photo.tag_en,
+      tag_zh: photo.tag_zh,
+      title_th: photo.title_th,
+      title_en: photo.title_en,
+      title_zh: photo.title_zh,
+      caption_th: photo.caption_th,
+      caption_en: photo.caption_en,
+      caption_zh: photo.caption_zh
+    });
+    setIsArchiveModalOpen(true);
+  };
+
+  const handleSaveArchivePhoto = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!archiveForm.title_th?.trim()) {
+      alert('กรุณากรอกชื่อภาพประวัติศาสตร์ (ภาษาไทย)');
+      return;
+    }
+    if (!archiveForm.src?.trim()) {
+      alert('กรุณาระบุ URL หรือ Path ของรูปภาพ');
+      return;
+    }
+
+    try {
+      if (editingPhotoId !== null) {
+        clientDb.updateArchivePhoto(editingPhotoId, archiveForm);
+        showFeedback(`แก้ไขภาพประวัติศาสตร์ "${archiveForm.title_th}" สำเร็จ`);
+      } else {
+        clientDb.createArchivePhoto(archiveForm);
+        showFeedback(`เพิ่มภาพประวัติศาสตร์ใหม่ "${archiveForm.title_th}" สำเร็จ`);
+      }
+      setIsArchiveModalOpen(false);
+      fetchAllData();
+    } catch (err: any) {
+      showFeedback(`เกิดข้อผิดพลาด: ${err.message}`);
+    }
+  };
+
+  const handleDeleteArchivePhoto = (id: number, title: string) => {
+    if (confirm(`คุณต้องการลบภาพประวัติศาสตร์ "${title}" ใช่หรือไม่?\nการลบจะมีผลกับหน้าคลังภาพในเว็บทันที`)) {
+      clientDb.deleteArchivePhoto(id);
+      showFeedback(`ลบภาพ "${title}" เรียบร้อยแล้ว`);
+      fetchAllData();
+    }
+  };
+
+  const handleResetArchivePhotos = () => {
+    if (confirm('คุณต้องการคืนค่าคลังภาพประวัติศาสตร์เริ่มต้นทั้งหมดใช่หรือไม่? (ภาพที่คุณเพิ่มเองจะถูกรีเซ็ตกลับเป็น ๑๓ ภาพดั้งเดิม)')) {
+      clientDb.resetArchivePhotos();
+      showFeedback('คืนค่ารายการภาพประวัติศาสตร์เริ่มต้นเรียบร้อยแล้ว');
       fetchAllData();
     }
   };
@@ -555,36 +655,43 @@ export default function AdminDashboardPage() {
         )}
 
         {/* Live Metric Cards Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
-          <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(229, 163, 30, 0.3)', borderRadius: '14px', padding: '18px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '14px' }}>
+          <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(229, 163, 30, 0.3)', borderRadius: '14px', padding: '16px' }}>
             <span style={{ fontSize: '0.75rem', color: 'rgba(250, 242, 221, 0.6)', display: 'block', marginBottom: '4px' }}>📅 กิจกรรม & เวิร์กช็อป</span>
             <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: '#E5A31E', fontFamily: 'monospace' }}>
               {events.length} <span style={{ fontSize: '0.85rem', fontWeight: 'normal', color: 'rgba(250, 242, 221, 0.5)' }}>รายการ</span>
             </div>
           </div>
 
-          <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '14px', padding: '18px' }}>
-            <span style={{ fontSize: '0.75rem', color: 'rgba(250, 242, 221, 0.6)', display: 'block', marginBottom: '4px' }}>🎟️ ตั๋วกิจกรรมทั้งหมด</span>
+          <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(229, 163, 30, 0.3)', borderRadius: '14px', padding: '16px' }}>
+            <span style={{ fontSize: '0.75rem', color: 'rgba(250, 242, 221, 0.6)', display: 'block', marginBottom: '4px' }}>🖼️ คลังภาพ & เรื่องเล่า</span>
+            <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: '#F59E0B', fontFamily: 'monospace' }}>
+              {archivePhotos.length} <span style={{ fontSize: '0.85rem', fontWeight: 'normal', color: 'rgba(250, 242, 221, 0.5)' }}>ภาพ</span>
+            </div>
+          </div>
+
+          <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '14px', padding: '16px' }}>
+            <span style={{ fontSize: '0.75rem', color: 'rgba(250, 242, 221, 0.6)', display: 'block', marginBottom: '4px' }}>🎟️ ตั๋วกิจกรรม</span>
             <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: '#FCD34D', fontFamily: 'monospace' }}>
               {bookings.length} <span style={{ fontSize: '0.85rem', fontWeight: 'normal', color: 'rgba(250, 242, 221, 0.5)' }}>รายการ</span>
             </div>
           </div>
 
-          <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '14px', padding: '18px' }}>
-            <span style={{ fontSize: '0.75rem', color: 'rgba(250, 242, 221, 0.6)', display: 'block', marginBottom: '4px' }}>✅ Check-in หน้างานแล้ว</span>
+          <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '14px', padding: '16px' }}>
+            <span style={{ fontSize: '0.75rem', color: 'rgba(250, 242, 221, 0.6)', display: 'block', marginBottom: '4px' }}>✅ Check-in หน้างาน</span>
             <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: '#34D399', fontFamily: 'monospace' }}>
-              {checkedInCount} <span style={{ fontSize: '0.85rem', fontWeight: 'normal', color: 'rgba(250, 242, 221, 0.5)' }}>/ {bookings.length} ท่าน</span>
+              {checkedInCount} <span style={{ fontSize: '0.85rem', fontWeight: 'normal', color: 'rgba(250, 242, 221, 0.5)' }}>/ {bookings.length}</span>
             </div>
           </div>
 
-          <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '14px', padding: '18px' }}>
+          <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '14px', padding: '16px' }}>
             <span style={{ fontSize: '0.75rem', color: 'rgba(250, 242, 221, 0.6)', display: 'block', marginBottom: '4px' }}>🏛️ คำขอใช้พื้นที่</span>
             <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: '#C44D27', fontFamily: 'monospace' }}>
-              {pendingProposalsCount} <span style={{ fontSize: '0.85rem', fontWeight: 'normal', color: 'rgba(250, 242, 221, 0.5)' }}>/ {spaceProposals.length} คำขอ</span>
+              {pendingProposalsCount} <span style={{ fontSize: '0.85rem', fontWeight: 'normal', color: 'rgba(250, 242, 221, 0.5)' }}>/ {spaceProposals.length}</span>
             </div>
           </div>
 
-          <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '14px', padding: '18px' }}>
+          <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '14px', padding: '16px' }}>
             <span style={{ fontSize: '0.75rem', color: 'rgba(250, 242, 221, 0.6)', display: 'block', marginBottom: '4px' }}>💡 ไอเดียจากชุมชน</span>
             <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: '#38BDF8', fontFamily: 'monospace' }}>
               {ideas.length} <span style={{ fontSize: '0.85rem', fontWeight: 'normal', color: 'rgba(250, 242, 221, 0.5)' }}>ข้อเสนอ</span>
@@ -609,7 +716,24 @@ export default function AdminDashboardPage() {
             }}
             onClick={() => setActiveTab('events')}
           >
-            📅 จัดการกิจกรรม & เวิร์กช็อป ({events.length})
+            📅 จัดการกิจกรรม ({events.length})
+          </button>
+          <button
+            style={{
+              padding: '10px 18px',
+              borderRadius: '10px',
+              border: 'none',
+              fontSize: '0.82rem',
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              whiteSpace: 'nowrap',
+              backgroundColor: activeTab === 'archive' ? '#E5A31E' : 'rgba(255, 255, 255, 0.06)',
+              color: activeTab === 'archive' ? '#122421' : '#FAF2DD',
+              transition: 'all 0.2s ease'
+            }}
+            onClick={() => setActiveTab('archive')}
+          >
+            🖼️ คลังภาพ & เรื่องเล่า ({archivePhotos.length})
           </button>
           <button
             style={{
@@ -626,7 +750,7 @@ export default function AdminDashboardPage() {
             }}
             onClick={() => setActiveTab('tickets')}
           >
-            🎫 สแกนตั๋ว & รายชื่อกิจกรรม ({bookings.length})
+            🎫 สแกนตั๋ว & รายชื่อ ({bookings.length})
           </button>
           <button
             style={{
@@ -643,7 +767,7 @@ export default function AdminDashboardPage() {
             }}
             onClick={() => setActiveTab('spaces')}
           >
-            🏛️ คำขอจองพื้นที่ & อนุมัติ ({spaceProposals.length})
+            🏛️ จองพื้นที่ & อนุมัติ ({spaceProposals.length})
           </button>
           <button
             style={{
@@ -660,7 +784,7 @@ export default function AdminDashboardPage() {
             }}
             onClick={() => setActiveTab('ideas')}
           >
-            💡 กระดานไอเดียชุมชน ({ideas.length})
+            💡 ไอเดียชุมชน ({ideas.length})
           </button>
           <button
             style={{
@@ -867,6 +991,185 @@ export default function AdminDashboardPage() {
                             🗑️ ลบ
                           </button>
                         </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* TAB ARCHIVE: HISTORIC PHOTOS & STORIES MANAGEMENT */}
+        {activeTab === 'archive' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '14px', backgroundColor: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '16px', padding: '18px 24px' }}>
+              <div>
+                <h2 style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#E5A31E', margin: '0 0 4px 0' }}>
+                  🖼️ จัดการคลังภาพถ่ายและเรื่องเล่าประวัติศาสตร์ (Archive Photos & Stories)
+                </h2>
+                <p style={{ fontSize: '0.82rem', color: 'rgba(250, 242, 221, 0.7)', margin: 0 }}>
+                  คุณสามารถเพิ่มภาพถ่ายประวัติศาสตร์ใหม่ แก้ไขคำบรรยาย หรือเปลี่ยนปี พ.ศ. ได้โดยตรง ข้อมูลจะอัปเดตลงบนหน้าเว็บคลังภาพทันที
+                </p>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                <button
+                  onClick={handleResetArchivePhotos}
+                  style={{
+                    padding: '9px 16px',
+                    borderRadius: '8px',
+                    backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    color: '#FAF2DD',
+                    fontSize: '0.8rem',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease'
+                  }}
+                  title="คืนค่าภาพถ่ายประวัติศาสตร์เริ่มต้นทั้งหมด ๑๓ ภาพ"
+                >
+                  🔄 คืนค่า ๑๓ ภาพเริ่มต้น
+                </button>
+
+                <button
+                  onClick={handleOpenCreateArchivePhoto}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    padding: '10px 20px',
+                    borderRadius: '10px',
+                    backgroundColor: '#E5A31E',
+                    color: '#122421',
+                    fontSize: '0.85rem',
+                    fontWeight: 'bold',
+                    border: 'none',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 15px rgba(229, 163, 30, 0.35)',
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  ➕ เพิ่มภาพประวัติศาสตร์ใหม่
+                </button>
+              </div>
+            </div>
+
+            {/* Archive Photos Grid in Admin */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '16px' }}>
+              {archivePhotos.map((photo, index) => {
+                const categoryLabel = photo.category === 'diplomacy'
+                  ? '🏛️ การทูต & อาคาร'
+                  : photo.category === 'school'
+                  ? '📚 ครู & นักเรียน'
+                  : photo.category === 'sports'
+                  ? '🏀 ทีมบาสเกตบอล'
+                  : '📜 เรื่องเล่าชุมชน';
+
+                return (
+                  <div
+                    key={photo.id}
+                    style={{
+                      backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      borderRadius: '16px',
+                      overflow: 'hidden',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      transition: 'all 0.2s ease',
+                      boxShadow: '0 4px 20px rgba(0,0,0,0.2)'
+                    }}
+                  >
+                    <div style={{ position: 'relative', height: '170px', backgroundColor: '#1A2826', overflow: 'hidden' }}>
+                      <img
+                        src={photo.src}
+                        alt={photo.title_th}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        onError={(e: any) => { e.target.src = '/img/building-community.jpg'; }}
+                      />
+                      <span
+                        style={{
+                          position: 'absolute',
+                          top: '10px',
+                          left: '10px',
+                          backgroundColor: 'rgba(18, 36, 33, 0.85)',
+                          border: '1px solid rgba(229, 163, 30, 0.4)',
+                          color: '#E5A31E',
+                          padding: '3px 10px',
+                          borderRadius: '999px',
+                          fontSize: '0.72rem',
+                          fontWeight: 'bold',
+                          fontFamily: 'monospace'
+                        }}
+                      >
+                        {photo.tag_th || `ภาพที่ ${index + 1}`}
+                      </span>
+                      <span
+                        style={{
+                          position: 'absolute',
+                          top: '10px',
+                          right: '10px',
+                          backgroundColor: 'rgba(0, 0, 0, 0.75)',
+                          color: '#FAF2DD',
+                          padding: '3px 8px',
+                          borderRadius: '6px',
+                          fontSize: '0.7rem'
+                        }}
+                      >
+                        {categoryLabel}
+                      </span>
+                    </div>
+
+                    <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', flexGrow: 1, gap: '8px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
+                        <h3 style={{ fontSize: '1.05rem', fontWeight: 'bold', color: '#FFF', margin: 0, lineHeight: 1.3 }}>
+                          {photo.title_th}
+                        </h3>
+                        <span style={{ fontSize: '0.75rem', color: 'rgba(250, 242, 221, 0.4)', fontFamily: 'monospace' }}>#{photo.id}</span>
+                      </div>
+
+                      {photo.title_en && (
+                        <div style={{ fontSize: '0.8rem', color: '#E5A31E', fontStyle: 'italic' }}>
+                          {photo.title_en}
+                        </div>
+                      )}
+
+                      <p style={{ fontSize: '0.82rem', color: 'rgba(250, 242, 221, 0.75)', margin: '4px 0 10px 0', lineHeight: 1.5, flexGrow: 1 }}>
+                        {photo.caption_th || 'ไม่มีคำบรรยาย'}
+                      </p>
+
+                      <div style={{ display: 'flex', gap: '8px', paddingTop: '10px', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                        <button
+                          onClick={() => handleOpenEditArchivePhoto(photo)}
+                          style={{
+                            flex: 1,
+                            padding: '8px 12px',
+                            borderRadius: '8px',
+                            backgroundColor: 'rgba(229, 163, 30, 0.15)',
+                            border: '1px solid rgba(229, 163, 30, 0.4)',
+                            color: '#E5A31E',
+                            fontSize: '0.8rem',
+                            fontWeight: 'bold',
+                            cursor: 'pointer',
+                            transition: 'all 0.2s ease'
+                          }}
+                        >
+                          ✏️ แก้ไข
+                        </button>
+                        <button
+                          onClick={() => handleDeleteArchivePhoto(photo.id, photo.title_th)}
+                          style={{
+                            padding: '8px 12px',
+                            borderRadius: '8px',
+                            backgroundColor: 'rgba(239, 68, 68, 0.15)',
+                            border: '1px solid rgba(239, 68, 68, 0.3)',
+                            color: '#FCA5A5',
+                            fontSize: '0.8rem',
+                            cursor: 'pointer',
+                            transition: 'all 0.2s ease'
+                          }}
+                        >
+                          🗑️ ลบ
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -1617,6 +1920,211 @@ export default function AdminDashboardPage() {
                     style={{ padding: '10px 24px', borderRadius: '8px', backgroundColor: '#E5A31E', color: '#122421', fontSize: '0.85rem', fontWeight: 'bold', border: 'none', cursor: 'pointer', boxShadow: '0 4px 15px rgba(229, 163, 30, 0.35)' }}
                   >
                     💾 บันทึกกิจกรรม (Save)
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* ARCHIVE PHOTO CREATE / EDIT MODAL */}
+        {isArchiveModalOpen && (
+          <div style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
+            <div
+              style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0, 0, 0, 0.85)', backdropFilter: 'blur(8px)' }}
+              onClick={() => setIsArchiveModalOpen(false)}
+            ></div>
+
+            <div
+              style={{
+                position: 'relative',
+                width: '100%',
+                maxWidth: '650px',
+                maxHeight: '90vh',
+                overflowY: 'auto',
+                backgroundColor: '#132422',
+                border: '1.5px solid rgba(229, 163, 30, 0.45)',
+                borderRadius: '20px',
+                padding: '26px',
+                boxShadow: '0 25px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(229, 163, 30, 0.15)',
+                zIndex: 10,
+                color: '#FAF2DD'
+              }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px', borderBottom: '1px solid rgba(255, 255, 255, 0.1)', paddingBottom: '14px' }}>
+                <div>
+                  <span style={{ fontSize: '0.72rem', fontFamily: 'monospace', fontWeight: 'bold', color: '#E5A31E', textTransform: 'uppercase' }}>
+                    {editingPhotoId !== null ? `✏️ EDIT ARCHIVE PHOTO #${editingPhotoId}` : '➕ CREATE NEW ARCHIVE PHOTO'}
+                  </span>
+                  <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#FFF', margin: '4px 0 0 0' }}>
+                    {editingPhotoId !== null ? 'แก้ไขภาพถ่ายและเรื่องเล่าประวัติศาสตร์' : 'เพิ่มภาพถ่ายและเรื่องเล่าประวัติศาสตร์ใหม่'}
+                  </h2>
+                </div>
+                <button
+                  onClick={() => setIsArchiveModalOpen(false)}
+                  style={{ background: 'none', border: 'none', color: '#FAF2DD', fontSize: '1.5rem', cursor: 'pointer', padding: '4px 8px' }}
+                >
+                  &times;
+                </button>
+              </div>
+
+              <form onSubmit={handleSaveArchivePhoto} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                {/* Category & Tag Row */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '14px' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                      หมวดหมู่ภาพ (Category) *
+                    </label>
+                    <select
+                      value={archiveForm.category}
+                      onChange={e => setArchiveForm({ ...archiveForm, category: e.target.value as any })}
+                      style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none' }}
+                    >
+                      <option value="diplomacy" style={{ backgroundColor: '#132422' }}>🏛️ การทูต & อาคาร (Diplomacy & Building)</option>
+                      <option value="school" style={{ backgroundColor: '#132422' }}>📚 ครู & นักเรียน (School & Faculty)</option>
+                      <option value="sports" style={{ backgroundColor: '#132422' }}>🏀 กีฬา & ทีมบาสเกตบอล (Sports & Basketball)</option>
+                      <option value="community" style={{ backgroundColor: '#132422' }}>📜 เรื่องเล่าชุมชน (Community Heritage)</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                      ป้ายยุคสมัย / ปี พ.ศ. (Tag TH)
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="เช่น พ.ศ. ๒๔๙๓ หรือ ยุคทอง ๒๔๗๐"
+                      value={archiveForm.tag_th || ''}
+                      onChange={e => setArchiveForm({ ...archiveForm, tag_th: e.target.value })}
+                      style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box' }}
+                    />
+                  </div>
+                </div>
+
+                {/* Image Path & Live Preview */}
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                    ที่อยู่รูปภาพ (Image URL / Path) *
+                  </label>
+                  <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                    <input
+                      type="text"
+                      required
+                      placeholder="เช่น /img/exhibit-zone1-school.jpg หรือ URL รูปภาพ"
+                      value={archiveForm.src || ''}
+                      onChange={e => setArchiveForm({ ...archiveForm, src: e.target.value })}
+                      style={{ flex: 1, padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box' }}
+                    />
+                    {archiveForm.src && (
+                      <div style={{ width: '48px', height: '48px', borderRadius: '6px', overflow: 'hidden', border: '1px solid #E5A31E', flexShrink: 0 }}>
+                        <img
+                          src={archiveForm.src}
+                          alt="preview"
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                          onError={(e: any) => { e.target.src = '/img/building-community.jpg'; }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                  <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '6px' }}>
+                    <span style={{ fontSize: '0.7rem', color: 'rgba(250, 242, 221, 0.5)', alignSelf: 'center' }}>ภาพในระบบ:</span>
+                    {[
+                      { label: 'อาคารดั้งเดิม ๒๔๖๕', path: '/img/exhibit-zone1-school.jpg' },
+                      { label: 'ต้อนรับกงสุล ๒๔๙๓', path: '/img/exhibit-zone2-consul.jpg' },
+                      { label: 'คณะครูอาจารย์', path: '/img/exhibit-zone2-teachers.jpg' },
+                      { label: 'ป้ายโรงเรียน', path: '/img/exhibit-zone2-class.jpg' },
+                      { label: 'อาคารเต้าหมิงปัจจุบัน', path: '/img/building-community.jpg' }
+                    ].map(p => (
+                      <button
+                        key={p.path}
+                        type="button"
+                        onClick={() => setArchiveForm({ ...archiveForm, src: p.path })}
+                        style={{
+                          padding: '3px 8px',
+                          fontSize: '0.7rem',
+                          borderRadius: '4px',
+                          backgroundColor: archiveForm.src === p.path ? '#E5A31E' : 'rgba(255, 255, 255, 0.08)',
+                          color: archiveForm.src === p.path ? '#122421' : '#FAF2DD',
+                          border: 'none',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        {p.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Title TH & EN */}
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                    ชื่อภาพประวัติศาสตร์ (ภาษาไทย) *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="เช่น พิธีต้อนรับกงสุลใหญ่สาธารณรัฐจีน ประจำปี ๒๔๙๓"
+                    value={archiveForm.title_th || ''}
+                    onChange={e => setArchiveForm({ ...archiveForm, title_th: e.target.value })}
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box' }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                    ชื่อภาพภาษาอังกฤษ (Title EN)
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Chinese Consul-General Official Reception (1950)"
+                    value={archiveForm.title_en || ''}
+                    onChange={e => setArchiveForm({ ...archiveForm, title_en: e.target.value })}
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box' }}
+                  />
+                </div>
+
+                {/* Caption TH & EN */}
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                    คำบรรยายประวัติศาสตร์และเรื่องเล่า (Caption TH)
+                  </label>
+                  <textarea
+                    rows={3}
+                    placeholder="บันทึกข้อเท็จจริง เรื่องเล่า ความเป็นมา และบุคคลในภาพ..."
+                    value={archiveForm.caption_th || ''}
+                    onChange={e => setArchiveForm({ ...archiveForm, caption_th: e.target.value })}
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box', resize: 'vertical' }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                    คำบรรยายภาษาอังกฤษ (Caption EN)
+                  </label>
+                  <textarea
+                    rows={2}
+                    placeholder="English historical notes and photographic evidence description..."
+                    value={archiveForm.caption_en || ''}
+                    onChange={e => setArchiveForm({ ...archiveForm, caption_en: e.target.value })}
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box', resize: 'vertical' }}
+                  />
+                </div>
+
+                {/* Modal Buttons */}
+                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', paddingTop: '16px', borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                  <button
+                    type="button"
+                    onClick={() => setIsArchiveModalOpen(false)}
+                    style={{ padding: '10px 20px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255, 255, 255, 0.15)', color: '#FAF2DD', fontSize: '0.85rem', cursor: 'pointer' }}
+                  >
+                    ยกเลิก
+                  </button>
+
+                  <button
+                    type="submit"
+                    style={{ padding: '10px 24px', borderRadius: '8px', backgroundColor: '#E5A31E', color: '#122421', fontSize: '0.85rem', fontWeight: 'bold', border: 'none', cursor: 'pointer', boxShadow: '0 4px 15px rgba(229, 163, 30, 0.35)' }}
+                  >
+                    💾 บันทึกภาพประวัติศาสตร์ (Save)
                   </button>
                 </div>
               </form>

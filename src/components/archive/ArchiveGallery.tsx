@@ -2,13 +2,15 @@
 
 import React, { useState, useEffect } from 'react';
 import { useApp } from '@/lib/store';
-import { ARCHIVE_PHOTOS } from '@/data/archive';
+import { clientDb } from '@/lib/clientDb';
+import { ArchivePhoto } from '@/types';
 
 const PAGE_SIZE = 6;
-const THAI_DIGITS = ['๑', '๒', '๓', '๔', '๕', '๖', '๗', '๘', '๙', '๑๐', '๑๑', '๑๒', '๑๓'];
+const THAI_DIGITS = ['๑', '๒', '๓', '๔', '๕', '๖', '๗', '๘', '๙', '๑๐', '๑๑', '๑๒', '๑๓', '๑๔', '๑๕', '๑๖', '๑๗', '๑๘', '๑๙', '๒๐'];
 
 export function ArchiveGallery() {
   const { lang, t, openLightbox } = useApp();
+  const [allPhotos, setAllPhotos] = useState<ArchivePhoto[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isMobile, setIsMobile] = useState<boolean>(false);
@@ -20,12 +22,25 @@ export function ArchiveGallery() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  useEffect(() => {
+    const loadPhotos = () => {
+      setAllPhotos(clientDb.getArchivePhotos());
+    };
+    loadPhotos();
+    window.addEventListener('daoming_archive_updated', loadPhotos);
+    window.addEventListener('storage', loadPhotos);
+    return () => {
+      window.removeEventListener('daoming_archive_updated', loadPhotos);
+      window.removeEventListener('storage', loadPhotos);
+    };
+  }, []);
+
   const isEn = lang === 'en';
   const isZh = lang === 'zh';
 
   const filteredPhotos = selectedCategory === 'all'
-    ? ARCHIVE_PHOTOS
-    : ARCHIVE_PHOTOS.filter(p => p.category === selectedCategory);
+    ? allPhotos
+    : allPhotos.filter(p => p.category === selectedCategory);
 
   const totalItems = filteredPhotos.length;
   const totalPages = Math.max(1, Math.ceil(totalItems / PAGE_SIZE));
@@ -33,8 +48,8 @@ export function ArchiveGallery() {
 
   const startIdx = (safePage - 1) * PAGE_SIZE;
   const endIdx = Math.min(startIdx + PAGE_SIZE, totalItems);
-  // On mobile show all 13 archive photos in the horizontal swipe carousel; on desktop paginate 6 per page
-  const displayPhotos = isMobile ? ARCHIVE_PHOTOS : filteredPhotos.slice(startIdx, endIdx);
+  // On mobile show all archive photos in the horizontal swipe carousel; on desktop paginate 6 per page
+  const displayPhotos = isMobile ? allPhotos : filteredPhotos.slice(startIdx, endIdx);
 
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);

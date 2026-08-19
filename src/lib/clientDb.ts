@@ -1,7 +1,8 @@
 import QRCode from 'qrcode';
 import { INITIAL_IDEAS } from '@/data/ideas';
 import { EVENTS_LIST } from '@/data/events';
-import { EventItem } from '@/types';
+import { ARCHIVE_PHOTOS } from '@/data/archive';
+import { EventItem, ArchivePhoto } from '@/types';
 
 export interface ClientBooking {
   id: string;
@@ -55,6 +56,7 @@ const MASTER_KEYS = {
   IDEAS: 'daoming_permanent_ideas_master',
   SEATS: 'daoming_permanent_seats_master',
   EVENTS: 'daoming_permanent_events_master',
+  ARCHIVE: 'daoming_permanent_archive_master',
 };
 
 const LEGACY_KEYS = {
@@ -507,28 +509,109 @@ export const clientDb = {
   },
 
   // =========================================================================
+  // ARCHIVE PHOTOS & HISTORIC STORIES REPOSITORY
+  // =========================================================================
+  getArchivePhotos(): ArchivePhoto[] {
+    if (typeof window === 'undefined') return ARCHIVE_PHOTOS;
+    try {
+      const stored = localStorage.getItem(MASTER_KEYS.ARCHIVE);
+      if (!stored) {
+        localStorage.setItem(MASTER_KEYS.ARCHIVE, JSON.stringify(ARCHIVE_PHOTOS));
+        return ARCHIVE_PHOTOS;
+      }
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
+      return ARCHIVE_PHOTOS;
+    } catch {
+      return ARCHIVE_PHOTOS;
+    }
+  },
+
+  createArchivePhoto(photoData: Partial<ArchivePhoto>): ArchivePhoto {
+    const list = this.getArchivePhotos();
+    const nextId = list.length > 0 ? Math.max(...list.map(p => typeof p.id === 'number' ? p.id : 0)) + 1 : 0;
+
+    const newPhoto: ArchivePhoto = {
+      id: nextId,
+      category: photoData.category || 'community',
+      src: photoData.src || '/img/building-community.jpg',
+      tag_th: photoData.tag_th || 'ภาพประวัติศาสตร์',
+      tag_en: photoData.tag_en || 'Historic Archive',
+      tag_zh: photoData.tag_zh || '歷史檔案',
+      title_th: photoData.title_th || 'ภาพประวัติศาสตร์เต้าหมิง',
+      title_en: photoData.title_en || 'Historic Dao Ming Photo',
+      title_zh: photoData.title_zh || '導明學校歷史影像',
+      caption_th: photoData.caption_th || '',
+      caption_en: photoData.caption_en || '',
+      caption_zh: photoData.caption_zh || '',
+    };
+
+    const updated = [newPhoto, ...list];
+    localStorage.setItem(MASTER_KEYS.ARCHIVE, JSON.stringify(updated));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('daoming_archive_updated'));
+    }
+    return newPhoto;
+  },
+
+  updateArchivePhoto(id: number, updatedFields: Partial<ArchivePhoto>): boolean {
+    const list = this.getArchivePhotos();
+    const idx = list.findIndex(p => p.id === id);
+    if (idx === -1) return false;
+    list[idx] = { ...list[idx], ...updatedFields };
+    localStorage.setItem(MASTER_KEYS.ARCHIVE, JSON.stringify(list));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('daoming_archive_updated'));
+    }
+    return true;
+  },
+
+  deleteArchivePhoto(id: number): boolean {
+    const list = this.getArchivePhotos();
+    const filtered = list.filter(p => p.id !== id);
+    if (filtered.length === list.length) return false;
+    localStorage.setItem(MASTER_KEYS.ARCHIVE, JSON.stringify(filtered));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('daoming_archive_updated'));
+    }
+    return true;
+  },
+
+  resetArchivePhotos(): ArchivePhoto[] {
+    localStorage.setItem(MASTER_KEYS.ARCHIVE, JSON.stringify(ARCHIVE_PHOTOS));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('daoming_archive_updated'));
+    }
+    return ARCHIVE_PHOTOS;
+  },
+
+  // =========================================================================
   // DATABASE BACKUP & RESTORE UTILITIES
   // =========================================================================
   exportFullDatabase() {
     return {
-      version: "2.0",
+      version: "2.1",
       exported_at: new Date().toISOString(),
       organization: "Dao Ming Foundation Takua Pa",
       bookings: this.getBookings(),
       ideas: this.getIdeas(),
-      events: this.getEvents()
+      events: this.getEvents(),
+      archive: this.getArchivePhotos()
     };
   },
 
-  importFullDatabase(jsonData: any): { success: boolean; message: string; count: { bookings: number; ideas: number; events: number } } {
+  importFullDatabase(jsonData: any): { success: boolean; message: string; count: { bookings: number; ideas: number; events: number; archive?: number } } {
     try {
       if (!jsonData || typeof jsonData !== 'object') {
-        return { success: false, message: 'Invalid JSON format', count: { bookings: 0, ideas: 0, events: 0 } };
+        return { success: false, message: 'Invalid JSON format', count: { bookings: 0, ideas: 0, events: 0, archive: 0 } };
       }
 
       let bCount = 0;
       let iCount = 0;
       let eCount = 0;
+      let aCount = 0;
 
       if (Array.isArray(jsonData.bookings)) {
         const current = this.getBookings();
@@ -557,13 +640,26 @@ export const clientDb = {
         eCount = toAdd.length;
       }
 
+      if (Array.isArray(jsonData.archive)) {
+        const current = this.getArchivePhotos();
+        const existingIds = new Set(current.map(a => a.id));
+        const toAdd = jsonData.archive.filter((a: ArchivePhoto) => a && typeof a.id === 'number' && !existingIds.has(a.id));
+        const merged = [...toAdd, ...current];
+        localStorage.setItem(MASTER_KEYS.ARCHIVE, JSON.stringify(merged));
+        aCount = toAdd.length;
+      }
+
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('daoming_archive_updated'));
+      }
+
       return {
         success: true,
-        message: `ผสานข้อมูลสำเร็จ: นำเข้าตั๋ว/คำขอ ${bCount} รายการ, ไอเดีย ${iCount} ข้อเสนอ, กิจกรรม ${eCount} รายการ`,
-        count: { bookings: bCount, ideas: iCount, events: eCount }
+        message: `ผสานข้อมูลสำเร็จ: นำเข้าตั๋ว/คำขอ ${bCount} รายการ, ไอเดีย ${iCount} ข้อเสนอ, กิจกรรม ${eCount} รายการ, คลังภาพ ${aCount} ภาพ`,
+        count: { bookings: bCount, ideas: iCount, events: eCount, archive: aCount }
       };
     } catch (err: any) {
-      return { success: false, message: err.message, count: { bookings: 0, ideas: 0, events: 0 } };
+      return { success: false, message: err.message, count: { bookings: 0, ideas: 0, events: 0, archive: 0 } };
     }
   }
 };

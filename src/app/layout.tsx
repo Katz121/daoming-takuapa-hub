@@ -1,10 +1,18 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Bai_Jamjuree, IBM_Plex_Mono, Noto_Sans_Thai } from "next/font/google";
 import "./globals.css";
 import { AppProvider } from "@/lib/store";
 import { Header } from "@/components/common/Header";
 import { Footer } from "@/components/common/Footer";
 import { AppModals } from "@/components/common/AppModals";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  viewportFit: "cover",
+  themeColor: "#0E1C1A",
+};
 
 const baiJamjuree = Bai_Jamjuree({
   variable: "--font-bai-jamjuree",

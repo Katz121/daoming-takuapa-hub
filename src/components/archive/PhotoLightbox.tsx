@@ -221,8 +221,8 @@ export function PhotoLightbox() {
           <div
             style={{
               width: '100%',
-              maxHeight: '70vh',
-              minHeight: '280px',
+              maxHeight: 'min(65vh, 65dvh)',
+              minHeight: '200px',
               backgroundColor: '#071210',
               display: 'flex',
               alignItems: 'center',
@@ -235,7 +235,7 @@ export function PhotoLightbox() {
               alt={isEn ? photo.title_en : photo.title_th}
               className="lightbox-img"
               style={{
-                maxHeight: '70vh',
+                maxHeight: 'min(65vh, 65dvh)',
                 maxWidth: '100%',
                 objectFit: 'contain',
                 display: 'block'
@@ -246,8 +246,11 @@ export function PhotoLightbox() {
           <div
             className="lightbox-caption"
             style={{
-              padding: '16px 24px',
+              padding: '14px 18px',
               color: '#FAF2DD',
+              maxHeight: 'min(25vh, 25dvh)',
+              overflowY: 'auto',
+              WebkitOverflowScrolling: 'touch',
               backgroundColor: '#112421',
               borderTop: '1px solid rgba(255, 255, 255, 0.1)',
               textAlign: 'left'

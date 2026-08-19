@@ -54,9 +54,9 @@ export function Footer() {
           <div className="footer-col">
             <h4>{isZh ? "聯繫基金會" : isEn ? "Contact Foundation" : "ติดต่อมูลนิธิฯ"}</h4>
             <p><strong>{isZh ? "德古巴導明學校基金會" : isEn ? "Dao Ming School Foundation" : "มูลนิธิโรงเรียนเต้าหมิง ตะกั่วป่า"}</strong></p>
-            <p>{isZh ? "泰國攀牙府德古巴縣大市場鎮斯里德古巴路 82110" : isEn ? "Sri Takua Pa Road, Talad Yai, Takua Pa, Phang Nga 82110" : "ถนนศรีตะกั่วป่า ตำบลตลาดใหญ่ อำอตะกั่วป่า จังหวัดพังงา ๘๒๑๑๐"}</p>
-            <p>{isZh ? "☎️ 電話: 081-891-2345" : isEn ? "☎️ Tel: 081-891-2345" : "☎️ โทร: 081-891-2345"}</p>
-            <p>{isZh ? "✉️ 電子郵箱: contact@daoming-heritage.org" : isEn ? "✉️ Email: contact@daoming-heritage.org" : "✉️ อีเมล: contact@daoming-heritage.org"}</p>
+            <p>{isZh ? "泰國攀牙府德古巴縣大市場鎮斯里德古巴路 82110" : isEn ? "Sri Takua Pa Road, Talad Yai, Takua Pa, Phang Nga 82110" : "ถนนศรีตะกั่วป่า ตำบลตลาดใหญ่ อำเภอตะกั่วป่า จังหวัดพังงา ๘๒๑๑๐"}</p>
+            <p><a href="tel:0813703883" style={{ color: 'inherit', textDecoration: 'none' }}>{isZh ? "☎️ 電話: 081-370-3883" : isEn ? "☎️ Tel: 081-370-3883" : "☎️ โทร: 081-370-3883"}</a></p>
+            <p><a href="mailto:pook.kanokpon@gmail.com" style={{ color: 'inherit', textDecoration: 'none' }}>{isZh ? "✉️ 電子郵箱: pook.kanokpon@gmail.com" : isEn ? "✉️ Email: pook.kanokpon@gmail.com" : "✉️ อีเมล: pook.kanokpon@gmail.com"}</a></p>
           </div>
         </div>
       </div>

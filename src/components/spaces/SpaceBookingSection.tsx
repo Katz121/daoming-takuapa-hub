@@ -106,7 +106,7 @@ export function SpaceBookingSection() {
 
             <div className="contact-direct-box">
               <span>{isZh ? "📞 即時聯絡 / 檔期諮詢：" : isEn ? "📞 Direct Contact / Inquiries:" : "📞 ติดต่อด่วน / สอบถามคิวงาน:"}</span>
-              <strong>076-471-XXX / contact@daoming-takuapa.org</strong>
+              <strong><a href="tel:0813703883" style={{ color: 'inherit', textDecoration: 'none' }}>081-370-3883</a> / <a href="mailto:pook.kanokpon@gmail.com" style={{ color: 'inherit', textDecoration: 'none' }}>pook.kanokpon@gmail.com</a></strong>
             </div>
           </div>
 

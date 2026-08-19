@@ -128,19 +128,19 @@ export function IdeasSection() {
 
         <div className="ideas-layout-grid">
           {/* Submission Form Card */}
-          <div className="idea-form-card">
-            <div className="form-header">
+          <div className="idea-form-card" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box', overflow: 'hidden' }}>
+            <div className="form-header" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
               <span className="form-icon">💡</span>
-              <div>
+              <div style={{ minWidth: 0, flex: 1 }}>
                 <h3>{isZh ? "提出您的活動構想" : isEn ? "Propose an Idea" : "เสนอไอเดียกิจกรรม"}</h3>
                 <p>{isZh ? "成為推動導明文創新生的共創者" : isEn ? "Be a part of shaping Dao Ming Hub" : "ร่วมเป็นส่วนหนึ่งในการขับเคลื่อนเต้าหมิง"}</p>
               </div>
             </div>
 
-            <form onSubmit={handleSubmit} id="ideaSubmissionForm">
-              <div className="form-group">
+            <form onSubmit={handleSubmit} id="ideaSubmissionForm" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
+              <div className="form-group" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
                 <label htmlFor="ideaCategory">{isZh ? "構想類別" : isEn ? "Category" : "ประเภทกิจกรรม / ไอเดีย"}</label>
-                <select id="ideaCategory" value={category} onChange={e => setCategory(e.target.value)} required>
+                <select id="ideaCategory" value={category} onChange={e => setCategory(e.target.value)} required style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
                   <option value="art">🎨 {isZh ? "藝術與手作工藝" : isEn ? "Art & Crafts" : "ศิลปะ & งานคราฟต์"}</option>
                   <option value="edu">📚 {isZh ? "歷史文獻與走讀" : isEn ? "History & Edu" : "การศึกษา & ประวัติศาสตร์"}</option>
                   <option value="food">🍲 {isZh ? "在地美食與糕餅" : isEn ? "Local Food" : "อาหาร & วัฒนธรรมพื้นถิ่น"}</option>
@@ -150,7 +150,7 @@ export function IdeasSection() {
                 </select>
               </div>
 
-              <div className="form-group">
+              <div className="form-group" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
                 <label htmlFor="ideaTitle">{isZh ? "構想主題" : isEn ? "Idea Title" : "หัวข้อไอเดียสั้นๆ"}</label>
                 <input
                   type="text"
@@ -160,10 +160,11 @@ export function IdeasSection() {
                   onChange={e => setTitle(e.target.value)}
                   required
                   maxLength={80}
+                  style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}
                 />
               </div>
 
-              <div className="form-group">
+              <div className="form-group" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
                 <label htmlFor="ideaDesc">{isZh ? "詳細說明 / 期待場景" : isEn ? "Description" : "รายละเอียดกิจกรรม / สิ่งที่อยากเห็น"}</label>
                 <textarea
                   id="ideaDesc"
@@ -173,10 +174,11 @@ export function IdeasSection() {
                   onChange={e => setDesc(e.target.value)}
                   required
                   maxLength={300}
+                  style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box', resize: 'vertical' }}
                 />
               </div>
 
-              <div className="form-group">
+              <div className="form-group" style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
                 <label htmlFor="ideaAuthor">{isZh ? "您的姓名或筆名" : isEn ? "Your Name or Pen Name" : "ชื่อของคุณ หรือ นามปากกา"}</label>
                 <input
                   type="text"
@@ -186,10 +188,11 @@ export function IdeasSection() {
                   onChange={e => setAuthor(e.target.value)}
                   required
                   maxLength={50}
+                  style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}
                 />
               </div>
 
-              <button type="submit" className="btn btn-primary btn-block" disabled={isSubmitting}>
+              <button type="submit" className="btn btn-primary btn-block" disabled={isSubmitting} style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box', whiteSpace: 'normal', wordBreak: 'break-word', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
                 <span>{isSubmitting ? (isZh ? "正在提交中..." : isEn ? "Submitting..." : "กำลังส่งข้อมูล...") : (isZh ? "發布構想至共創板" : isEn ? "Submit Idea to Board" : "ส่งไอเดียขึ้นกระดาน")}</span>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
               </button>

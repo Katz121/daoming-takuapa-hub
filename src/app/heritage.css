@@ -3019,6 +3019,16 @@ button, input, select, textarea {
   display: grid;
   grid-template-columns: 1fr 1.4fr;
   gap: 36px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.ideas-layout-grid > * {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .idea-form-card {
@@ -3027,6 +3037,10 @@ button, input, select, textarea {
   border-radius: var(--radius-lg);
   padding: 32px;
   box-shadow: var(--shadow-sm);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .form-header {
@@ -3034,25 +3048,40 @@ button, input, select, textarea {
   align-items: center;
   gap: 14px;
   margin-bottom: 24px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.form-header > div {
+  min-width: 0;
+  flex: 1;
+  word-break: break-word;
 }
 
 .form-icon {
   font-size: 2rem;
+  flex-shrink: 0;
 }
 
 .form-header h3 {
   font-family: var(--font-display);
   font-size: 1.25rem;
   font-weight: 700;
+  word-break: break-word;
 }
 
 .form-header p {
   font-size: 0.85rem;
   color: var(--text-muted);
+  word-break: break-word;
 }
 
 .form-group {
   margin-bottom: 18px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .form-group label {
@@ -3061,18 +3090,34 @@ button, input, select, textarea {
   font-weight: 600;
   margin-bottom: 6px;
   color: var(--text-main);
+  word-break: break-word;
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   padding: 10px 14px;
   border: 1px solid var(--border-ochre);
   border-radius: var(--radius-sm);
   background-color: var(--bg-main);
   color: var(--text-main);
   transition: var(--transition);
+}
+
+.idea-form-card .btn-block {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  white-space: normal;
+  word-break: break-word;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
 }
 
 .form-group input:focus,

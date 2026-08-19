@@ -33,8 +33,8 @@ export function ArchiveGallery() {
 
   const startIdx = (safePage - 1) * PAGE_SIZE;
   const endIdx = Math.min(startIdx + PAGE_SIZE, totalItems);
-  // On mobile show all filtered photos in horizontal swipe carousel; on desktop paginate 6 per page
-  const displayPhotos = isMobile ? filteredPhotos : filteredPhotos.slice(startIdx, endIdx);
+  // On mobile show all 13 archive photos in the horizontal swipe carousel; on desktop paginate 6 per page
+  const displayPhotos = isMobile ? ARCHIVE_PHOTOS : filteredPhotos.slice(startIdx, endIdx);
 
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);

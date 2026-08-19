@@ -4060,6 +4060,10 @@ button, input, select, textarea {
   }
 
   /* Archive Gallery — Horizontal Swipe Carousel on Mobile */
+  .archive-filter-bar {
+    display: none !important;
+  }
+
   .archive-mobile-swipe-hint {
     display: inline-block;
     text-align: center;

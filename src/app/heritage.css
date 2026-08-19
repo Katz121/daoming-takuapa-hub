@@ -3875,14 +3875,25 @@ button, input, select, textarea {
     padding: 3px 10px;
   }
 
-  /* Timeline & Story Redesign */
+  /* Timeline & Story Redesign — Horizontal Swipe on Mobile */
   .story-narrative-grid {
-    grid-template-columns: 1fr;
-    gap: 14px;
-    margin-bottom: 24px;
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 6px;
+  }
+
+  .story-narrative-grid::-webkit-scrollbar {
+    display: none;
   }
 
   .narrative-card {
+    flex: 0 0 clamp(260px, 80vw, 320px);
+    scroll-snap-align: center;
     padding: 16px 14px;
   }
 
@@ -4048,7 +4059,22 @@ button, input, select, textarea {
     font-size: 0.78rem;
   }
 
-  /* Archive Gallery */
+  /* Archive Gallery — Horizontal Swipe Carousel on Mobile */
+  .archive-mobile-swipe-hint {
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 12px;
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: var(--color-tin-gold);
+    background: rgba(229, 163, 30, 0.1);
+    border: 1px dashed rgba(229, 163, 30, 0.35);
+    border-radius: var(--radius-pill);
+    padding: 6px 12px;
+    box-sizing: border-box;
+  }
+
   .archive-gallery-grid {
     display: flex;
     overflow-x: auto;
@@ -4056,7 +4082,8 @@ button, input, select, textarea {
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     gap: 14px;
-    padding-bottom: 6px;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
   }
 
   .archive-gallery-grid::-webkit-scrollbar {

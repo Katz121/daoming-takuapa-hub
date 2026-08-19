@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '@/lib/store';
 import { ARCHIVE_PHOTOS } from '@/data/archive';
 
@@ -11,6 +11,14 @@ export function ArchiveGallery() {
   const { lang, t, openLightbox } = useApp();
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const isEn = lang === 'en';
   const isZh = lang === 'zh';
@@ -25,7 +33,8 @@ export function ArchiveGallery() {
 
   const startIdx = (safePage - 1) * PAGE_SIZE;
   const endIdx = Math.min(startIdx + PAGE_SIZE, totalItems);
-  const currentPhotos = filteredPhotos.slice(startIdx, endIdx);
+  // On mobile show all filtered photos in horizontal swipe carousel; on desktop paginate 6 per page
+  const displayPhotos = isMobile ? filteredPhotos : filteredPhotos.slice(startIdx, endIdx);
 
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
@@ -89,9 +98,14 @@ export function ArchiveGallery() {
           </button>
         </div>
 
-        {/* 6 Photos Per Page Gallery Grid */}
+        {/* Mobile Swipe Hint */}
+        <div className="archive-mobile-swipe-hint">
+          <span>👉 {isZh ? "左右滑動瀏覽歷史影像 (點擊可放大)" : isEn ? "Swipe horizontally to explore photos (Tap to expand)" : "ปัดซ้าย-ขวาเพื่อเลื่อนดูภาพประวัติศาสตร์ (แตะเพื่อดูภาพขยาย)"} 👈</span>
+        </div>
+
+        {/* Gallery Carousel / Grid */}
         <div className="archive-gallery-grid" id="archiveGalleryGrid">
-          {currentPhotos.map(item => (
+          {displayPhotos.map(item => (
             <div
               key={item.id}
               className="archive-card"
@@ -111,48 +125,52 @@ export function ArchiveGallery() {
           ))}
         </div>
 
-        {/* Pagination Controls */}
-        <div className="archive-pagination-bar" id="archivePaginationBar">
-          <button
-            className="page-nav-btn page-prev-btn"
-            disabled={safePage <= 1}
-            onClick={() => handlePageChange(-1)}
-            aria-label={isZh ? "上一頁" : isEn ? "Previous" : "หน้าก่อนหน้า"}
-          >
-            <span>←</span> <span>{t('page_prev')}</span>
-          </button>
-
-          <div className="page-numbers-group" id="archivePageNumbers">
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
+        {/* Desktop Pagination Controls */}
+        {!isMobile && (
+          <>
+            <div className="archive-pagination-bar" id="archivePaginationBar">
               <button
-                key={p}
-                className={`page-num-btn ${p === safePage ? 'active' : ''}`}
-                onClick={() => setCurrentPage(p)}
+                className="page-nav-btn page-prev-btn"
+                disabled={safePage <= 1}
+                onClick={() => handlePageChange(-1)}
+                aria-label={isZh ? "上一頁" : isEn ? "Previous" : "หน้าก่อนหน้า"}
               >
-                {toDigit(p)}
+                <span>←</span> <span>{t('page_prev')}</span>
               </button>
-            ))}
-          </div>
 
-          <button
-            className="page-nav-btn page-next-btn"
-            disabled={safePage >= totalPages}
-            onClick={() => handlePageChange(1)}
-            aria-label={isZh ? "下一頁" : isEn ? "Next" : "หน้าถัดไป"}
-          >
-            <span>{t('page_next')}</span> <span>→</span>
-          </button>
-        </div>
+              <div className="page-numbers-group" id="archivePageNumbers">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
+                  <button
+                    key={p}
+                    className={`page-num-btn ${p === safePage ? 'active' : ''}`}
+                    onClick={() => setCurrentPage(p)}
+                  >
+                    {toDigit(p)}
+                  </button>
+                ))}
+              </div>
 
-        <div className="archive-page-status-pill" id="archivePageStatus">
-          <span>
-            {isZh
-              ? `顯示第 ${totalItems === 0 ? 0 : startIdx + 1} - ${endIdx} 張照片，共 ${totalItems} 張 (第 ${safePage} / ${totalPages} 頁)`
-              : isEn
-                ? `Showing photos ${totalItems === 0 ? 0 : startIdx + 1} - ${endIdx} of ${totalItems} (Page ${safePage} / ${totalPages})`
-                : `แสดงภาพ ${totalItems === 0 ? '๐' : toDigit(startIdx + 1)} - ${toDigit(endIdx)} จาก ${toDigit(totalItems)} ภาพ (หน้า ${toDigit(safePage)} / ${toDigit(totalPages)})`}
-          </span>
-        </div>
+              <button
+                className="page-nav-btn page-next-btn"
+                disabled={safePage >= totalPages}
+                onClick={() => handlePageChange(1)}
+                aria-label={isZh ? "下一頁" : isEn ? "Next" : "หน้าถัดไป"}
+              >
+                <span>{t('page_next')}</span> <span>→</span>
+              </button>
+            </div>
+
+            <div className="archive-page-status-pill" id="archivePageStatus">
+              <span>
+                {isZh
+                  ? `顯示第 ${totalItems === 0 ? 0 : startIdx + 1} - ${endIdx} 張照片，共 ${totalItems} 張 (第 ${safePage} / ${totalPages} 頁)`
+                  : isEn
+                    ? `Showing photos ${totalItems === 0 ? 0 : startIdx + 1} - ${endIdx} of ${totalItems} (Page ${safePage} / ${totalPages})`
+                    : `แสดงภาพ ${totalItems === 0 ? '๐' : toDigit(startIdx + 1)} - ${toDigit(endIdx)} จาก ${toDigit(totalItems)} ภาพ (หน้า ${toDigit(safePage)} / ${toDigit(totalPages)})`}
+              </span>
+            </div>
+          </>
+        )}
       </div>
     </section>
   );

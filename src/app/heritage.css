@@ -4096,6 +4096,10 @@ button, input, select, textarea {
     border-radius: var(--radius-md);
   }
 
+  .archive-era-tag {
+    display: none !important;
+  }
+
   .archive-img-box {
     height: 180px;
   }

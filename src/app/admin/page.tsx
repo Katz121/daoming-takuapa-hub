@@ -328,6 +328,48 @@ export default function AdminDashboardPage() {
     }
   };
 
+  const handleFileImageUpload = (file: File, onDone: (dataUrl: string) => void) => {
+    if (!file || !file.type.startsWith('image/')) {
+      alert('กรุณาเลือกไฟล์รูปภาพที่ถูกต้อง (PNG, JPG, JPEG, WebP)');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX_WIDTH = 1280;
+        const MAX_HEIGHT = 1280;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > MAX_WIDTH) {
+            height = Math.round((height * MAX_WIDTH) / width);
+            width = MAX_WIDTH;
+          }
+        } else {
+          if (height > MAX_HEIGHT) {
+            width = Math.round((width * MAX_HEIGHT) / height);
+            height = MAX_HEIGHT;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(img, 0, 0, width, height);
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.82);
+          onDone(compressedDataUrl);
+          showFeedback('✓ โหลดและประมวลผลรูปภาพพร้อมใช้งานแล้ว (ไม่ต้องพุช git)');
+        }
+      };
+      img.src = e.target?.result as string;
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleVerifyTicket = (e: React.FormEvent) => {
     e.preventDefault();
     if (!scanCode.trim()) return;
@@ -1822,18 +1864,65 @@ export default function AdminDashboardPage() {
                   </div>
                 </div>
 
-                {/* Image Path with Presets */}
+                {/* Image Path with Direct Upload & Presets */}
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
-                    รูปภาพหน้าปกกิจกรรม (Image URL / Path)
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="เช่น /assets/event-tea.jpg หรือ URL รูปภาพ"
-                    value={eventForm.image || ''}
-                    onChange={e => setEventForm({ ...eventForm, image: e.target.value })}
-                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box', marginBottom: '6px' }}
-                  />
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                    <label style={{ fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E' }}>
+                      รูปภาพหน้าปกกิจกรรม (Image) *
+                    </label>
+                    <label
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        padding: '5px 12px',
+                        borderRadius: '6px',
+                        backgroundColor: 'rgba(229, 163, 30, 0.18)',
+                        border: '1px solid #E5A31E',
+                        color: '#E5A31E',
+                        fontSize: '0.75rem',
+                        fontWeight: 'bold',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
+                      📁 เลือกรูปจากเครื่อง / มือถือ
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            handleFileImageUpload(file, (dataUrl) => {
+                              setEventForm(prev => ({ ...prev, image: dataUrl }));
+                            });
+                          }
+                        }}
+                        style={{ display: 'none' }}
+                      />
+                    </label>
+                  </div>
+
+                  <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '8px' }}>
+                    <input
+                      type="text"
+                      placeholder="เช่น /assets/event-tea.jpg หรือวาง URL รูปภาพ"
+                      value={eventForm.image || ''}
+                      onChange={e => setEventForm({ ...eventForm, image: e.target.value })}
+                      style={{ flex: 1, padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box' }}
+                    />
+                    {eventForm.image && (
+                      <div style={{ width: '50px', height: '50px', borderRadius: '8px', overflow: 'hidden', border: '1.5px solid #E5A31E', flexShrink: 0 }}>
+                        <img
+                          src={eventForm.image}
+                          alt="preview"
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                          onError={(e: any) => { e.target.src = '/assets/event-tea.jpg'; }}
+                        />
+                      </div>
+                    )}
+                  </div>
+
                   <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                     <span style={{ fontSize: '0.7rem', color: 'rgba(250, 242, 221, 0.5)', alignSelf: 'center' }}>เลือกรูปภาพแนะนำ:</span>
                     {[
@@ -2001,22 +2090,56 @@ export default function AdminDashboardPage() {
                   </div>
                 </div>
 
-                {/* Image Path & Live Preview */}
+                {/* Image Path with Direct Upload & Live Preview */}
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
-                    ที่อยู่รูปภาพ (Image URL / Path) *
-                  </label>
-                  <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                    <label style={{ fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E' }}>
+                      ที่อยู่รูปภาพ (Image) *
+                    </label>
+                    <label
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        padding: '5px 12px',
+                        borderRadius: '6px',
+                        backgroundColor: 'rgba(229, 163, 30, 0.18)',
+                        border: '1px solid #E5A31E',
+                        color: '#E5A31E',
+                        fontSize: '0.75rem',
+                        fontWeight: 'bold',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
+                      📁 เลือกรูปจากเครื่อง / มือถือ (Upload Photo)
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            handleFileImageUpload(file, (dataUrl) => {
+                              setArchiveForm(prev => ({ ...prev, src: dataUrl }));
+                            });
+                          }
+                        }}
+                        style={{ display: 'none' }}
+                      />
+                    </label>
+                  </div>
+
+                  <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '8px' }}>
                     <input
                       type="text"
                       required
-                      placeholder="เช่น /img/exhibit-zone1-school.jpg หรือ URL รูปภาพ"
+                      placeholder="เช่น /img/exhibit-zone1-school.jpg หรือวาง URL รูปภาพ"
                       value={archiveForm.src || ''}
                       onChange={e => setArchiveForm({ ...archiveForm, src: e.target.value })}
                       style={{ flex: 1, padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box' }}
                     />
                     {archiveForm.src && (
-                      <div style={{ width: '48px', height: '48px', borderRadius: '6px', overflow: 'hidden', border: '1px solid #E5A31E', flexShrink: 0 }}>
+                      <div style={{ width: '50px', height: '50px', borderRadius: '8px', overflow: 'hidden', border: '1.5px solid #E5A31E', flexShrink: 0 }}>
                         <img
                           src={archiveForm.src}
                           alt="preview"
@@ -2026,7 +2149,8 @@ export default function AdminDashboardPage() {
                       </div>
                     )}
                   </div>
-                  <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '6px' }}>
+
+                  <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                     <span style={{ fontSize: '0.7rem', color: 'rgba(250, 242, 221, 0.5)', alignSelf: 'center' }}>ภาพในระบบ:</span>
                     {[
                       { label: 'อาคารดั้งเดิม ๒๔๖๕', path: '/img/exhibit-zone1-school.jpg' },

@@ -786,6 +786,13 @@ export const clientDb = {
       }
       const parsed = JSON.parse(stored);
       if (Array.isArray(parsed) && parsed.length > 0) {
+        const existingIds = new Set(parsed.map((p: any) => p.id));
+        const missing = ARCHIVE_PHOTOS.filter(p => !existingIds.has(p.id));
+        if (missing.length > 0) {
+          const merged = [...parsed, ...missing];
+          localStorage.setItem(MASTER_KEYS.ARCHIVE, JSON.stringify(merged));
+          return merged;
+        }
         return parsed;
       }
       return ARCHIVE_PHOTOS;

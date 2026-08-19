@@ -2,9 +2,10 @@
 
 import React from 'react';
 import { useApp } from '@/lib/store';
+import { clientDb } from '@/lib/clientDb';
 
 export function VisitSection() {
-  const { lang, t } = useApp();
+  const { lang, t, openLightbox } = useApp();
   const isEn = lang === 'en';
   const isZh = lang === 'zh';
 
@@ -147,19 +148,47 @@ export function VisitSection() {
           boxShadow: '0 8px 30px rgba(0, 0, 0, 0.35)'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flex: '1 1 320px' }}>
-            <img
-              src="/assets/poster-daoming-pop.png"
-              alt="Dao Ming Pop Heritage Art"
-              style={{
-                width: '74px',
-                height: '98px',
-                objectFit: 'cover',
-                borderRadius: '10px',
-                border: '1.5px solid #E5A31E',
-                boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
-                flexShrink: 0
+            <div
+              onClick={() => {
+                const photos = clientDb.getArchivePhotos();
+                const idx = photos.findIndex(p => p.category === 'art' || p.id === 13);
+                openLightbox(idx !== -1 ? idx : 0);
               }}
-            />
+              style={{ position: 'relative', cursor: 'pointer', flexShrink: 0 }}
+              title={isZh ? "點擊放大檢視" : isEn ? "Click to expand" : "แตะเพื่อดูภาพขยาย"}
+            >
+              <img
+                src="/assets/poster-daoming-pop.png"
+                alt="Dao Ming Pop Heritage Art"
+                style={{
+                  width: '78px',
+                  height: '104px',
+                  objectFit: 'cover',
+                  borderRadius: '10px',
+                  border: '1.5px solid #E5A31E',
+                  boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
+                  display: 'block',
+                  transition: 'transform 0.2s ease'
+                }}
+              />
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  backgroundColor: 'rgba(0,0,0,0.25)',
+                  borderRadius: '10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  opacity: 0,
+                  transition: 'opacity 0.2s ease'
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
+                onMouseLeave={(e) => (e.currentTarget.style.opacity = '0')}
+              >
+                <span style={{ fontSize: '1.2rem' }}>🔍</span>
+              </div>
+            </div>
             <div>
               <span style={{ fontSize: '0.72rem', letterSpacing: '1px', fontWeight: 'bold', color: '#E5A31E', textTransform: 'uppercase', display: 'block', marginBottom: '2px' }}>
                 📮 {isZh ? "百年導明限定紀念明信片" : isEn ? "120th Anniversary Commemorative Postcard" : "โปสการ์ดของที่ระลึก ๑๒๐ ปี เต้าหมิง"}
@@ -177,7 +206,19 @@ export function VisitSection() {
             </div>
           </div>
 
-          <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexShrink: 0 }}>
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap', flexShrink: 0 }}>
+            <button
+              onClick={() => {
+                const photos = clientDb.getArchivePhotos();
+                const idx = photos.findIndex(p => p.category === 'art' || p.id === 13);
+                openLightbox(idx !== -1 ? idx : 0);
+              }}
+              className="btn btn-secondary"
+              style={{ fontSize: '0.82rem', padding: '9px 18px', borderRadius: '12px', border: '1.5px solid #E5A31E', color: '#FAF2DD', fontWeight: 'bold', cursor: 'pointer', background: 'rgba(229, 163, 30, 0.15)' }}
+            >
+              🔍 {isZh ? "檢視大圖" : isEn ? "View Large" : "ดูภาพขยาย"}
+            </button>
+
             <a
               href="/assets/poster-daoming-pop.png"
               download="DaoMing_120Y_Heritage_Poster.png"

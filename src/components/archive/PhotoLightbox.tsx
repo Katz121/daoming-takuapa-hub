@@ -4,12 +4,19 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useApp } from '@/lib/store';
 import { clientDb } from '@/lib/clientDb';
 import { ArchivePhoto } from '@/types';
+import { ARCHIVE_PHOTOS } from '@/data/archive';
 
 const THAI_DIGITS = ['๑', '๒', '๓', '๔', '๕', '๖', '๗', '๘', '๙', '๑๐', '๑๑', '๑๒', '๑๓', '๑๔', '๑๕', '๑๖', '๑๗', '๑๘', '๑๙', '๒๐'];
 
 export function PhotoLightbox() {
   const { lang, lightboxPhotoIndex, closeLightbox, openLightbox } = useApp();
-  const [allPhotos, setAllPhotos] = useState<ArchivePhoto[]>([]);
+  const [allPhotos, setAllPhotos] = useState<ArchivePhoto[]>(() => {
+    try {
+      return clientDb.getArchivePhotos();
+    } catch {
+      return ARCHIVE_PHOTOS;
+    }
+  });
   const [touchStart, setTouchStart] = useState<number | null>(null);
 
   useEffect(() => {

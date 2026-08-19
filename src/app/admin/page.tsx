@@ -1237,7 +1237,7 @@ export default function AdminDashboardPage() {
           <img
             src="/assets/logo.png"
             alt="ตราสัญลักษณ์เต้าหมิง"
-            style={{ width: '72px', height: '72px', borderRadius: '50%', border: '3px solid #E5A31E', boxShadow: '0 0 20px rgba(229, 163, 30, 0.3)', backgroundColor: 'rgba(255, 255, 255, 0.05)', padding: '4px' }}
+            style={{ width: '72px', height: '72px', borderRadius: '50%', border: '3px solid #E5A31E', boxShadow: '0 0 20px rgba(229, 163, 30, 0.3)', backgroundColor: '#FFFFFF', padding: '4px', objectFit: 'contain' }}
           />
 
           <div style={{ textAlign: 'center' }}>
@@ -1540,7 +1540,7 @@ export default function AdminDashboardPage() {
         {/* Top Header Bar */}
         <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', paddingBottom: '20px', borderBottom: '1px solid rgba(229, 163, 30, 0.2)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <img src="/assets/logo.png" alt="Logo" style={{ width: '48px', height: '48px', borderRadius: '50%', border: '2px solid #E5A31E', backgroundColor: 'rgba(255, 255, 255, 0.05)', padding: '2px' }} />
+            <img src="/assets/logo.png" alt="Logo" style={{ width: '48px', height: '48px', borderRadius: '50%', border: '2px solid #E5A31E', backgroundColor: '#FFFFFF', padding: '3px', objectFit: 'contain' }} />
             <div>
               <div style={{ fontSize: '0.72rem', fontFamily: 'monospace', fontWeight: 'bold', color: '#E5A31E', textTransform: 'uppercase', letterSpacing: '1px' }}>
                 🏛️ DAO MING FOUNDATION · BACKOFFICE PORTAL

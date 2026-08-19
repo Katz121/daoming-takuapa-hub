@@ -131,7 +131,10 @@ export function ArchiveGallery() {
               key={item.id}
               className="archive-card"
               data-category={item.category}
-              onClick={() => openLightbox(item.id)}
+              onClick={() => {
+                const idx = allPhotos.findIndex(p => p.id === item.id);
+                openLightbox(idx !== -1 ? idx : 0);
+              }}
             >
               <div className="archive-img-box">
                 <img src={item.src} alt={isZh ? item.title_zh : isEn ? item.title_en : item.title_th} loading="lazy" />

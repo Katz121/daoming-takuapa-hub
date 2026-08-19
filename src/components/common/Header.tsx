@@ -28,6 +28,7 @@ export function Header() {
 
           {/* Desktop Nav */}
           <nav className="main-nav" id="mainNav">
+            <a href="#hero" className="nav-link">{t('nav_home')}</a>
             <a href="#story" className="nav-link">{t('nav_story')}</a>
             <a href="#gable" className="nav-link">{t('nav_gable')}</a>
             <a href="#archive" className="nav-link">{t('nav_archive')}</a>
@@ -85,6 +86,9 @@ export function Header() {
           <button className="close-drawer-btn" id="closeDrawerBtn" onClick={() => setDrawerOpen(false)}>&times;</button>
         </div>
         <nav className="mobile-nav-links">
+          <a href="#hero" className="m-link" onClick={() => setDrawerOpen(false)} style={{ color: '#E5A31E', fontWeight: 'bold' }}>
+            🏠 {t('nav_home')}
+          </a>
           <a href="#story" className="m-link" onClick={() => setDrawerOpen(false)}>๑. ประวัติศาสตร์ & สถาปัตยกรรม</a>
           <a href="#gable" className="m-link" onClick={() => setDrawerOpen(false)}>๒. ปรัชญาหน้าจั่วจำลองจักรวาล</a>
           <a href="#archive" className="m-link" onClick={() => setDrawerOpen(false)}>๓. คลังภาพเก่า (Living Archive)</a>

@@ -47,6 +47,7 @@ export function AmbientSoundscape() {
   const [activeTrackIndex, setActiveTrackIndex] = useState<number>(0);
   const [volume, setVolume] = useState<number>(0.25);
   const [isOpenPanel, setIsOpenPanel] = useState<boolean>(false);
+  const [isMinimized, setIsMinimized] = useState<boolean>(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const wasPlayingBeforeGuideRef = useRef<boolean>(false);
@@ -143,43 +144,88 @@ export function AmbientSoundscape() {
 
   return (
     <div className="ambient-soundscape-container">
-      {/* Floating Mini Controller Button */}
-      <div className={`ambient-floating-pill ${isPlaying ? 'playing' : ''}`}>
+      {/* Minimized Floating Disc Badge (Compact Mobile Mode) */}
+      {isMinimized ? (
         <button
-          className="ambient-play-toggle-btn"
-          onClick={togglePlay}
-          title={isPlaying ? (isZh ? "暫停環境音" : isEn ? "Pause Ambience" : "หยุดเสียงบรรยากาศ") : (isZh ? "開啟環境音" : isEn ? "Play Ambience" : "เปิดเสียงบรรยากาศ")}
-          aria-label="Toggle Ambient Sound"
+          className={`ambient-minimized-badge ${isPlaying ? 'playing' : ''}`}
+          onClick={() => setIsMinimized(false)}
+          title={isZh ? "展開老城音景播放器" : isEn ? "Expand Soundscape Player" : "แตะเพื่อเปิดแถบเสียงบรรยากาศ"}
+          aria-label="Expand Soundscape"
         >
-          <span className="ambient-icon">{isPlaying ? "🔊" : "🔈"}</span>
-          <div className={`ambient-bars ${isPlaying ? 'animated' : ''}`}>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
+          <span className="minimized-icon">{isPlaying ? "🔊" : "🎵"}</span>
+          {isPlaying && (
+            <div className="minimized-mini-bars">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          )}
         </button>
+      ) : (
+        /* Expanded Floating Pill Controller */
+        <div className={`ambient-floating-pill ${isPlaying ? 'playing' : ''}`}>
+          <button
+            className="ambient-play-toggle-btn"
+            onClick={togglePlay}
+            title={isPlaying ? (isZh ? "暫停環境音" : isEn ? "Pause Ambience" : "หยุดเสียงบรรยากาศ") : (isZh ? "開啟環境音" : isEn ? "Play Ambience" : "เปิดเสียงบรรยากาศ")}
+            aria-label="Toggle Ambient Sound"
+          >
+            <span className="ambient-icon">{isPlaying ? "🔊" : "🔈"}</span>
+            <div className={`ambient-bars ${isPlaying ? 'animated' : ''}`}>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </button>
 
-        <button
-          className="ambient-label-btn"
-          onClick={() => setIsOpenPanel(!isOpenPanel)}
-          title={isZh ? "設定空間音景" : isEn ? "Soundscape Settings" : "ปรับแต่งเสียงบรรยากาศ"}
-        >
-          <span className="ambient-track-name">
-            {isZh ? track.title_zh : isEn ? track.title_en : track.title_th}
-          </span>
-          <span className="ambient-gear-icon">{isOpenPanel ? "✕" : "⚙️"}</span>
-        </button>
-      </div>
+          <button
+            className="ambient-label-btn"
+            onClick={() => setIsOpenPanel(!isOpenPanel)}
+            title={isZh ? "設定空間音景" : isEn ? "Soundscape Settings" : "ปรับแต่งเสียงบรรยากาศ"}
+          >
+            <span className="ambient-track-name">
+              {isZh ? track.title_zh : isEn ? track.title_en : track.title_th}
+            </span>
+            <span className="ambient-gear-icon">{isOpenPanel ? "✕" : "⚙️"}</span>
+          </button>
+
+          {/* Minimize / Hide Button */}
+          <button
+            className="ambient-minimize-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsMinimized(true);
+              setIsOpenPanel(false);
+            }}
+            title={isZh ? "縮小隱藏 (Minimize)" : isEn ? "Minimize Player" : "ซ่อนแถบเสียงบรรยากาศ"}
+            aria-label="Minimize Player"
+          >
+            <span>&minus;</span>
+          </button>
+        </div>
+      )}
 
       {/* Expanded Sound Settings Card */}
-      {isOpenPanel && (
+      {isOpenPanel && !isMinimized && (
         <div className="ambient-settings-card">
           <div className="ambient-card-header">
             <div className="ambient-header-left">
               <span className="pulsing-dot"></span>
               <strong>{isZh ? "老城空間音景" : isEn ? "HERITAGE SOUNDSCAPE" : "เสียงบรรยากาศเมืองเก่า"}</strong>
             </div>
-            <button className="ambient-card-close" onClick={() => setIsOpenPanel(false)}>&times;</button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <button
+                className="ambient-card-minimize"
+                onClick={() => {
+                  setIsMinimized(true);
+                  setIsOpenPanel(false);
+                }}
+                title="ซ่อนตัวเล่นเสียง (Minimize)"
+              >
+                &minus;
+              </button>
+              <button className="ambient-card-close" onClick={() => setIsOpenPanel(false)}>&times;</button>
+            </div>
           </div>
 
           <p className="ambient-card-desc">

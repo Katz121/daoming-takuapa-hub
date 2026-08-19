@@ -2,6 +2,7 @@ export const TRANSLATIONS = {
   th: {
     brand_title: "โรงเรียนเต้าหมิง",
     brand_sub: "DAO MING · TAKUA PA HUB",
+    nav_home: "หน้าแรก",
     nav_story: "ประวัติศาสตร์",
     nav_gable: "ปรัชญาหน้าจั่ว",
     nav_archive: "คลังภาพเก่า",
@@ -106,6 +107,7 @@ export const TRANSLATIONS = {
   en: {
     brand_title: "Dao Ming School",
     brand_sub: "DAO MING · TAKUA PA HUB",
+    nav_home: "Home",
     nav_story: "History",
     nav_gable: "Gable Philosophy",
     nav_archive: "Photo Archive",
@@ -210,6 +212,7 @@ export const TRANSLATIONS = {
   zh: {
     brand_title: "導明學校",
     brand_sub: "DAO MING · 德古巴文創樞紐",
+    nav_home: "首頁",
     nav_story: "百年歷史",
     nav_gable: "山牆宇宙觀",
     nav_archive: "歷史珍相",

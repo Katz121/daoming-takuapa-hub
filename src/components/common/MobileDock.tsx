@@ -19,6 +19,16 @@ export function MobileDock() {
       aria-label="Mobile Quick Action Dock"
     >
       <a
+        href="#hero"
+        className="dock-btn"
+        id="dockHomeBtn"
+        title="หน้าแรก (บนสุด)"
+      >
+        <span className="dock-icon">🏠</span>
+        <span className="dock-label">{t('nav_home')}</span>
+      </a>
+
+      <a
         href="https://maps.google.com/?q=8.833573397970662,98.36506109469767"
         target="_blank"
         rel="noopener noreferrer"

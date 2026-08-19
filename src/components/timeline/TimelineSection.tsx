@@ -80,14 +80,140 @@ const TIMELINE_DATA = {
 
 const YEARS = ["1905", "1950", "1990", "2026"] as const;
 
+const AUDIO_CHAPTERS: Record<string, {
+  src: string;
+  title_th: string;
+  title_en: string;
+  title_zh: string;
+  transcript_th: string;
+  transcript_en: string;
+  transcript_zh: string;
+}> = {
+  "1905": {
+    src: "/audio/chapter_1.mp3",
+    title_th: 'บทที่ ๑: กำเนิด "โต๊ะเบ๋ง" สู่การลงขันสร้างอาคารโดยช่างผาว (พ.ศ. ๒๔๔๘ - ๒๔๖๕)',
+    title_en: 'Chapter 1: Origins of Toh Beng & Master Pao (1905 - 1922)',
+    title_zh: '第一章：卓明創校 · 華商集資與包師傅築造紅毛樓 (1905 - 1922)',
+    transcript_th: 'ย้อนกลับไปเมื่อร้อยยี่สิบปีก่อน ในยุคที่ตะกั่วป่ายังเป็นเมืองเหมืองแร่ดีบุกอันรุ่งเรืองระดับโลก ท่ามกลางสายน้ำและเรือสำเภา พ่อค้าชาวจีนฮกเกี้ยนได้ร่วมแรงร่วมใจกันลงขัน ก่อตั้งโรงเรียนสอนภาษาจีนแห่งแรกขึ้นในนาม "โต๊ะเบ๋ง" จนกระทั่งปี ๒๔๖๕ นายผาว ช่างฝีมือเอกชาวจีน ได้รังสรรค์อาคารอั้งม่อเหลาหลังนี้ขึ้น ผสานปรัชญาหน้าจั่วจำลองจักรวาล ฟ้า ดิน คน สลักเสาเทียนกงเพื่อดึงพลังบริสุทธิ์จากฟากฟ้า ส่งต่อปัญญาและแสงสว่างอันเป็นนิรันดร์สู่ลูกหลานเมืองตะกั่วป่า',
+    transcript_en: 'Over a century ago, Takua Pa was a thriving world-class tin mining capital. Hokkien merchants pooled resources to establish the first Chinese school named "Toh Beng". In 1922, master builder Pao constructed this Ang Mor Lao schoolhouse, embedding Taoist cosmic symbols on the pediment to channel celestial wisdom to future generations.',
+    transcript_zh: '溯源一百二十年前，當德古巴仍是名揚四海的錫礦重鎮，在川流不息的商船泊岸處，福建華商先賢同心集資，創設全府首間華文學校「卓明」。至1922年，閩南名匠包師傅掌墨興築這座中西合璧紅毛樓，融合「天地人」三才宇宙觀，立天公柱接引天心浩氣，將永恆的智慧之光世世代代傳承給後代子孫。'
+  },
+  "1950": {
+    src: "/audio/chapter_2.mp3",
+    title_th: 'บทที่ ๒: ยุคทองแห่งการศึกษา บาสเกตบอล และการต้อนรับกงสุลจีน (พ.ศ. ๒๔๘๐ - ๒๕๑๐)',
+    title_en: 'Chapter 2: The Golden Era, Basketball & Chinese Consul (1937 - 1967)',
+    title_zh: '第二章：教育黃金時代 · 熱血籃球與隆重接待中國總領事 (1937 - 1967)',
+    transcript_th: 'ยุคทองแห่งการศึกษาและความเกรียงไกร เสียงท่องตำราภาษาจีนและภาษาไทยดังก้องไปทั่วโถงไม้ เต้าหมิงกลายเป็นหัวใจของชุมชนอย่างแท้จริง ที่นี่มีสนามบาสเกตบอลดินที่คึกคักที่สุดในพังงา สร้างนักกีฬาและหล่อหลอมความสามัคคีให้คนรุ่นหลัง และในหน้าประวัติศาสตร์ปี ๒๔๙๓ อาคารแห่งนี้ได้รับเกียรติยศสูงสุด ในการจัดพิธีต้อนรับกงสุลใหญ่สาธารณรัฐจีน จารึกบทบาทศูนย์กลางการทูตและสังคมอันน่าเกรงขามของเมืองเก่า',
+    transcript_en: 'The golden age of vibrant education and communal pride. Dao Ming was the heart of the district, featuring Takua Pa’s most popular basketball tournaments and proudly hosting the grand reception of the Chinese Consul-General in 1950.',
+    transcript_zh: '一段弦歌不輟、人才輩出的黃金歲月。瑯瑯讀書聲迴盪於木構大廳，導明學校成為凝聚僑社情感的核心。這裡有全府最具活力的紅土籃球場，鍛鍊青年體魄、凝聚社區向心力；1950年，更於前廊隆重接待中華民國駐宋卡總領事，銘刻老城作為政治、外交與文化重鎮的莊嚴篇章。'
+  },
+  "1990": {
+    src: "/audio/chapter_3.mp3",
+    title_th: 'บทที่ ๓: จัดตั้งมูลนิธิฯ & การส่งมอบกรรมสิทธิ์ที่ดินเพื่อสาธารณะ (พ.ศ. ๒๕๓๓ - ๒๕๔๗)',
+    title_en: 'Chapter 3: Establishment of Dao Ming Foundation & Ownership Handover (1990 - 2004)',
+    title_zh: '第三章：成立基金會 · 產權全數無償移交公眾永續傳承 (1990 - 2004)',
+    transcript_th: 'มรดกแห่งความเสียสละเพื่อสาธารณประโยชน์ แม้กาลเวลาจะเปลี่ยนผ่าน แต่สายใยแห่งความผูกพันของชุมชนมิเคยจางหาย ในปี ๒๕๓๓ ได้มีการจัดตั้งมูลนิธิโรงเรียนเต้าหมิง ตะกั่วป่า และด้วยจิตวิญญาณอันสูงส่ง ทายาทผู้ถือครองกรรมสิทธิ์ที่ดินทั้ง ๓ ท่าน ได้พร้อมใจกันส่งมอบที่ดินและตัวอาคารทั้งหมด ๑๐๐% ให้เป็นสมบัติส่วนรวมของชุมชนตลอดไป โดยมิคิดมูลค่า เพื่อให้เต้าหมิงเป็นมรดกมีชีวิตของทุกคน',
+    transcript_en: 'A testament to altruism. In 1990, the Dao Ming Foundation was established. The 3 trustee families unconditionally transferred 100% legal title of land and schoolhouse to the foundation without compensation, gifting this perpetual heritage to the community.',
+    transcript_zh: '一份無私奉獻於公共福祉的崇高遺產。歲月流轉，老城對導明的鄉情永不褪色。1990年正式成立「德古巴導明學校基金會」，原代持地契之三大家族後人深明大義，簽署和解協議，將地皮與整座校舍之100%產權全額無償移交基金會，永為德古巴社區共享之活態遺產。'
+  },
+  "2026": {
+    src: "/audio/chapter_4.mp3",
+    title_th: 'บทที่ ๔: บริบทใหม่ในเมืองตะกั่วป่า & รางวัลอนุรักษ์ศิลปสถาปัตยกรรม ๒๕๖๙',
+    title_en: 'Chapter 4: Living Heritage Context & ASA Architectural Award 2026',
+    title_zh: '第四章：老城新生語境 · 榮獲2026年度泰國國家建築保護大獎',
+    transcript_th: 'จากประวัติศาสตร์อันทรงคุณค่า สู่บริบทใหม่แห่งอนาคต วันนี้ โรงเรียนเต้าหมิงได้รับการยกย่องสูงสุด ด้วยรางวัลอนุรักษ์ศิลปสถาปัตยกรรมดีเด่น ประจำปี ๒๕๖๙ จากสมาคมสถาปนิกสยาม ในพระบรมราชูปถัมภ์ ชุบชีวิตอาคารไม้ร้อยปี สู่เต้าหมิง ครีเอทีฟ ฮับ พื้นที่แห่งการเรียนรู้ ชา กาแฟ นิทรรศการ และตลาดสร้างสรรค์ ที่ซึ่งรากเหง้าในอดีต ผสานเข้ากับพลังของคนรุ่นใหม่อย่างงดงามและยั่งยืน',
+    transcript_en: 'Honored with the Prestigious Architectural Conservation Award 2026 by ASA, Dao Ming opens its next chapter as a living creative hub, connecting heritage roots with future vibrancy.',
+    transcript_zh: '從厚重的歷史篇章，邁向生機盎然的嶄新未來。今日，導明學校榮獲泰國暹羅皇家建築師協會（ASA）「2026年度傑出建築保護大獎」最高榮譽。重煥百年木構建築，蛻變為融合文化展覽、工夫茶席、工藝手作與文創市集的「導明文創樞紐」，讓百年文脈與青年世代的創新能量在此完美交融。'
+  }
+};
+
 export function TimelineSection() {
   const { lang, setAudioGuideOpen } = useApp();
   const [activeYear, setActiveYear] = useState<(typeof YEARS)[number]>("1905");
+  const [isNarrating, setIsNarrating] = useState<boolean>(false);
+  const [narrateTime, setNarrateTime] = useState<number>(0);
+  const [narrateDuration, setNarrateDuration] = useState<number>(45);
+  const [showTranscript, setShowTranscript] = useState<boolean>(false);
+
+  const audioRef = React.useRef<HTMLAudioElement | null>(null);
 
   const isEn = lang === 'en';
   const isZh = lang === 'zh';
   const data = TIMELINE_DATA[activeYear];
+  const audioTrack = AUDIO_CHAPTERS[activeYear];
   const activeIndex = YEARS.indexOf(activeYear);
+
+  // Sync and initialize audio on era change
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    if (!audioRef.current) {
+      audioRef.current = new Audio(audioTrack.src);
+    } else {
+      const prevPlaying = isNarrating;
+      audioRef.current.src = audioTrack.src;
+      audioRef.current.load();
+      if (prevPlaying) {
+        audioRef.current.play().catch(() => setIsNarrating(false));
+      }
+    }
+
+    const audio = audioRef.current;
+
+    const handleLoaded = () => {
+      if (audio.duration && !isNaN(audio.duration)) {
+        setNarrateDuration(audio.duration);
+      }
+    };
+
+    const handleTimeUpdate = () => {
+      setNarrateTime(audio.currentTime);
+    };
+
+    const handleEnded = () => {
+      setIsNarrating(false);
+      setNarrateTime(0);
+    };
+
+    audio.addEventListener('loadedmetadata', handleLoaded);
+    audio.addEventListener('timeupdate', handleTimeUpdate);
+    audio.addEventListener('ended', handleEnded);
+
+    return () => {
+      audio.removeEventListener('loadedmetadata', handleLoaded);
+      audio.removeEventListener('timeupdate', handleTimeUpdate);
+      audio.removeEventListener('ended', handleEnded);
+    };
+  }, [activeYear]);
+
+  // Handle Play/Pause
+  const togglePlayNarration = () => {
+    if (!audioRef.current) return;
+    if (isNarrating) {
+      audioRef.current.pause();
+      setIsNarrating(false);
+    } else {
+      audioRef.current.play().then(() => {
+        setIsNarrating(true);
+      }).catch(() => {
+        setIsNarrating(false);
+      });
+    }
+  };
+
+  const handleSeekNarration = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const targetTime = parseFloat(e.target.value);
+    setNarrateTime(targetTime);
+    if (audioRef.current) {
+      audioRef.current.currentTime = targetTime;
+    }
+  };
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+  };
 
   return (
     <section className="section section-story" id="story">
@@ -209,6 +335,70 @@ export function TimelineSection() {
                   {(isZh ? data.chips_zh : isEn ? data.chips_en : data.chips_th).map((c, i) => (
                     <span key={i} className="chip">{c}</span>
                   ))}
+                </div>
+
+                {/* Inline Oral History Narration Audio Player Card */}
+                <div className={`inline-narration-card ${isNarrating ? 'playing' : ''}`}>
+                  <div className="narration-player-header">
+                    <div className="narration-title-group">
+                      <span className="narration-badge">
+                        <span className="narration-live-dot"></span>
+                        🎧 {isZh ? "歷史口述原音" : isEn ? "ORAL HISTORY AUDIO" : "เสียงบรรยายประวัติศาสตร์"}
+                      </span>
+                      <span className="narration-track-name">
+                        {isZh ? audioTrack.title_zh : isEn ? audioTrack.title_en : audioTrack.title_th}
+                      </span>
+                    </div>
+
+                    <button
+                      className="narration-transcript-toggle"
+                      onClick={() => setShowTranscript(!showTranscript)}
+                      title="ดูบทบรรยาย"
+                    >
+                      {showTranscript ? (isZh ? "收起文字" : isEn ? "Hide Text" : "ซ่อนบทบรรยาย") : (isZh ? "📜 查閱全文" : isEn ? "📜 View Transcript" : "📜 อ่านบทบรรยาย")}
+                    </button>
+                  </div>
+
+                  <div className="narration-controls-row">
+                    <button
+                      className="narration-play-btn"
+                      onClick={togglePlayNarration}
+                      aria-label="Play Narration Audio"
+                      title={isNarrating ? "หยุดชั่วคราว" : "กดฟังเสียงบรรยาย"}
+                    >
+                      <span className="play-icon">{isNarrating ? "⏸" : "▶"}</span>
+                      <span className="play-label">
+                        {isNarrating
+                          ? (isZh ? "暫停收聽" : isEn ? "Pause Audio" : "หยุดชั่วคราว")
+                          : (isZh ? "點擊收聽原音" : isEn ? "Play Narration" : "กดฟังเสียงบรรยาย")}
+                      </span>
+                    </button>
+
+                    <div className="narration-progress-group">
+                      <input
+                        type="range"
+                        min="0"
+                        max={narrateDuration || 100}
+                        step="0.1"
+                        value={narrateTime}
+                        onChange={handleSeekNarration}
+                        className="narration-progress-slider"
+                      />
+                      <div className="narration-time-display">
+                        <span>{formatTime(narrateTime)}</span>
+                        <span>/</span>
+                        <span>{formatTime(narrateDuration)}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {showTranscript && (
+                    <div className="narration-transcript-box">
+                      <p>
+                        {isZh ? audioTrack.transcript_zh : isEn ? audioTrack.transcript_en : audioTrack.transcript_th}
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="tl-photo-card">

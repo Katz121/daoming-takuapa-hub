@@ -82,6 +82,18 @@ export interface EventItem {
   price_zh?: string;
   isFree?: boolean;
   btnType: 'register' | 'details' | 'shops' | 'reserve' | 'tea_simulator';
+  detailed_desc_th?: string;
+  detailed_desc_en?: string;
+  detailed_desc_zh?: string;
+  highlights_th?: string[];
+  highlights_en?: string[];
+  highlights_zh?: string[];
+  schedule_th?: { time: string; activity: string }[];
+  schedule_en?: { time: string; activity: string }[];
+  schedule_zh?: { time: string; activity: string }[];
+  instructor_th?: string;
+  instructor_en?: string;
+  instructor_zh?: string;
 }
 
 export interface CommunityIdea {

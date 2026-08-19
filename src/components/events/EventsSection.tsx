@@ -3,10 +3,13 @@
 import React, { useState } from 'react';
 import { useApp } from '@/lib/store';
 import { EVENTS_LIST } from '@/data/events';
+import { EventItem } from '@/types';
+import { EventDetailModal } from './EventDetailModal';
 
 export function EventsSection() {
   const { lang, t, setTeaModalOpen, showToast } = useApp();
   const [filter, setFilter] = useState<string>('all');
+  const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
 
   const isEn = lang === 'en';
   const isZh = lang === 'zh';
@@ -15,9 +18,15 @@ export function EventsSection() {
     ? EVENTS_LIST
     : EVENTS_LIST.filter(ev => ev.category === filter);
 
-  const handleAction = (ev: (typeof EVENTS_LIST)[0]) => {
+  const handleAction = (ev: EventItem) => {
     if (ev.btnType === 'tea_simulator') {
       setTeaModalOpen(true);
+    } else if (ev.btnType === 'shops') {
+      const target = document.getElementById('visit');
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else if (ev.btnType === 'details') {
+      const target = document.getElementById('archive');
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     } else {
       showToast(
         isZh
@@ -70,11 +79,11 @@ export function EventsSection() {
             const cap = isZh ? ev.cap_zh : isEn ? ev.cap_en : ev.cap_th;
             const price = isZh ? ev.price_zh : isEn ? ev.price_en : ev.price_th;
 
-            let btnLabel = isZh ? "立即登記參加" : isEn ? "Register" : "ลงทะเบียนร่วมกิจกรรม";
-            if (ev.btnType === 'tea_simulator') btnLabel = isZh ? "🍵 體驗茶席與預約" : isEn ? "🍵 Tea Simulator & RSVP" : "🍵 จำลองจิบชา & สำรองที่นั่ง";
-            else if (ev.btnType === 'details') btnLabel = isZh ? "特展詳細資訊" : isEn ? "Details" : "รายละเอียดนิทรรศการ";
-            else if (ev.btnType === 'shops') btnLabel = isZh ? "查看攤位與樂團" : isEn ? "View Shops" : "ดูร้านค้าและตารางดนตรี";
-            else if (ev.btnType === 'reserve') btnLabel = isZh ? "預約講座座席" : isEn ? "Reserve Seat" : "สำรองที่นั่งล่วงหน้า";
+            let btnLabel = isZh ? "立即報名" : isEn ? "Register" : "ลงทะเบียน";
+            if (ev.btnType === 'tea_simulator') btnLabel = isZh ? "🍵 體驗茶席" : isEn ? "🍵 Try Tea RSVP" : "🍵 สำรองจิบชา";
+            else if (ev.btnType === 'details') btnLabel = isZh ? "🏛️ ดูผังนิทรรศการ" : isEn ? "🏛️ View Hall" : "🏛️ ดูนิทรรศการ";
+            else if (ev.btnType === 'shops') btnLabel = isZh ? "📍 ดูพิกัดตลาด" : isEn ? "📍 View Map" : "📍 ดูพิกัดตลาด";
+            else if (ev.btnType === 'reserve') btnLabel = isZh ? "🎟️ จองที่นั่ง" : isEn ? "🎟️ Reserve Seat" : "🎟️ สำรองที่นั่ง";
 
             const tagClass = ev.category === 'workshop'
               ? 'workshop-tag'
@@ -86,16 +95,32 @@ export function EventsSection() {
 
             return (
               <div key={ev.id} className="event-card" data-category={ev.category}>
-                <div className="event-card-img-wrap">
+                <div
+                  className="event-card-img-wrap"
+                  onClick={() => setSelectedEvent(ev)}
+                  style={{ cursor: 'pointer' }}
+                  title={isZh ? "點擊查看活動詳情" : isEn ? "Click to view full event details" : "คลิกเพื่อดูรายละเอียดเชิงลึก"}
+                >
                   <img src={ev.image} alt={title} loading="lazy" />
                   <div className={`event-header-tag ${tagClass}`}>{tag}</div>
+                  <div className="event-click-hint">
+                    <span>🔍 {isZh ? "查看詳細內容" : isEn ? "View Details" : "ดูรายละเอียด"}</span>
+                  </div>
                 </div>
+
                 <div className="event-card-body">
-                  <div className="event-date-box">
+                  <div className="event-date-box" onClick={() => setSelectedEvent(ev)} style={{ cursor: 'pointer' }}>
                     <span className="ev-day">{day}</span>
                     <span className="ev-month">{month}</span>
                   </div>
-                  <h3 className="event-title">{title}</h3>
+                  <h3
+                    className="event-title"
+                    onClick={() => setSelectedEvent(ev)}
+                    style={{ cursor: 'pointer' }}
+                    title={isZh ? "點擊查看活動詳情" : isEn ? "Click to view details" : "คลิกเพื่อดูรายละเอียด"}
+                  >
+                    {title}
+                  </h3>
                   <p className="event-snippet">{snippet}</p>
                   <div className="event-meta-info">
                     <span>{loc}</span>
@@ -104,9 +129,21 @@ export function EventsSection() {
                   </div>
                   <div className="event-card-footer">
                     <span className={`event-price ${ev.isFree ? 'highlight-free' : ''}`}>{price}</span>
-                    <button className="btn btn-outline-sm" onClick={() => handleAction(ev)}>
-                      {btnLabel}
-                    </button>
+                    <div className="event-card-btn-group">
+                      <button
+                        className="btn btn-secondary-sm"
+                        onClick={() => setSelectedEvent(ev)}
+                        title={isZh ? "查看完整內容" : isEn ? "View Full Details" : "ดูรายละเอียดกิจกรรม"}
+                      >
+                        {isZh ? "รายละเอียด" : isEn ? "Details" : "รายละเอียด"}
+                      </button>
+                      <button
+                        className="btn btn-outline-sm"
+                        onClick={() => handleAction(ev)}
+                      >
+                        {btnLabel}
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -114,6 +151,13 @@ export function EventsSection() {
           })}
         </div>
       </div>
+
+      {/* Pop-up Full Event Detail Modal */}
+      <EventDetailModal
+        event={selectedEvent}
+        onClose={() => setSelectedEvent(null)}
+        onAction={handleAction}
+      />
     </section>
   );
 }

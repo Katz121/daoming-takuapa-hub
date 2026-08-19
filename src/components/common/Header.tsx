@@ -19,7 +19,7 @@ export function Header() {
       <header className="site-header" id="siteHeader">
         <div className="header-container">
           <a href="#hero" className="brand-logo">
-            <img src="/assets/logo-305.jpg" alt="โลโก้โรงเรียนเต้าหมิง" className="brand-logo-img" />
+            <img src="/assets/logo.jpg" alt="โลโก้โรงเรียนเต้าหมิง" className="brand-logo-img" />
             <div className="brand-text">
               <span className="brand-title">{t('brand_title')}</span>
               <span className="brand-sub">{t('brand_sub')}</span>
@@ -77,7 +77,7 @@ export function Header() {
       <div className={`mobile-drawer ${isDrawerOpen ? 'open' : ''}`} id="mobileDrawer">
         <div className="drawer-header">
           <div className="brand-logo">
-            <img src="/assets/logo-305.jpg" alt="โลโก้โรงเรียนเต้าหมิง" className="brand-logo-img" />
+            <img src="/assets/logo.jpg" alt="โลโก้โรงเรียนเต้าหมิง" className="brand-logo-img" />
             <div className="brand-text">
               <span className="brand-title">{t('brand_title')}</span>
               <span className="brand-sub">DAO MING CREATIVE HUB</span>

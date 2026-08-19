@@ -43,7 +43,7 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: '/favicon.ico' },
-      { url: '/assets/logo-305.jpg', type: 'image/jpeg' }
+      { url: '/assets/logo.jpg', type: 'image/jpeg' }
     ],
     apple: [
       { url: '/apple-touch-icon.png' }
@@ -66,7 +66,7 @@ export default function RootLayout({
     <html lang="th" className="scroll-smooth">
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" type="image/jpeg" href="/assets/logo-305.jpg" />
+        <link rel="icon" type="image/jpeg" href="/assets/logo.jpg" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <script
           type="application/ld+json"

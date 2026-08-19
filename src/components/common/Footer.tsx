@@ -20,7 +20,7 @@ export function Footer() {
       <div className="container footer-content">
         <div className="footer-brand">
           <div className="brand-logo">
-            <img src="/assets/logo-305.jpg" alt="โลโก้โรงเรียนเต้าหมิง" className="brand-logo-img" />
+            <img src="/assets/logo.jpg" alt="โลโก้โรงเรียนเต้าหมิง" className="brand-logo-img" />
             <div className="brand-text">
               <span className="brand-title">{t('brand_title')}</span>
               <span className="brand-sub">{t('brand_sub')}</span>

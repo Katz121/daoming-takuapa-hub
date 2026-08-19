@@ -40,6 +40,7 @@
 
 | Master Key | Purpose | Update Event Dispatched |
 | :--- | :--- | :--- |
+| `daoming_permanent_users_master` | Member accounts, roles, auth passwords & permissions | `daoming_users_updated` |
 | `daoming_permanent_site_copy_master` | Hero texts, ASA award badge, Slogans, Vision, Contact | `daoming_site_copy_updated` |
 | `daoming_permanent_gables_master` | 5 Gable symbols (Tiangong pillar, Cloud base, Triangle, Sun 12-ray, Dome capitals) | `daoming_gables_updated` |
 | `daoming_permanent_timeline_master` | 4 Historical Era Milestones (1905, 1950, 1990, 2026) | `daoming_timeline_updated` |
@@ -49,20 +50,21 @@
 | `daoming_permanent_ideas_master` | Community proposals & votes | `storage` |
 
 ### Database Backup & Restore:
-- **Export Full Database:** ดาวน์โหลดไฟล์ JSON ก้อนเดียวรวมทุก Master Table
+- **Export Full Database:** ดาวน์โหลดไฟล์ JSON ก้อนเดียวรวมทุก Master Table (รวมรายชื่อสมาชิกและสิทธิ์)
 - **Import Full Database:** อัปโหลด JSON เพื่อกู้คืนหรือ Sync ข้ามเครื่อง พร้อมระบบ Merge ป้องกันการบันทึกซ้ำ
 
 ---
 
 ## 4. Admin Portal CMS Structure (`/admin`)
 
-- **Tab 1: 📅 จัดการกิจกรรม (Events CMS)** — เพิ่ม/แก้ไข/ลบ เวิร์กช็อป จิบชาเปอยี่ นิทรรศการ, กำหนดจำนวนที่นั่ง, เวลา และราคา
-- **Tab 2: 🖼️ คลังภาพ & เรื่องเล่า (Archive Photos CMS)** — จัดการภาพประวัติศาสตร์ 3 ภาษา พร้อมปุ่มอัปโหลดรูป
-- **Tab 3: 📝 ข้อความ & เนื้อหาเว็บ (Site Copy CMS)** — จัดการข้อความหน้าแรก, ปรัชญาหน้าจั่ว ๕ สัญลักษณ์, ประวัติศาสตร์ ๔ ยุค, วิสัยทัศน์ และข้อมูลติดต่อ
-- **Tab 4: 🎫 สแกนตั๋ว & รายชื่อ (Ticket Scanner & Verification)** — สแกน QR Code หน้างาน, ค้นหารหัสตั๋ว `DM-VIP-XXXX`, ปุ่มบันทึก Check-in
-- **Tab 5: 🏛️ จองพื้นที่ & อนุมัติ (Space Proposals)** — ตรวจสอบและอนุมัติการขอใช้พื้นที่จัดกิจกรรม (โถงอั้งม่อเหลา, คราฟต์สตูดิโอ, ลานวัฒนธรรม, ระเบียงไม้)
-- **Tab 6: 💡 ไอเดียชุมชน (Community Ideas)** — ตรวจสอบข้อเสนอแนะจากชาวตะกั่วป่า
-- **Tab 7: 📊 รายงาน & สำรองข้อมูล (Reports & Backup)** — ดาวน์โหลด CSV และระบบ Export / Import Master JSON
+- **Tab 1: 👥 สมาชิก & สิทธิ์ (Users & Roles)** — จัดการสมาชิกและสิทธิ์การเข้าใช้งาน, Super Admin (`admin/takuapa2569`) แต่งตั้งสิทธิ์ (Super Admin, Officer, Staff, Member), อนุมัติผู้สมัครใหม่, รีเซ็ตรหัสผ่าน และระงับบัญชี
+- **Tab 2: 📅 จัดการกิจกรรม (Events CMS)** — เพิ่ม/แก้ไข/ลบ เวิร์กช็อป จิบชาเปอยี่ นิทรรศการ, กำหนดจำนวนที่นั่ง, เวลา และราคา
+- **Tab 3: 🖼️ คลังภาพ & เรื่องเล่า (Archive Photos CMS)** — จัดการภาพประวัติศาสตร์ 3 ภาษา พร้อมปุ่มอัปโหลดรูป
+- **Tab 4: 📝 ข้อความ & เนื้อหาเว็บ (Site Copy CMS)** — จัดการข้อความหน้าแรก, ปรัชญาหน้าจั่ว ๕ สัญลักษณ์, ประวัติศาสตร์ ๔ ยุค, วิสัยทัศน์ และข้อมูลติดต่อ
+- **Tab 5: 🎫 สแกนตั๋ว & รายชื่อ (Ticket Scanner & Verification)** — สแกน QR Code หน้างาน, ค้นหารหัสตั๋ว `DM-VIP-XXXX`, ปุ่มบันทึก Check-in
+- **Tab 6: 🏛️ จองพื้นที่ & อนุมัติ (Space Proposals)** — ตรวจสอบและอนุมัติการขอใช้พื้นที่จัดกิจกรรม (โถงอั้งม่อเหลา, คราฟต์สตูดิโอ, ลานวัฒนธรรม, ระเบียงไม้)
+- **Tab 7: 💡 ไอเดียชุมชน (Community Ideas)** — ตรวจสอบข้อเสนอแนะจากชาวตะกั่วป่า
+- **Tab 8: 📊 รายงาน & สำรองข้อมูล (Reports & Backup)** — ดาวน์โหลด CSV และระบบ Export / Import Master JSON
 
 ---
 

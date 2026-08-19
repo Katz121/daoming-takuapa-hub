@@ -141,3 +141,21 @@ export interface SpaceZone {
   vent_en: string;
   vent_zh?: string;
 }
+
+export type UserRole = 'superadmin' | 'officer' | 'staff' | 'member';
+export type UserStatus = 'active' | 'pending' | 'suspended';
+
+export interface SystemUser {
+  id: string;
+  username: string;
+  password: string;
+  full_name: string;
+  role: UserRole;
+  status: UserStatus;
+  phone?: string;
+  email?: string;
+  department?: string;
+  created_at: string;
+  last_login?: string | null;
+  notes?: string;
+}

@@ -3,7 +3,49 @@ import { INITIAL_IDEAS } from '@/data/ideas';
 import { EVENTS_LIST } from '@/data/events';
 import { ARCHIVE_PHOTOS } from '@/data/archive';
 import { GABLE_SYMBOLS } from '@/data/gables';
-import { EventItem, ArchivePhoto, GableSymbol } from '@/types';
+import { EventItem, ArchivePhoto, GableSymbol, SystemUser, UserRole, UserStatus } from '@/types';
+
+export const DEFAULT_USERS: SystemUser[] = [
+  {
+    id: "user-superadmin-01",
+    username: "admin",
+    password: "takuapa2569",
+    full_name: "ผู้ดูแลระบบสูงสุด (Super Admin)",
+    role: "superadmin",
+    status: "active",
+    phone: "0813703883",
+    email: "pook.kanokpon@gmail.com",
+    department: "คณะกรรมการมูลนิธิโรงเรียนเต้าหมิง",
+    created_at: "2026-08-01T00:00:00.000Z",
+    notes: "บัญชีผู้ดูแลระบบสูงสุด มีสิทธิ์แต่งตั้งและจัดการสิทธิ์สมาชิกทุกคน"
+  },
+  {
+    id: "user-officer-01",
+    username: "officer_heritage",
+    password: "daoming2026",
+    full_name: "เจ้าหน้าที่มรดกวัฒนธรรม (Heritage Officer)",
+    role: "officer",
+    status: "active",
+    phone: "081-998-1122",
+    email: "heritage@daominghub.org",
+    department: "ฝ่ายกิจกรรม & คลังภาพ",
+    created_at: "2026-08-10T00:00:00.000Z",
+    notes: "สิทธิ์จัดการกิจกรรม คลังภาพ และตรวจสอบตั๋ว"
+  },
+  {
+    id: "user-staff-01",
+    username: "staff_takuapa",
+    password: "2465",
+    full_name: "เจ้าหน้าที่ต้อนรับ & สแกนตั๋วหน้างาน",
+    role: "staff",
+    status: "active",
+    phone: "076-421-305",
+    email: "staff@daominghub.org",
+    department: "ฝ่ายต้อนรับ & ทะเบียน",
+    created_at: "2026-08-15T00:00:00.000Z",
+    notes: "สิทธิ์สแกน QR Code ตั๋ว และเช็คอินผู้เข้าร่วม"
+  }
+];
 
 export interface SiteCopyData {
   // HERO SECTION
@@ -262,6 +304,7 @@ const MASTER_KEYS = {
   SITE_COPY: 'daoming_permanent_site_copy_master',
   GABLES: 'daoming_permanent_gables_master',
   TIMELINE: 'daoming_permanent_timeline_master',
+  USERS: 'daoming_permanent_users_master',
 };
 
 const LEGACY_KEYS = {
@@ -913,13 +956,192 @@ export const clientDb = {
   },
 
   // =========================================================================
+  // USER & MEMBER MANAGEMENT (Survives Git Pushes & Builds)
+  // =========================================================================
+  getUsers(): SystemUser[] {
+    if (typeof window === 'undefined') return DEFAULT_USERS;
+    try {
+      const stored = localStorage.getItem(MASTER_KEYS.USERS);
+      if (!stored) {
+        localStorage.setItem(MASTER_KEYS.USERS, JSON.stringify(DEFAULT_USERS));
+        return DEFAULT_USERS;
+      }
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        // Ensure superadmin always exists
+        const hasAdmin = parsed.some(u => u.username === 'admin');
+        if (!hasAdmin) {
+          const merged = [DEFAULT_USERS[0], ...parsed];
+          localStorage.setItem(MASTER_KEYS.USERS, JSON.stringify(merged));
+          return merged;
+        }
+        return parsed;
+      }
+      return DEFAULT_USERS;
+    } catch {
+      return DEFAULT_USERS;
+    }
+  },
+
+  getUserById(id: string): SystemUser | null {
+    const users = this.getUsers();
+    return users.find(u => u.id === id) || null;
+  },
+
+  getUserByUsername(username: string): SystemUser | null {
+    const users = this.getUsers();
+    const clean = username.trim().toLowerCase();
+    return users.find(u => u.username.toLowerCase() === clean) || null;
+  },
+
+  authenticate(username: string, pass: string): { success: boolean; user?: SystemUser; message: string } {
+    const cleanUser = username.trim().toLowerCase();
+    const cleanPass = pass.trim();
+
+    if (!cleanUser || !cleanPass) {
+      return { success: false, message: 'กรุณากรอกชื่อผู้ใช้และรหัสผ่าน' };
+    }
+
+    const users = this.getUsers();
+    const found = users.find(u => u.username.toLowerCase() === cleanUser);
+
+    if (!found) {
+      return { success: false, message: 'ไม่พบชื่อผู้ใช้นี้ในระบบ' };
+    }
+
+    if (found.password !== cleanPass) {
+      return { success: false, message: 'รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง' };
+    }
+
+    if (found.status === 'pending') {
+      return { success: false, message: 'บัญชีนี้อยู่ระหว่างรอการอนุมัติสิทธิ์จากผู้ดูแลระบบสูงสุด' };
+    }
+
+    if (found.status === 'suspended') {
+      return { success: false, message: 'บัญชีนี้ถูกระงับการใช้งานชั่วคราว กรุณาติดต่อผู้ดูแลระบบ' };
+    }
+
+    // Update last login
+    this.updateUser(found.id, { last_login: new Date().toISOString() });
+
+    return {
+      success: true,
+      user: { ...found, last_login: new Date().toISOString() },
+      message: `ยินดีต้อนรับคุณ ${found.full_name || found.username}`
+    };
+  },
+
+  createUser(userData: {
+    username: string;
+    password: string;
+    full_name: string;
+    role?: UserRole;
+    status?: UserStatus;
+    phone?: string;
+    email?: string;
+    department?: string;
+    notes?: string;
+  }): { success: boolean; user?: SystemUser; message: string } {
+    const cleanUser = userData.username.trim().toLowerCase();
+    if (!cleanUser || cleanUser.length < 3) {
+      return { success: false, message: 'ชื่อผู้ใช้ต้องมีความยาวอย่างน้อย 3 ตัวอักษร' };
+    }
+
+    if (!userData.password || userData.password.length < 4) {
+      return { success: false, message: 'รหัสผ่านต้องมีความยาวอย่างน้อย 4 ตัวอักษร' };
+    }
+
+    const users = this.getUsers();
+    if (users.some(u => u.username.toLowerCase() === cleanUser)) {
+      return { success: false, message: `ชื่อผู้ใช้ "${cleanUser}" มีอยู่ในระบบแล้ว` };
+    }
+
+    const newUser: SystemUser = {
+      id: `user-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+      username: cleanUser,
+      password: userData.password,
+      full_name: userData.full_name || cleanUser,
+      role: userData.role || 'member',
+      status: userData.status || 'pending',
+      phone: userData.phone || '',
+      email: userData.email || '',
+      department: userData.department || 'สมาชิกทั่วไป',
+      created_at: new Date().toISOString(),
+      last_login: null,
+      notes: userData.notes || ''
+    };
+
+    const updated = [newUser, ...users];
+    localStorage.setItem(MASTER_KEYS.USERS, JSON.stringify(updated));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('daoming_users_updated'));
+    }
+
+    return {
+      success: true,
+      user: newUser,
+      message: userData.status === 'active' 
+        ? `เพิ่มสมาชิก "${newUser.full_name}" สำเร็จ` 
+        : 'ลงทะเบียนสมาชิกสำเร็จ อยู่ระหว่างรอ Super Admin อนุมัติสิทธิ์'
+    };
+  },
+
+  updateUser(id: string, updatedFields: Partial<SystemUser>): { success: boolean; message: string } {
+    const users = this.getUsers();
+    const idx = users.findIndex(u => u.id === id);
+    if (idx === -1) return { success: false, message: 'ไม่พบผู้ใช้ในระบบ' };
+
+    // Prevent demoting primary superadmin username
+    if (users[idx].username === 'admin' && updatedFields.role && updatedFields.role !== 'superadmin') {
+      return { success: false, message: 'ไม่อนุญาตให้ลดสิทธิ์บัญชีผู้ดูแลหลัก (admin)' };
+    }
+
+    if (users[idx].username === 'admin' && updatedFields.status && updatedFields.status !== 'active') {
+      return { success: false, message: 'ไม่อนุญาตให้ระงับบัญชีผู้ดูแลหลัก (admin)' };
+    }
+
+    users[idx] = { ...users[idx], ...updatedFields };
+    localStorage.setItem(MASTER_KEYS.USERS, JSON.stringify(users));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('daoming_users_updated'));
+    }
+    return { success: true, message: 'บันทึกการแก้ไขข้อมูลผู้ใช้สำเร็จ' };
+  },
+
+  deleteUser(id: string): { success: boolean; message: string } {
+    const users = this.getUsers();
+    const target = users.find(u => u.id === id);
+    if (!target) return { success: false, message: 'ไม่พบผู้ใช้ที่ต้องการลบ' };
+
+    if (target.username === 'admin') {
+      return { success: false, message: 'ไม่อนุญาตให้ลบบัญชีผู้ดูแลหลัก (admin)' };
+    }
+
+    const filtered = users.filter(u => u.id !== id);
+    localStorage.setItem(MASTER_KEYS.USERS, JSON.stringify(filtered));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('daoming_users_updated'));
+    }
+    return { success: true, message: `ลบสมาชิก "${target.full_name}" เรียบร้อยแล้ว` };
+  },
+
+  resetUsers(): SystemUser[] {
+    localStorage.setItem(MASTER_KEYS.USERS, JSON.stringify(DEFAULT_USERS));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('daoming_users_updated'));
+    }
+    return DEFAULT_USERS;
+  },
+
+  // =========================================================================
   // DATABASE BACKUP & RESTORE UTILITIES
   // =========================================================================
   exportFullDatabase() {
     return {
-      version: "2.2",
+      version: "2.3",
       exported_at: new Date().toISOString(),
       organization: "Dao Ming Foundation Takua Pa",
+      users: this.getUsers(),
       bookings: this.getBookings(),
       ideas: this.getIdeas(),
       events: this.getEvents(),
@@ -930,17 +1152,27 @@ export const clientDb = {
     };
   },
 
-  importFullDatabase(jsonData: any): { success: boolean; message: string; count: { bookings: number; ideas: number; events: number; archive?: number; site_copy?: boolean } } {
+  importFullDatabase(jsonData: any): { success: boolean; message: string; count: { users?: number; bookings: number; ideas: number; events: number; archive?: number; site_copy?: boolean } } {
     try {
       if (!jsonData || typeof jsonData !== 'object') {
         return { success: false, message: 'Invalid JSON format', count: { bookings: 0, ideas: 0, events: 0, archive: 0 } };
       }
 
+      let uCount = 0;
       let bCount = 0;
       let iCount = 0;
       let eCount = 0;
       let aCount = 0;
       let copyImported = false;
+
+      if (Array.isArray(jsonData.users)) {
+        const current = this.getUsers();
+        const existingUsernames = new Set(current.map(u => u.username.toLowerCase()));
+        const toAdd = jsonData.users.filter((u: SystemUser) => u && u.username && !existingUsernames.has(u.username.toLowerCase()));
+        const merged = [...toAdd, ...current];
+        localStorage.setItem(MASTER_KEYS.USERS, JSON.stringify(merged));
+        uCount = toAdd.length;
+      }
 
       if (Array.isArray(jsonData.bookings)) {
         const current = this.getBookings();
@@ -992,6 +1224,7 @@ export const clientDb = {
       }
 
       if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('daoming_users_updated'));
         window.dispatchEvent(new CustomEvent('daoming_archive_updated'));
         window.dispatchEvent(new CustomEvent('daoming_site_copy_updated'));
         window.dispatchEvent(new CustomEvent('daoming_gables_updated'));
@@ -1000,8 +1233,8 @@ export const clientDb = {
 
       return {
         success: true,
-        message: `ผสานข้อมูลสำเร็จ: นำเข้าตั๋ว/คำขอ ${bCount} รายการ, ไอเดีย ${iCount} ข้อเสนอ, กิจกรรม ${eCount} รายการ, คลังภาพ ${aCount} ภาพ${copyImported ? ', ข้อความเว็บไซต์' : ''}`,
-        count: { bookings: bCount, ideas: iCount, events: eCount, archive: aCount, site_copy: copyImported }
+        message: `ผสานข้อมูลสำเร็จ: นำเข้าสมาชิก ${uCount} ท่าน, ตั๋ว/คำขอ ${bCount} รายการ, ไอเดีย ${iCount} ข้อเสนอ, กิจกรรม ${eCount} รายการ, คลังภาพ ${aCount} ภาพ${copyImported ? ', ข้อความเว็บไซต์' : ''}`,
+        count: { users: uCount, bookings: bCount, ideas: iCount, events: eCount, archive: aCount, site_copy: copyImported }
       };
     } catch (err: any) {
       return { success: false, message: err.message, count: { bookings: 0, ideas: 0, events: 0, archive: 0 } };

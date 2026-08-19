@@ -42,12 +42,15 @@ export const metadata: Metadata = {
   keywords: ["เต้าหมิง", "ตะกั่วป่า", "พังงา", "โรงเรียนจีน", "สถาปัตยกรรม", "ASA 2569", "ชิโนโปรตุกีส", "Dao Ming School", "Living Heritage"],
   icons: {
     icon: [
-      { url: '/favicon.ico' },
-      { url: '/assets/logo.png', type: 'image/png' }
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon-32x32.png', type: 'image/png', sizes: '32x32' },
+      { url: '/favicon-16x16.png', type: 'image/png', sizes: '16x16' },
+      { url: '/assets/logo.png', type: 'image/png', sizes: '512x512' }
     ],
     apple: [
-      { url: '/apple-touch-icon.png' }
-    ]
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }
+    ],
+    shortcut: ['/favicon.ico']
   },
   openGraph: {
     title: "โรงเรียนเต้าหมิง ตะกั่วป่า | Dao Ming Living Heritage & Creative Hub",

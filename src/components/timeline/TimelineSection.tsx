@@ -163,9 +163,28 @@ export function TimelineSection() {
     <section className="section section-story" id="story">
       <div className="container">
         <div className="section-heading text-center">
-          <div className="section-tag">{copy.story_tag || "AUTHENTIC HISTORY & FOUNDATION"}</div>
+          <div className="section-tag">{copy.story_tag || "TIMELINE & HERITAGE"}</div>
           <h2 className="section-title">
-            {isZh ? (copy.story_title_zh || "導明學校百年歷史淵源") : isEn ? (copy.story_title_en || "Authentic History of Dao Ming School") : (copy.story_title_th || 'ประวัติศาสตร์ความเป็นมา "โรงเรียนเต้าหมิง"')}
+            {(() => {
+              const rawTitle = isZh
+                ? (copy.story_title_zh || "導明學校120年歷史篇章 (Chronological Milestones)")
+                : isEn
+                  ? (copy.story_title_en || "120-Year Milestones: The Journey of Dao Ming")
+                  : (copy.story_title_th || "ลำดับกาลเวลา ๑๒๐ ปี เต้าหมิง (Chronological Milestones)");
+
+              const match = rawTitle.match(/^(.*?)\s*(\(.*?\))$/);
+              if (match) {
+                return (
+                  <span style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: '2px', textAlign: 'center' }}>
+                    <span style={{ display: 'block' }}>{match[1].trim()}</span>
+                    <span style={{ display: 'block', fontSize: 'clamp(1.05rem, 2.2vw, 1.4rem)', fontWeight: '600', color: 'var(--color-terracotta, #C44D27)', opacity: 0.95, letterSpacing: '0.5px' }}>
+                      {match[2].trim()}
+                    </span>
+                  </span>
+                );
+              }
+              return rawTitle;
+            })()}
           </h2>
           <p className="section-subtitle">
             {isZh
@@ -237,7 +256,21 @@ export function TimelineSection() {
         <div className="timeline-container">
           <div className="timeline-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
             <div>
-              <h3>{isZh ? (copy.story_title_zh || "導明學校120年編年史") : isEn ? (copy.story_title_en || "120-Year Chronological Milestones") : (copy.story_title_th || "ลำดับกาลเวลา ๑๒๐ ปี เต้าหมิง (Chronological Milestones)")}</h3>
+              <h3>
+                {(() => {
+                  const rawTitle = isZh ? (copy.story_title_zh || "導明學校120年編年史") : isEn ? (copy.story_title_en || "120-Year Chronological Milestones") : (copy.story_title_th || "ลำดับกาลเวลา ๑๒๐ ปี เต้าหมิง (Chronological Milestones)");
+                  const match = rawTitle.match(/^(.*?)\s*(\(.*?\))$/);
+                  if (match) {
+                    return (
+                      <span style={{ display: 'inline-flex', alignItems: 'baseline', gap: '8px', flexWrap: 'wrap' }}>
+                        <span>{match[1].trim()}</span>
+                        <span style={{ fontSize: '0.85em', fontWeight: '500', color: 'var(--color-terracotta, #C44D27)' }}>{match[2].trim()}</span>
+                      </span>
+                    );
+                  }
+                  return rawTitle;
+                })()}
+              </h3>
               <p>{isZh ? (copy.story_subtitle_zh || "點選各個時期，探索歷史文獻與珍貴原照") : isEn ? (copy.story_subtitle_en || "Click through each era to study historical milestones and photographic evidence") : (copy.story_subtitle_th || "คลิกเลือกยุคสมัยเพื่อศึกษาประวัติศาสตร์และหลักฐานที่บันทึกไว้")}</p>
             </div>
             <button

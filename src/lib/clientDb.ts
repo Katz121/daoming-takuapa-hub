@@ -2,7 +2,209 @@ import QRCode from 'qrcode';
 import { INITIAL_IDEAS } from '@/data/ideas';
 import { EVENTS_LIST } from '@/data/events';
 import { ARCHIVE_PHOTOS } from '@/data/archive';
-import { EventItem, ArchivePhoto } from '@/types';
+import { GABLE_SYMBOLS } from '@/data/gables';
+import { EventItem, ArchivePhoto, GableSymbol } from '@/types';
+
+export interface SiteCopyData {
+  // HERO SECTION
+  hero_award_th: string;
+  hero_award_en: string;
+  hero_award_zh: string;
+  hero_badge_th: string;
+  hero_badge_en: string;
+  hero_badge_zh: string;
+  hero_title_th: string;
+  hero_title_en: string;
+  hero_title_zh: string;
+  hero_desc_th: string;
+  hero_desc_en: string;
+  hero_desc_zh: string;
+  hero_stat_1_val: string;
+  hero_stat_1_lbl_th: string;
+  hero_stat_1_lbl_en: string;
+  hero_stat_1_lbl_zh: string;
+  hero_stat_2_val: string;
+  hero_stat_2_lbl_th: string;
+  hero_stat_2_lbl_en: string;
+  hero_stat_2_lbl_zh: string;
+
+  // GABLE SECTION
+  gable_tag: string;
+  gable_title_th: string;
+  gable_title_en: string;
+  gable_title_zh: string;
+  gable_subtitle_th: string;
+  gable_subtitle_en: string;
+  gable_subtitle_zh: string;
+
+  // TIMELINE & STORIES SECTION
+  story_tag: string;
+  story_title_th: string;
+  story_title_en: string;
+  story_title_zh: string;
+  story_subtitle_th: string;
+  story_subtitle_en: string;
+  story_subtitle_zh: string;
+
+  // VISION SECTION
+  vision_tag: string;
+  vision_title_th: string;
+  vision_title_en: string;
+  vision_title_zh: string;
+  vision_subtitle_th: string;
+  vision_subtitle_en: string;
+  vision_subtitle_zh: string;
+
+  // CONTACT & FOOTER
+  contact_phone: string;
+  contact_email: string;
+  contact_address_th: string;
+  contact_address_en: string;
+  contact_hours_th: string;
+  contact_hours_en: string;
+}
+
+export const DEFAULT_SITE_COPY: SiteCopyData = {
+  // HERO SECTION
+  hero_award_th: "รางวัลอนุรักษ์ศิลปสถาปัตยกรรม ประจำปี ๒๕๖๙ · สมาคมสถาปนิกสยามฯ (ASA)",
+  hero_award_en: "Architectural Conservation Award 2026 · The Association of Siamese Architects (ASA)",
+  hero_award_zh: "泰國暹羅皇家建築師協會 (ASA) 2026年度傑出建築保護大獎",
+
+  hero_badge_th: "โรงเรียนจีนแห่งแรกและแห่งเดียวของ จ.พังงา · ก่อตั้ง พ.ศ. ๒๔๔๘ / อาคาร พ.ศ. ๒๔๖๕",
+  hero_badge_en: "First & Only Chinese School in Phang Nga · Founded 1905 / Building 1922",
+  hero_badge_zh: "攀牙府首所也是唯一百年華校 · 1905年創辦 / 1922年建校舍",
+
+  hero_title_th: "คืนชีวิตให้ เส้นทางแห่งแสงสว่าง เติมพลังสร้างสรรค์สู่อนาคต",
+  hero_title_en: "Revitalizing a Century-Old Path of Light · Empowering a Creative Future",
+  hero_title_zh: "重煥百年 明德指引之路 · 賦能老城文創 永續未來",
+
+  hero_desc_th: "จาก \"โต๊ะเบ๋ง\" สู่ \"เต้าหมิง\" โรงเรียนจีนแห่งแรกของจังหวัดพังงาที่สร้างขึ้นโดยการลงขันของคหบดีเหมืองแร่และช่างผาวในปี 2465 สู่การเป็น มรดกที่มีชีวิต (Living Heritage) ภายใต้มูลนิธิโรงเรียนเต้าหมิง ตะกั่วป่า เพื่อการเรียนรู้ วัฒนธรรม และพื้นที่สร้างสรรค์ของทุกคน",
+  hero_desc_en: "From \"Toh Beng\" to \"Dao Ming\", the premier Chinese academy in Phang Nga founded by tin mining merchants and Master Pao in 1922, thoughtfully transformed into a Living Heritage cultural & creative hub for all generations.",
+  hero_desc_zh: "從「卓明（โต๊ะเบ๋ง）」到「導明（導明學校）」——這所於1922年由華人礦商集資、閩南名匠包師傅親手築造的攀牙府開山華校，如今在基金會守護下全面活化，蛻變為凝聚跨世代情感與文創能量的「活態文化遺產（Living Heritage）」。",
+
+  hero_stat_1_val: "120+",
+  hero_stat_1_lbl_th: "ปี นับแต่เริ่มก่อตั้ง พ.ศ. 2448 (โต๊ะเบ๋ง)",
+  hero_stat_1_lbl_en: "Years of Legacy since 1905 (Toh Beng)",
+  hero_stat_1_lbl_zh: "年歷史厚度 (自1905年創辦)",
+
+  hero_stat_2_val: "1922",
+  hero_stat_2_lbl_th: "ปีสร้างอาคารอั้งม่อเหลา โดยนายผาว",
+  hero_stat_2_lbl_en: "Year Schoolhouse Built by Master Pao",
+  hero_stat_2_lbl_zh: "年包師傅掌墨興建紅毛樓校舍",
+
+  // GABLE SECTION
+  gable_tag: "COSMIC FACADE PHILOSOPHY",
+  gable_title_th: "ถอดรหัสปรัชญาหน้าจั่ว: \"ภาพจำลองจักรวาล ฟ้า-ดิน-คน\"",
+  gable_title_en: "Decoding the Cosmic Facade: \"Universe, Heaven, Earth & Humanity\"",
+  gable_title_zh: "解碼山牆哲學：「宇宙、天地人三才圖象」",
+
+  gable_subtitle_th: "หน้าจั่วอาคารเต้าหมิงได้รับการออกแบบอย่างลึกซึ้งตามคติเต๋าและปรัชญาจีนโบราณ สื่อถึงพลังงาน ปัญญา และการศึกษา",
+  gable_subtitle_en: "The Dao Ming pediment embodies deep Taoist cosmology and Chinese philosophy, channeling cosmic wisdom and perpetual education.",
+  gable_subtitle_zh: "導明學校山牆深度融匯道家宇宙觀與中華傳統哲學，象徵接引天心靈氣、生生不息啟迪後進。",
+
+  // TIMELINE & STORIES SECTION
+  story_tag: "TIMELINE & HERITAGE",
+  story_title_th: "ลำดับกาลเวลา ๑๒๐ ปี เต้าหมิง (Chronological Milestones)",
+  story_title_en: "120-Year Milestones: The Journey of Dao Ming",
+  story_title_zh: "導明學校120年歷史篇章 (Chronological Milestones)",
+
+  story_subtitle_th: "จากโรงเรียนจีนแห่งแรกของพังงาสู่รางวัลอนุรักษ์สถาปัตยกรรมระดับชาติ พ.ศ. ๒๕๖๙",
+  story_subtitle_en: "From the first Chinese academy in Phang Nga to the National Architectural Conservation Award 2026.",
+  story_subtitle_zh: "從攀牙府首座華校到榮獲2026年國家級建築保護殊榮的世紀歷程。",
+
+  // VISION SECTION
+  vision_tag: "REVITALIZATION & LIVING HERITAGE",
+  vision_title_th: "โครงการ: \"เต้าหมิง - บริบทใหม่ในเมืองตะกั่วป่า\"",
+  vision_title_en: "Project: \"Dao Ming - A Living Heritage in Takua Pa\"",
+  vision_title_zh: "活化願景：「導明 · 老城新生新語境」",
+
+  vision_subtitle_th: "การฟื้นฟูมรดกที่มีชีวิต ผสานการอนุรักษ์เชิงกายภาพ คุณค่าทางวัฒนธรรม การท่องเที่ยวเชิงนิเวศ และการมีส่วนร่วมของชุมชน",
+  vision_subtitle_en: "Living heritage revitalisation integrating architectural conservation, cultural identity, eco-tourism, and community engagement.",
+  vision_subtitle_zh: "融合建築本體修復、文化認同復興、生態慢遊與跨世代社群參與的活態遺產典範。",
+
+  // CONTACT & FOOTER
+  contact_phone: "0813703883",
+  contact_email: "pook.kanokpon@gmail.com",
+  contact_address_th: "ถนนศรีตะกั่วป่า ตำบลตลาดใหญ่ อำเภอตะกั่วป่า จังหวัดพังงา 82110",
+  contact_address_en: "Sri Takua Pa Road, Talad Yai, Takua Pa District, Phang Nga 82110, Thailand",
+  contact_hours_th: "เปิดทำการทุกวัน 09:00 - 17:30 น. (โซนคาเฟ่ & นิทรรศการ)",
+  contact_hours_en: "Daily 09:00 AM - 05:30 PM (Cafe & Living Museum)"
+};
+
+export const DEFAULT_TIMELINE_DATA: Record<string, any> = {
+  "1905": {
+    badge_th: "พ.ศ. ๒๔๔๘ - ๒๔๖๕",
+    badge_en: "1905 - 1922",
+    badge_zh: "1905 - 1922年",
+    title_th: 'กำเนิด "โต๊ะเบ๋ง" สู่การก่อสร้างอาคารเต้าหมิงโดยช่างผาว',
+    title_en: 'Origins of "Toh Beng" to Dao Ming Schoolhouse Construction by Master Pao',
+    title_zh: '從「卓明（โต๊ะเบ๋ง）」創立至「包師傅（ช่างผาว）」掌墨興築校舍',
+    desc_th: "เริ่มก่อตั้งอย่างไม่เป็นทางการในปี 2448 ในชื่อโต๊ะเบ๋ง ก่อนเปลี่ยนเป็นเต้าหมิง และจดทะเบียนโรงเรียนราษฎร์ในปี 2463 อาคารหลังปัจจุบันสร้างขึ้นในปี 2465 โดยนายผาว ช่างฝีมือชาวจีนฮกเกี้ยน จากเงินบริจาคของคหบดีเหมืองแร่ตะกั่วป่า ระนอง และภูเก็ต เดิมมุงหลังคากระเบื้องกาบกล้วยและเชิงชายไม้ฉลุ",
+    desc_en: "Founded informally in 1905 as Toh Beng, registered as a private academy in 1920. The current schoolhouse was built in 1922 by Hokkien master builder Pao through community donations from tin magnates in Takua Pa, Ranong, and Phuket.",
+    desc_zh: "1905年以閩南語「卓明」之名非正式創校，1920年正式更名為「導明」並註冊為私立學校。現存巍峨校舍於1922年由福建名匠「包師傅（นายผาว）」主持建造，資金源自德古巴、拉廊及普吉三地華人錫礦商賈鼎力集資，初建時鋪設芭蕉瓦屋頂並配有精美木雕花邊。",
+    photo: "/img/exhibit-zone1-school.jpg",
+    caption_th: '"ภาพประวัติศาสตร์: นักเรียนและครูถ่ายภาพร่วมกันหน้าอาคารเต้าหมิง ยุคหลังคากระเบื้องกาบกล้วยดั้งเดิม"',
+    caption_en: '"Historic Portrait: First generation students and scholars before the original banana-tile roof architecture"',
+    caption_zh: '「歷史珍影：首屆師生齊聚於芭蕉瓦原貌校舍前合影」',
+    chips_th: ["🏛️ ช่างผาว ฮกเกี้ยน", "📚 จดทะเบียนราษฎร์ 2463", "🤝 ลงขันเหมืองแร่ 3 เมือง"],
+    chips_en: ["🏛️ Master Builder Pao", "📚 Registered Academy 1920", "🤝 3-City Tin Merchant Donors"],
+    chips_zh: ["🏛️ 閩南名匠包師傅", "📚 1920年註冊立案", "🤝 三府華商集資興學"]
+  },
+  "1950": {
+    badge_th: "พ.ศ. ๒๔๘๐ - ๒๕๑๐",
+    badge_en: "1937 - 1967",
+    badge_zh: "1937 - 1967年",
+    title_th: "ยุคทองแห่งการศึกษา & กิจกรรมชุมชนตะกั่วป่า",
+    title_en: "The Golden Era: Vibrant Education, Sports & Diplomacy",
+    title_zh: "教育黃金時代 · 熱血籃球盛會與隆重接待中國總領事",
+    desc_th: "เป็นศูนย์กลางการศึกษาภาษาจีน มีนักเรียนหลายร้อยคน มีการจัดกิจกรรมกีฬาบาสเกตบอลเชื่อมความสัมพันธ์ชุมชน และได้รับเกียรติเป็นสถานที่ต้อนรับบุคคลสำคัญ เช่น กงสุลใหญ่สาธารณรัฐจีนประจำสงขลา ในปี พ.ศ. ๒๔๙๓",
+    desc_en: "Pioneered Chinese language and ethics education with hundreds of students, famous basketball tournament leagues, and hosted the Consul-General of the Republic of China in 1950.",
+    desc_zh: "作為全府華文教育核心，育才數百人，並建有老城最具人氣之紅土籃球場，舉辦盛大社區聯賽。1950年更榮膺全城最高禮遇，於校舍前廊隆重接待中華民國駐宋卡總領事，銘刻歷史外交高光時刻。",
+    photo: "/img/exhibit-zone2-consul.jpg",
+    caption_th: '"ภาพประวัติศาสตร์: พิธีต้อนรับกงสุลใหญ่ ณ มุขหน้าอาคารเต้าหมิง พ.ศ. ๒๔๙๓"',
+    caption_en: '"Historic Portrait: Reception ceremony for the Chinese Consul-General at Dao Ming in 1950"',
+    caption_zh: '「歷史珍影：1950年於導明學校前廊盛大接待中國總領事」',
+    chips_th: ["🏀 ทีมบาสเกตบอลชุมชน", "📜 ต้อนรับกงสุลจีน 2493", "🌱 ผลิตบุคลากรคุณภาพ"],
+    chips_en: ["🏀 Community Basketball", "📜 Chinese Consul Visit 1950", "🌱 Thousands of Alumni"],
+    chips_zh: ["🏀 導明熱血籃球隊", "📜 1950年接待總領事", "🌱 培育千百傑出校友"]
+  },
+  "1990": {
+    badge_th: "พ.ศ. ๒๕๓๓ - ๒๕๔๗",
+    badge_en: "1990 - 2004",
+    badge_zh: "1990 - 2004年",
+    title_th: "การจัดตั้งมูลนิธิโรงเรียนเต้าหมิง & การส่งมอบกรรมสิทธิ์",
+    title_en: "Establishment of Dao Ming Foundation & Ownership Handover",
+    title_zh: "成立導明學校基金會 · 地契全數無償移交為公共財產",
+    desc_th: "ปี 2533 จดทะเบียนจัดตั้ง 'มูลนิธิโรงเรียนเต้าหมิง ตะกั่วป่า' โดยมีคุณอนันต์ สวาทยานนท์ เป็นประธานคนแรก และในปี 2542 ทายาทผู้ถือครองที่ดิน สค.1 ทั้ง 3 ท่าน ได้ทำสัญญาประนีประนอมยอมความ ส่งมอบกรรมสิทธิ์ที่ดินและอาคารให้แก่มูลนิธิฯ อย่างถูกต้องตามกฎหมาย",
+    desc_en: "In 1990, the Dao Ming Foundation was officially incorporated. In 1999, the three trustee families officially transferred 100% legal ownership of the land and schoolhouse to the foundation for public benefit.",
+    desc_zh: "1990年依法註冊成立「德古巴導明學校基金會」，由阿南·沙瓦塔亞農先生出任首屆主席。1999年，原代持地契之三大家族後人秉持先賢奉獻精神，簽署和解協議，將地皮與整座校舍之100%合法產權無償移交基金會，成為德古巴永久公共遺產。",
+    photo: "/img/building-community.jpg",
+    caption_th: '"ภาพถ่ายอาคารเต้าหมิงคู่กับต้นจามจุรีใหญ่ใจกลางย่านเมืองเก่า"',
+    caption_en: '"Dao Ming schoolhouse standing gracefully alongside the ancient rain trees of Takua Pa"',
+    caption_zh: '「校舍與大雨樹：百年老校與老城老樹相伴相生之靜謐畫面」',
+    chips_th: ["⚖️ ส่งมอบกรรมสิทธิ์ 100%", "🏛️ ก่อตั้งมูลนิธิฯ 2533", "🌿 อนุรักษ์มรดกชุมชน"],
+    chips_en: ["⚖️ 100% Land Handover", "🏛️ Foundation Est. 1990", "🌿 Heritage Preservation"],
+    chips_zh: ["⚖️ 100%產權無償移交", "🏛️ 1990年成立基金會", "🌿 守護公眾文化資產"]
+  },
+  "2026": {
+    badge_th: "พ.ศ. ๒๕๖๙ (ปัจจุบัน)",
+    badge_en: "2026 (Present Day)",
+    badge_zh: "2026年 (當代新生)",
+    title_th: "บริบทใหม่ในเมืองตะกั่วป่า & รางวัลอนุรักษ์สถาปัตยกรรม ASA ๒๕๖๙",
+    title_en: "A New Context in Takua Pa & ASA Conservation Award 2026",
+    title_zh: "老城新生語境 · 榮獲2026年泰國暹羅建築師協會國家保護大獎",
+    desc_th: "ได้รับ 'รางวัลอนุรักษ์ศิลปสถาปัตยกรรม ประจำปี ๒๕๖๙' จากสมาคมสถาปนิกสยามฯ มุ่งพัฒนาพื้นที่ชั้นล่างเป็น Creative Living Space, ศูนย์เรียนรู้มรดกชุมชน, คราฟต์สตูดิโอ และคาเฟ่ โดยชั้นบนยังคงเป็นพื้นที่ปฏิบัติธรรมอันสงบเงียบ",
+    desc_en: "Awarded the National Architectural Conservation Award 2026 by ASA. Ground floors transformed into a living creative space, craft studios, and community cafe, with top floors preserved as a peaceful meditation sanctuary.",
+    desc_zh: "榮膺泰國暹羅建築師協會（ASA）「2026年度傑出建築保護大獎」。底層精心規劃為文創新空間、口述歷史展覽館、手作工坊與社區茶飲咖啡館；二樓則保留為清幽靜謐的禪修與交流聖所。",
+    photo: "/img/building-current.jpg",
+    caption_th: '"อาคารเต้าหมิงหลังการอนุรักษ์ ได้รับรางวัลอนุรักษ์ศิลปสถาปัตยกรรม ประจำปี ๒๕๖๙"',
+    caption_en: '"Revitalized Dao Ming Schoolhouse, recipient of the ASA Conservation Award 2026"',
+    caption_zh: '「活化後的導明學校：榮獲2026年國家級建築保護殊榮」',
+    chips_th: ["🏆 รางวัลอนุรักษ์ ASA 2569", "🎨 Creative Living Space", "☕ คาเฟ่ & ชุมชน"],
+    chips_en: ["🏆 ASA Conservation Award", "🎨 Creative Living Space", "☕ Community Cafe"],
+    chips_zh: ["🏆 榮獲ASA國家保護獎", "🎨 活態文創生活空間", "☕ 在地茶飲與社區對話"]
+  }
+};
 
 export interface ClientBooking {
   id: string;
@@ -57,6 +259,9 @@ const MASTER_KEYS = {
   SEATS: 'daoming_permanent_seats_master',
   EVENTS: 'daoming_permanent_events_master',
   ARCHIVE: 'daoming_permanent_archive_master',
+  SITE_COPY: 'daoming_permanent_site_copy_master',
+  GABLES: 'daoming_permanent_gables_master',
+  TIMELINE: 'daoming_permanent_timeline_master',
 };
 
 const LEGACY_KEYS = {
@@ -588,21 +793,144 @@ export const clientDb = {
   },
 
   // =========================================================================
+  // SITE COPY & GLOBAL CONTENT CMS
+  // =========================================================================
+  getSiteCopy(): SiteCopyData {
+    if (typeof window === 'undefined') return DEFAULT_SITE_COPY;
+    try {
+      const stored = localStorage.getItem(MASTER_KEYS.SITE_COPY);
+      if (!stored) {
+        localStorage.setItem(MASTER_KEYS.SITE_COPY, JSON.stringify(DEFAULT_SITE_COPY));
+        return DEFAULT_SITE_COPY;
+      }
+      const parsed = JSON.parse(stored);
+      if (parsed && typeof parsed === 'object') {
+        return { ...DEFAULT_SITE_COPY, ...parsed };
+      }
+      return DEFAULT_SITE_COPY;
+    } catch {
+      return DEFAULT_SITE_COPY;
+    }
+  },
+
+  updateSiteCopy(updatedFields: Partial<SiteCopyData>): SiteCopyData {
+    const current = this.getSiteCopy();
+    const merged = { ...current, ...updatedFields };
+    localStorage.setItem(MASTER_KEYS.SITE_COPY, JSON.stringify(merged));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('daoming_site_copy_updated'));
+    }
+    return merged;
+  },
+
+  resetSiteCopy(): SiteCopyData {
+    localStorage.setItem(MASTER_KEYS.SITE_COPY, JSON.stringify(DEFAULT_SITE_COPY));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('daoming_site_copy_updated'));
+    }
+    return DEFAULT_SITE_COPY;
+  },
+
+  // =========================================================================
+  // GABLE EXPLORER SYMBOLS CMS
+  // =========================================================================
+  getGableSymbols(): GableSymbol[] {
+    if (typeof window === 'undefined') return GABLE_SYMBOLS;
+    try {
+      const stored = localStorage.getItem(MASTER_KEYS.GABLES);
+      if (!stored) {
+        localStorage.setItem(MASTER_KEYS.GABLES, JSON.stringify(GABLE_SYMBOLS));
+        return GABLE_SYMBOLS;
+      }
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
+      return GABLE_SYMBOLS;
+    } catch {
+      return GABLE_SYMBOLS;
+    }
+  },
+
+  updateGableSymbol(id: string, updatedFields: Partial<GableSymbol>): boolean {
+    const list = this.getGableSymbols();
+    const idx = list.findIndex(s => s.id === id);
+    if (idx === -1) return false;
+    list[idx] = { ...list[idx], ...updatedFields };
+    localStorage.setItem(MASTER_KEYS.GABLES, JSON.stringify(list));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('daoming_gables_updated'));
+    }
+    return true;
+  },
+
+  resetGableSymbols(): GableSymbol[] {
+    localStorage.setItem(MASTER_KEYS.GABLES, JSON.stringify(GABLE_SYMBOLS));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('daoming_gables_updated'));
+    }
+    return GABLE_SYMBOLS;
+  },
+
+  // =========================================================================
+  // TIMELINE 120-YEAR MILESTONES CMS
+  // =========================================================================
+  getTimelineData(): Record<string, any> {
+    if (typeof window === 'undefined') return DEFAULT_TIMELINE_DATA;
+    try {
+      const stored = localStorage.getItem(MASTER_KEYS.TIMELINE);
+      if (!stored) {
+        localStorage.setItem(MASTER_KEYS.TIMELINE, JSON.stringify(DEFAULT_TIMELINE_DATA));
+        return DEFAULT_TIMELINE_DATA;
+      }
+      const parsed = JSON.parse(stored);
+      if (parsed && typeof parsed === 'object') {
+        return { ...DEFAULT_TIMELINE_DATA, ...parsed };
+      }
+      return DEFAULT_TIMELINE_DATA;
+    } catch {
+      return DEFAULT_TIMELINE_DATA;
+    }
+  },
+
+  updateTimelineEra(year: string, updatedFields: Partial<any>): boolean {
+    const data = this.getTimelineData();
+    if (!data[year]) return false;
+    data[year] = { ...data[year], ...updatedFields };
+    localStorage.setItem(MASTER_KEYS.TIMELINE, JSON.stringify(data));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('daoming_timeline_updated'));
+    }
+    return true;
+  },
+
+  resetTimelineData(): Record<string, any> {
+    localStorage.setItem(MASTER_KEYS.TIMELINE, JSON.stringify(DEFAULT_TIMELINE_DATA));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('daoming_timeline_updated'));
+    }
+    return DEFAULT_TIMELINE_DATA;
+  },
+
+  // =========================================================================
   // DATABASE BACKUP & RESTORE UTILITIES
   // =========================================================================
   exportFullDatabase() {
     return {
-      version: "2.1",
+      version: "2.2",
       exported_at: new Date().toISOString(),
       organization: "Dao Ming Foundation Takua Pa",
       bookings: this.getBookings(),
       ideas: this.getIdeas(),
       events: this.getEvents(),
-      archive: this.getArchivePhotos()
+      archive: this.getArchivePhotos(),
+      site_copy: this.getSiteCopy(),
+      gables: this.getGableSymbols(),
+      timeline: this.getTimelineData()
     };
   },
 
-  importFullDatabase(jsonData: any): { success: boolean; message: string; count: { bookings: number; ideas: number; events: number; archive?: number } } {
+  importFullDatabase(jsonData: any): { success: boolean; message: string; count: { bookings: number; ideas: number; events: number; archive?: number; site_copy?: boolean } } {
     try {
       if (!jsonData || typeof jsonData !== 'object') {
         return { success: false, message: 'Invalid JSON format', count: { bookings: 0, ideas: 0, events: 0, archive: 0 } };
@@ -612,6 +940,7 @@ export const clientDb = {
       let iCount = 0;
       let eCount = 0;
       let aCount = 0;
+      let copyImported = false;
 
       if (Array.isArray(jsonData.bookings)) {
         const current = this.getBookings();
@@ -649,14 +978,30 @@ export const clientDb = {
         aCount = toAdd.length;
       }
 
+      if (jsonData.site_copy && typeof jsonData.site_copy === 'object') {
+        this.updateSiteCopy(jsonData.site_copy);
+        copyImported = true;
+      }
+
+      if (Array.isArray(jsonData.gables)) {
+        localStorage.setItem(MASTER_KEYS.GABLES, JSON.stringify(jsonData.gables));
+      }
+
+      if (jsonData.timeline && typeof jsonData.timeline === 'object') {
+        localStorage.setItem(MASTER_KEYS.TIMELINE, JSON.stringify(jsonData.timeline));
+      }
+
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('daoming_archive_updated'));
+        window.dispatchEvent(new CustomEvent('daoming_site_copy_updated'));
+        window.dispatchEvent(new CustomEvent('daoming_gables_updated'));
+        window.dispatchEvent(new CustomEvent('daoming_timeline_updated'));
       }
 
       return {
         success: true,
-        message: `ผสานข้อมูลสำเร็จ: นำเข้าตั๋ว/คำขอ ${bCount} รายการ, ไอเดีย ${iCount} ข้อเสนอ, กิจกรรม ${eCount} รายการ, คลังภาพ ${aCount} ภาพ`,
-        count: { bookings: bCount, ideas: iCount, events: eCount, archive: aCount }
+        message: `ผสานข้อมูลสำเร็จ: นำเข้าตั๋ว/คำขอ ${bCount} รายการ, ไอเดีย ${iCount} ข้อเสนอ, กิจกรรม ${eCount} รายการ, คลังภาพ ${aCount} ภาพ${copyImported ? ', ข้อความเว็บไซต์' : ''}`,
+        count: { bookings: bCount, ideas: iCount, events: eCount, archive: aCount, site_copy: copyImported }
       };
     } catch (err: any) {
       return { success: false, message: err.message, count: { bookings: 0, ideas: 0, events: 0, archive: 0 } };

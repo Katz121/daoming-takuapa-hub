@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { clientDb, ClientBooking, ClientIdea } from '@/lib/clientDb';
-import { EventItem, ArchivePhoto } from '@/types';
+import { clientDb, ClientBooking, ClientIdea, SiteCopyData, DEFAULT_SITE_COPY, DEFAULT_TIMELINE_DATA } from '@/lib/clientDb';
+import { EventItem, ArchivePhoto, GableSymbol } from '@/types';
 
 type BookingRecord = ClientBooking;
 type IdeaRecord = ClientIdea;
@@ -14,9 +14,12 @@ export default function AdminDashboardPage() {
   const [authError, setAuthError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  const [activeTab, setActiveTab] = useState<'events' | 'archive' | 'tickets' | 'spaces' | 'ideas' | 'reports'>('events');
+  const [activeTab, setActiveTab] = useState<'events' | 'archive' | 'site_copy' | 'tickets' | 'spaces' | 'ideas' | 'reports'>('events');
   const [events, setEvents] = useState<EventItem[]>([]);
   const [archivePhotos, setArchivePhotos] = useState<ArchivePhoto[]>([]);
+  const [siteCopy, setSiteCopy] = useState<SiteCopyData>(DEFAULT_SITE_COPY);
+  const [gables, setGables] = useState<GableSymbol[]>([]);
+  const [timelineData, setTimelineData] = useState<Record<string, any>>(DEFAULT_TIMELINE_DATA);
   const [bookings, setBookings] = useState<BookingRecord[]>([]);
   const [spaceProposals, setSpaceProposals] = useState<BookingRecord[]>([]);
   const [ideas, setIdeas] = useState<IdeaRecord[]>([]);
@@ -75,6 +78,16 @@ export default function AdminDashboardPage() {
     caption_zh: ''
   });
 
+  // Gable symbol modal states
+  const [isGableModalOpen, setIsGableModalOpen] = useState(false);
+  const [editingGableId, setEditingGableId] = useState<string | null>(null);
+  const [gableForm, setGableForm] = useState<Partial<GableSymbol>>({});
+
+  // Timeline era modal states
+  const [isTimelineModalOpen, setIsTimelineModalOpen] = useState(false);
+  const [editingTimelineYear, setEditingTimelineYear] = useState<string | null>(null);
+  const [timelineForm, setTimelineForm] = useState<Partial<any>>({});
+
   const showFeedback = (msg: string) => {
     setFeedbackMsg(msg);
     setTimeout(() => setFeedbackMsg(null), 4000);
@@ -87,6 +100,15 @@ export default function AdminDashboardPage() {
 
       const aList = clientDb.getArchivePhotos();
       setArchivePhotos(aList);
+
+      const copyData = clientDb.getSiteCopy();
+      setSiteCopy(copyData);
+
+      const gList = clientDb.getGableSymbols();
+      setGables(gList);
+
+      const tData = clientDb.getTimelineData();
+      setTimelineData(tData);
 
       const bList = clientDb.getBookings('event');
       setBookings(bList);
@@ -446,6 +468,67 @@ export default function AdminDashboardPage() {
     showFeedback("ดาวน์โหลดรายงานสรุป CSV เรียบร้อยแล้ว");
   };
 
+  const handleSaveSiteCopy = (e: React.FormEvent) => {
+    e.preventDefault();
+    clientDb.updateSiteCopy(siteCopy);
+    showFeedback("✓ บันทึกข้อความและเนื้อหาเว็บไซต์สำเร็จ (อัปเดตแบบ Realtime ทันที)");
+  };
+
+  const handleResetSiteCopy = () => {
+    if (confirm("คุณต้องการคืนค่าข้อความเริ่มต้นของระบบทั้งหมดใช่หรือไม่?")) {
+      const reset = clientDb.resetSiteCopy();
+      setSiteCopy(reset);
+      showFeedback("✓ คืนค่าข้อความและเนื้อหาเริ่มต้นเรียบร้อยแล้ว");
+    }
+  };
+
+  const handleOpenEditGable = (symbol: GableSymbol) => {
+    setEditingGableId(symbol.id);
+    setGableForm({ ...symbol });
+    setIsGableModalOpen(true);
+  };
+
+  const handleSaveGable = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingGableId) return;
+    clientDb.updateGableSymbol(editingGableId, gableForm);
+    setIsGableModalOpen(false);
+    fetchAllData();
+    showFeedback(`✓ บันทึกข้อมูลสัญลักษณ์ ${gableForm.name_th || editingGableId} สำเร็จ`);
+  };
+
+  const handleResetGables = () => {
+    if (confirm("คุณต้องการคืนค่าสัญลักษณ์หน้าจั่วทั้ง ๕ สัญลักษณ์เริ่มต้นใช่หรือไม่?")) {
+      const reset = clientDb.resetGableSymbols();
+      setGables(reset);
+      showFeedback("✓ คืนค่าสัญลักษณ์หน้าจั่วเริ่มต้นเรียบร้อยแล้ว");
+    }
+  };
+
+  const handleOpenEditTimeline = (year: string) => {
+    setEditingTimelineYear(year);
+    const data = timelineData[year] || DEFAULT_TIMELINE_DATA[year];
+    setTimelineForm({ ...data });
+    setIsTimelineModalOpen(true);
+  };
+
+  const handleSaveTimeline = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingTimelineYear) return;
+    clientDb.updateTimelineEra(editingTimelineYear, timelineForm);
+    setIsTimelineModalOpen(false);
+    fetchAllData();
+    showFeedback(`✓ บันทึกข้อมูลยุคสมัย ${timelineForm.badge_th || editingTimelineYear} สำเร็จ`);
+  };
+
+  const handleResetTimeline = () => {
+    if (confirm("คุณต้องการคืนค่าประวัติศาสตร์ ๔ ยุคเริ่มต้นใช่หรือไม่?")) {
+      const reset = clientDb.resetTimelineData();
+      setTimelineData(reset);
+      showFeedback("✓ คืนค่าประวัติศาสตร์เริ่มต้นเรียบร้อยแล้ว");
+    }
+  };
+
   const handleExportJSON = () => {
     const backupData = clientDb.exportFullDatabase();
     const jsonStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
@@ -776,6 +859,23 @@ export default function AdminDashboardPage() {
             onClick={() => setActiveTab('archive')}
           >
             🖼️ คลังภาพ & เรื่องเล่า ({archivePhotos.length})
+          </button>
+          <button
+            style={{
+              padding: '10px 18px',
+              borderRadius: '10px',
+              border: 'none',
+              fontSize: '0.82rem',
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              whiteSpace: 'nowrap',
+              backgroundColor: activeTab === 'site_copy' ? '#E5A31E' : 'rgba(255, 255, 255, 0.06)',
+              color: activeTab === 'site_copy' ? '#122421' : '#FAF2DD',
+              transition: 'all 0.2s ease'
+            }}
+            onClick={() => setActiveTab('site_copy')}
+          >
+            📝 ข้อความ & เนื้อหาเว็บ
           </button>
           <button
             style={{
@@ -1218,6 +1318,576 @@ export default function AdminDashboardPage() {
                 );
               })}
             </div>
+          </div>
+        )}
+
+        {/* TAB: SITE COPY & CONTENT CMS */}
+        {activeTab === 'site_copy' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            {/* Top Info & Quick Actions Banner */}
+            <div style={{ backgroundColor: 'rgba(229, 163, 30, 0.08)', border: '1.5px solid rgba(229, 163, 30, 0.3)', borderRadius: '16px', padding: '20px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
+              <div>
+                <span style={{ fontSize: '0.72rem', color: '#E5A31E', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 'bold', display: 'block', marginBottom: '2px' }}>
+                  ✍️ SITE-WIDE CONTENT & ARCHITECTURE CMS
+                </span>
+                <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#FAF2DD', margin: '0 0 4px 0' }}>
+                  จัดการข้อความและเนื้อหาทั้งหมดในเว็บไซต์
+                </h2>
+                <p style={{ fontSize: '0.82rem', color: 'rgba(250, 242, 221, 0.7)', margin: 0 }}>
+                  แก้ไขสโลแกน, หัวข้อหน้าแรก, ปรัชญาหน้าจั่ว ๕ สัญลักษณ์, ประวัติศาสตร์ ๔ ยุค, และข้อมูลติดต่อ (ข้อมูลบันทึกถาวร ไม่สูญหายเมื่อ Push Git)
+                </p>
+              </div>
+
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <button
+                  type="button"
+                  onClick={handleResetSiteCopy}
+                  style={{
+                    padding: '9px 16px',
+                    borderRadius: '8px',
+                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    color: '#FAF2DD',
+                    fontSize: '0.8rem',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}
+                >
+                  <span>🔄</span>
+                  <span>คืนค่าเริ่มต้น</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleSaveSiteCopy}
+                  style={{
+                    padding: '9px 20px',
+                    borderRadius: '8px',
+                    backgroundColor: '#E5A31E',
+                    color: '#122421',
+                    fontSize: '0.82rem',
+                    fontWeight: 'bold',
+                    border: 'none',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 15px rgba(229, 163, 30, 0.35)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}
+                >
+                  <span>💾</span>
+                  <span>บันทึกข้อความทั้งหมด</span>
+                </button>
+              </div>
+            </div>
+
+            <form onSubmit={handleSaveSiteCopy} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+              
+              {/* SECTION 1: HERO SECTION */}
+              <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '16px', padding: '24px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '18px', paddingBottom: '12px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                  <span style={{ fontSize: '1.4rem' }}>🌟</span>
+                  <div>
+                    <h3 style={{ fontSize: '1.05rem', fontWeight: 'bold', color: '#E5A31E', margin: 0 }}>
+                      ข้อความหน้าแรก & ป้ายสโลแกน (Hero Section)
+                    </h3>
+                    <span style={{ fontSize: '0.75rem', color: 'rgba(250, 242, 221, 0.6)' }}>
+                      ปรับแต่งป้ายรางวัล ASA, สโลแกนโรงเรียนจีนแห่งแรก, หัวข้อใหญ่ และคำบรรยายความเป็นมา
+                    </span>
+                  </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px', marginBottom: '16px' }}>
+                  {/* Award Ribbon */}
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                      🏆 ข้อความป้ายรางวัล ASA (ภาษาไทย)
+                    </label>
+                    <input
+                      type="text"
+                      value={siteCopy.hero_award_th || ''}
+                      onChange={e => setSiteCopy({ ...siteCopy, hero_award_th: e.target.value })}
+                      style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box' }}
+                    />
+                  </div>
+
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                      🏆 ข้อความป้ายรางวัล (ภาษาอังกฤษ)
+                    </label>
+                    <input
+                      type="text"
+                      value={siteCopy.hero_award_en || ''}
+                      onChange={e => setSiteCopy({ ...siteCopy, hero_award_en: e.target.value })}
+                      style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box' }}
+                    />
+                  </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px', marginBottom: '16px' }}>
+                  {/* Badge */}
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                      🏷️ ข้อความป้ายสโลแกน (ภาษาไทย)
+                    </label>
+                    <input
+                      type="text"
+                      value={siteCopy.hero_badge_th || ''}
+                      onChange={e => setSiteCopy({ ...siteCopy, hero_badge_th: e.target.value })}
+                      style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box' }}
+                    />
+                  </div>
+
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                      🏷️ ข้อความป้ายสโลแกน (ภาษาอังกฤษ)
+                    </label>
+                    <input
+                      type="text"
+                      value={siteCopy.hero_badge_en || ''}
+                      onChange={e => setSiteCopy({ ...siteCopy, hero_badge_en: e.target.value })}
+                      style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box' }}
+                    />
+                  </div>
+                </div>
+
+                {/* Hero Title */}
+                <div style={{ marginBottom: '16px' }}>
+                  <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                    📢 หัวข้อหลักหน้าแรก (Main Title ภาษาไทย) *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={siteCopy.hero_title_th || ''}
+                    onChange={e => setSiteCopy({ ...siteCopy, hero_title_th: e.target.value })}
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.95rem', fontWeight: '600', outline: 'none', boxSizing: 'border-box' }}
+                  />
+                </div>
+
+                <div style={{ marginBottom: '16px' }}>
+                  <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                    📢 หัวข้อหลักภาษาอังกฤษ (Main Title EN)
+                  </label>
+                  <input
+                    type="text"
+                    value={siteCopy.hero_title_en || ''}
+                    onChange={e => setSiteCopy({ ...siteCopy, hero_title_en: e.target.value })}
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box' }}
+                  />
+                </div>
+
+                {/* Hero Description */}
+                <div style={{ marginBottom: '16px' }}>
+                  <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                    📖 คำบรรยายความเป็นมา โต๊ะเบ๋ง สู่ เต้าหมิง (Description TH) *
+                  </label>
+                  <textarea
+                    rows={3}
+                    required
+                    value={siteCopy.hero_desc_th || ''}
+                    onChange={e => setSiteCopy({ ...siteCopy, hero_desc_th: e.target.value })}
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box', resize: 'vertical' }}
+                  />
+                </div>
+
+                <div style={{ marginBottom: '16px' }}>
+                  <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                    📖 คำบรรยายภาษาอังกฤษ (Description EN)
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={siteCopy.hero_desc_en || ''}
+                    onChange={e => setSiteCopy({ ...siteCopy, hero_desc_en: e.target.value })}
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box', resize: 'vertical' }}
+                  />
+                </div>
+
+                {/* Stats */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '14px', paddingTop: '12px', borderTop: '1px solid rgba(255, 255, 255, 0.06)' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#E5A31E', marginBottom: '4px' }}>ตัวเลขสถิติ 1</label>
+                    <input
+                      type="text"
+                      value={siteCopy.hero_stat_1_val || ''}
+                      onChange={e => setSiteCopy({ ...siteCopy, hero_stat_1_val: e.target.value })}
+                      style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FCD34D', fontWeight: 'bold', fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box', marginBottom: '4px' }}
+                    />
+                    <input
+                      type="text"
+                      placeholder="คำอธิบายสถิติ 1 (TH)"
+                      value={siteCopy.hero_stat_1_lbl_th || ''}
+                      onChange={e => setSiteCopy({ ...siteCopy, hero_stat_1_lbl_th: e.target.value })}
+                      style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.8rem', outline: 'none', boxSizing: 'border-box' }}
+                    />
+                  </div>
+
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.75rem', color: '#E5A31E', marginBottom: '4px' }}>ตัวเลขสถิติ 2</label>
+                    <input
+                      type="text"
+                      value={siteCopy.hero_stat_2_val || ''}
+                      onChange={e => setSiteCopy({ ...siteCopy, hero_stat_2_val: e.target.value })}
+                      style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FCD34D', fontWeight: 'bold', fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box', marginBottom: '4px' }}
+                    />
+                    <input
+                      type="text"
+                      placeholder="คำอธิบายสถิติ 2 (TH)"
+                      value={siteCopy.hero_stat_2_lbl_th || ''}
+                      onChange={e => setSiteCopy({ ...siteCopy, hero_stat_2_lbl_th: e.target.value })}
+                      style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.8rem', outline: 'none', boxSizing: 'border-box' }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* SECTION 2: GABLE PHILOSOPHY */}
+              <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '16px', padding: '24px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px', paddingBottom: '12px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', flexWrap: 'wrap', gap: '10px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <span style={{ fontSize: '1.4rem' }}>🏛️</span>
+                    <div>
+                      <h3 style={{ fontSize: '1.05rem', fontWeight: 'bold', color: '#E5A31E', margin: 0 }}>
+                        ปรัชญาหน้าจั่ว & สถาปัตยกรรม ๕ สัญลักษณ์ (Gable Facade & Symbols)
+                      </h3>
+                      <span style={{ fontSize: '0.75rem', color: 'rgba(250, 242, 221, 0.6)' }}>
+                        ถอดรหัสปรัชญาหน้าจั่ว ภาพจำลองจักรวาล ฟ้า-ดิน-คน และความหมายของแต่ละจุด
+                      </span>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={handleResetGables}
+                    style={{ padding: '6px 12px', fontSize: '0.75rem', borderRadius: '6px', backgroundColor: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255, 255, 255, 0.15)', color: '#FAF2DD', cursor: 'pointer' }}
+                  >
+                    🔄 คืนค่าสัญลักษณ์เริ่มต้น
+                  </button>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px', marginBottom: '16px' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                      หัวข้อส่วนหน้าจั่ว (Title TH)
+                    </label>
+                    <input
+                      type="text"
+                      value={siteCopy.gable_title_th || ''}
+                      onChange={e => setSiteCopy({ ...siteCopy, gable_title_th: e.target.value })}
+                      style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box' }}
+                    />
+                  </div>
+
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                      คำบรรยายส่วนหน้าจั่ว (Subtitle TH)
+                    </label>
+                    <input
+                      type="text"
+                      value={siteCopy.gable_subtitle_th || ''}
+                      onChange={e => setSiteCopy({ ...siteCopy, gable_subtitle_th: e.target.value })}
+                      style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box' }}
+                    />
+                  </div>
+                </div>
+
+                {/* 5 Symbols Cards */}
+                <div style={{ marginTop: '16px' }}>
+                  <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '10px' }}>
+                    สัญลักษณ์หน้าจั่วทั้ง ๕ สัญลักษณ์ (คลิกเพื่อแก้ไขเนื้อหา):
+                  </label>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '12px' }}>
+                    {gables.map((s, idx) => (
+                      <div
+                        key={s.id}
+                        style={{
+                          backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                          border: '1px solid rgba(255, 255, 255, 0.1)',
+                          borderRadius: '12px',
+                          padding: '14px',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'space-between',
+                          gap: '10px'
+                        }}
+                      >
+                        <div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                            <span style={{ fontSize: '0.7rem', color: '#E5A31E', fontWeight: 'bold' }}>#{idx + 1} · {s.badge_th}</span>
+                          </div>
+                          <h4 style={{ fontSize: '0.9rem', fontWeight: 'bold', color: '#FFF', margin: '0 0 4px 0' }}>
+                            {s.name_th}
+                          </h4>
+                          <p style={{ fontSize: '0.78rem', color: 'rgba(250, 242, 221, 0.7)', margin: 0, lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                            {s.desc_th}
+                          </p>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => handleOpenEditGable(s)}
+                          style={{
+                            padding: '6px 12px',
+                            borderRadius: '6px',
+                            backgroundColor: 'rgba(229, 163, 30, 0.15)',
+                            border: '1px solid rgba(229, 163, 30, 0.4)',
+                            color: '#FCD34D',
+                            fontSize: '0.75rem',
+                            fontWeight: '600',
+                            cursor: 'pointer',
+                            alignSelf: 'flex-start'
+                          }}
+                        >
+                          ✏️ แก้ไขเนื้อหาสัญลักษณ์
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* SECTION 3: TIMELINE & 4 ERAS */}
+              <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '16px', padding: '24px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px', paddingBottom: '12px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', flexWrap: 'wrap', gap: '10px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <span style={{ fontSize: '1.4rem' }}>📜</span>
+                    <div>
+                      <h3 style={{ fontSize: '1.05rem', fontWeight: 'bold', color: '#E5A31E', margin: 0 }}>
+                        ประวัติศาสตร์ & กาลเวลา ๑๒๐ ปี (Timeline & 4 Eras)
+                      </h3>
+                      <span style={{ fontSize: '0.75rem', color: 'rgba(250, 242, 221, 0.6)' }}>
+                        ประวัติศาสตร์ความเป็นมาโรงเรียนเต้าหมิง ๔ ยุคสมัย และคำบรรยายเสียง
+                      </span>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={handleResetTimeline}
+                    style={{ padding: '6px 12px', fontSize: '0.75rem', borderRadius: '6px', backgroundColor: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255, 255, 255, 0.15)', color: '#FAF2DD', cursor: 'pointer' }}
+                  >
+                    🔄 คืนค่ายุคสมัยเริ่มต้น
+                  </button>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px', marginBottom: '16px' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                      หัวข้อส่วนประวัติศาสตร์ (Story Title TH)
+                    </label>
+                    <input
+                      type="text"
+                      value={siteCopy.story_title_th || ''}
+                      onChange={e => setSiteCopy({ ...siteCopy, story_title_th: e.target.value })}
+                      style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box' }}
+                    />
+                  </div>
+
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                      คำบรรยายส่วนประวัติศาสตร์ (Story Subtitle TH)
+                    </label>
+                    <input
+                      type="text"
+                      value={siteCopy.story_subtitle_th || ''}
+                      onChange={e => setSiteCopy({ ...siteCopy, story_subtitle_th: e.target.value })}
+                      style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box' }}
+                    />
+                  </div>
+                </div>
+
+                {/* 4 Eras Cards */}
+                <div style={{ marginTop: '16px' }}>
+                  <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '10px' }}>
+                    ยุคสมัยประวัติศาสตร์ทั้ง ๔ ยุค (คลิกเพื่อแก้ไขเนื้อหา):
+                  </label>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '12px' }}>
+                    {["1905", "1950", "1990", "2026"].map((year) => {
+                      const era = timelineData[year] || DEFAULT_TIMELINE_DATA[year];
+                      return (
+                        <div
+                          key={year}
+                          style={{
+                            backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                            border: '1px solid rgba(255, 255, 255, 0.1)',
+                            borderRadius: '12px',
+                            padding: '14px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'space-between',
+                            gap: '10px'
+                          }}
+                        >
+                          <div>
+                            <span style={{ fontSize: '0.7rem', color: '#E5A31E', fontWeight: 'bold', display: 'block', marginBottom: '4px' }}>
+                              ⏳ {era?.badge_th || year}
+                            </span>
+                            <h4 style={{ fontSize: '0.9rem', fontWeight: 'bold', color: '#FFF', margin: '0 0 4px 0' }}>
+                              {era?.title_th}
+                            </h4>
+                            <p style={{ fontSize: '0.78rem', color: 'rgba(250, 242, 221, 0.7)', margin: 0, lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                              {era?.desc_th}
+                            </p>
+                          </div>
+
+                          <button
+                            type="button"
+                            onClick={() => handleOpenEditTimeline(year)}
+                            style={{
+                              padding: '6px 12px',
+                              borderRadius: '6px',
+                              backgroundColor: 'rgba(229, 163, 30, 0.15)',
+                              border: '1px solid rgba(229, 163, 30, 0.4)',
+                              color: '#FCD34D',
+                              fontSize: '0.75rem',
+                              fontWeight: '600',
+                              cursor: 'pointer',
+                              alignSelf: 'flex-start'
+                            }}
+                          >
+                            ✏️ แก้ไขเนื้อหายุคสมัย
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+
+              {/* SECTION 4: VISION & LIVING HERITAGE */}
+              <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '16px', padding: '24px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '18px', paddingBottom: '12px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                  <span style={{ fontSize: '1.4rem' }}>💡</span>
+                  <div>
+                    <h3 style={{ fontSize: '1.05rem', fontWeight: 'bold', color: '#E5A31E', margin: 0 }}>
+                      วิสัยทัศน์ & บริบทใหม่ในเมืองตะกั่วป่า (Vision & Heritage)
+                    </h3>
+                    <span style={{ fontSize: '0.75rem', color: 'rgba(250, 242, 221, 0.6)' }}>
+                      คำอธิบายโครงการฟื้นฟูมรดกที่มีชีวิต และการมีส่วนร่วมของชุมชน
+                    </span>
+                  </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                      หัวข้อโครงการ (Vision Title TH)
+                    </label>
+                    <input
+                      type="text"
+                      value={siteCopy.vision_title_th || ''}
+                      onChange={e => setSiteCopy({ ...siteCopy, vision_title_th: e.target.value })}
+                      style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box' }}
+                    />
+                  </div>
+
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                      คำบรรยายวิสัยทัศน์ (Vision Subtitle TH)
+                    </label>
+                    <input
+                      type="text"
+                      value={siteCopy.vision_subtitle_th || ''}
+                      onChange={e => setSiteCopy({ ...siteCopy, vision_subtitle_th: e.target.value })}
+                      style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box' }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* SECTION 5: CONTACT & LOCATION */}
+              <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '16px', padding: '24px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '18px', paddingBottom: '12px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                  <span style={{ fontSize: '1.4rem' }}>📞</span>
+                  <div>
+                    <h3 style={{ fontSize: '1.05rem', fontWeight: 'bold', color: '#E5A31E', margin: 0 }}>
+                      ข้อมูลติดต่อ & การเดินทาง (Contact & Location)
+                    </h3>
+                    <span style={{ fontSize: '0.75rem', color: 'rgba(250, 242, 221, 0.6)' }}>
+                      เบอร์โทรศัพท์มูลนิธิฯ, อีเมล, ที่อยู่ และเวลาเปิดทำการ
+                    </span>
+                  </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginBottom: '16px' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                      เบอร์โทรศัพท์ติดต่อ
+                    </label>
+                    <input
+                      type="text"
+                      value={siteCopy.contact_phone || ''}
+                      onChange={e => setSiteCopy({ ...siteCopy, contact_phone: e.target.value })}
+                      style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box' }}
+                    />
+                  </div>
+
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                      อีเมลติดต่อมูลนิธิฯ
+                    </label>
+                    <input
+                      type="email"
+                      value={siteCopy.contact_email || ''}
+                      onChange={e => setSiteCopy({ ...siteCopy, contact_email: e.target.value })}
+                      style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box' }}
+                    />
+                  </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                      ที่อยู่ (ภาษาไทย)
+                    </label>
+                    <input
+                      type="text"
+                      value={siteCopy.contact_address_th || ''}
+                      onChange={e => setSiteCopy({ ...siteCopy, contact_address_th: e.target.value })}
+                      style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box' }}
+                    />
+                  </div>
+
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                      เวลาทำการ (ภาษาไทย)
+                    </label>
+                    <input
+                      type="text"
+                      value={siteCopy.contact_hours_th || ''}
+                      onChange={e => setSiteCopy({ ...siteCopy, contact_hours_th: e.target.value })}
+                      style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box' }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Bottom Submit Button */}
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
+                <button
+                  type="submit"
+                  style={{
+                    padding: '12px 32px',
+                    borderRadius: '10px',
+                    backgroundColor: '#E5A31E',
+                    color: '#122421',
+                    fontSize: '0.9rem',
+                    fontWeight: 'bold',
+                    border: 'none',
+                    cursor: 'pointer',
+                    boxShadow: '0 6px 20px rgba(229, 163, 30, 0.4)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px'
+                  }}
+                >
+                  <span>💾</span>
+                  <span>บันทึกการแก้ไขเนื้อหาเว็บไซต์ทั้งหมด (Save All Changes)</span>
+                </button>
+              </div>
+            </form>
           </div>
         )}
 
@@ -2249,6 +2919,301 @@ export default function AdminDashboardPage() {
                     style={{ padding: '10px 24px', borderRadius: '8px', backgroundColor: '#E5A31E', color: '#122421', fontSize: '0.85rem', fontWeight: 'bold', border: 'none', cursor: 'pointer', boxShadow: '0 4px 15px rgba(229, 163, 30, 0.35)' }}
                   >
                     💾 บันทึกภาพประวัติศาสตร์ (Save)
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* MODAL: EDIT GABLE SYMBOL */}
+        {/* ========================================================================= */}
+        {isGableModalOpen && editingGableId && (
+          <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0, 0, 0, 0.82)', backdropFilter: 'blur(8px)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
+            <div style={{ width: '100%', maxWidth: '650px', maxHeight: '90vh', overflowY: 'auto', backgroundColor: '#122421', border: '1.5px solid rgba(229, 163, 30, 0.5)', borderRadius: '20px', padding: '28px', boxShadow: '0 25px 60px rgba(0, 0, 0, 0.8)' }}>
+              
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', paddingBottom: '12px', borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                <div>
+                  <span style={{ fontSize: '0.72rem', color: '#E5A31E', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 'bold', display: 'block' }}>
+                    🏛️ GABLE SYMBOL PHILOSOPHY EDITOR
+                  </span>
+                  <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#FFF', margin: 0 }}>
+                    แก้ไขสัญลักษณ์หน้าจั่ว: {gableForm.name_th || editingGableId}
+                  </h3>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setIsGableModalOpen(false)}
+                  style={{ width: '32px', height: '32px', borderRadius: '50%', backgroundColor: 'rgba(255, 255, 255, 0.1)', border: 'none', color: '#FFF', fontSize: '1rem', cursor: 'pointer' }}
+                >
+                  ✕
+                </button>
+              </div>
+
+              <form onSubmit={handleSaveGable} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '14px' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                      ชื่อสัญลักษณ์ (ภาษาไทย) *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={gableForm.name_th || ''}
+                      onChange={e => setGableForm({ ...gableForm, name_th: e.target.value })}
+                      style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box' }}
+                    />
+                  </div>
+
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                      ชื่อสัญลักษณ์ภาษาอังกฤษ (Name EN)
+                    </label>
+                    <input
+                      type="text"
+                      value={gableForm.name_en || ''}
+                      onChange={e => setGableForm({ ...gableForm, name_en: e.target.value })}
+                      style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box' }}
+                    />
+                  </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '14px' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                      ป้ายระบุตำแหน่ง (Badge TH)
+                    </label>
+                    <input
+                      type="text"
+                      value={gableForm.badge_th || ''}
+                      onChange={e => setGableForm({ ...gableForm, badge_th: e.target.value })}
+                      style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box' }}
+                    />
+                  </div>
+
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                      ป้ายระบุตำแหน่ง EN
+                    </label>
+                    <input
+                      type="text"
+                      value={gableForm.badge_en || ''}
+                      onChange={e => setGableForm({ ...gableForm, badge_en: e.target.value })}
+                      style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box' }}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                    คำอธิบายสั้น (Short Desc TH)
+                  </label>
+                  <input
+                    type="text"
+                    value={gableForm.short_desc_th || ''}
+                    onChange={e => setGableForm({ ...gableForm, short_desc_th: e.target.value })}
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box' }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                    คำบรรยายรายละเอียดสถาปัตยกรรม (Description TH) *
+                  </label>
+                  <textarea
+                    rows={3}
+                    required
+                    value={gableForm.desc_th || ''}
+                    onChange={e => setGableForm({ ...gableForm, desc_th: e.target.value })}
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box', resize: 'vertical' }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                    ความหมายเชิงปรัชญา & คติเต๋า (Meaning TH) *
+                  </label>
+                  <textarea
+                    rows={2}
+                    required
+                    value={gableForm.meaning_th || ''}
+                    onChange={e => setGableForm({ ...gableForm, meaning_th: e.target.value })}
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box', resize: 'vertical' }}
+                  />
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', paddingTop: '16px', borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                  <button
+                    type="button"
+                    onClick={() => setIsGableModalOpen(false)}
+                    style={{ padding: '10px 20px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255, 255, 255, 0.15)', color: '#FAF2DD', fontSize: '0.85rem', cursor: 'pointer' }}
+                  >
+                    ยกเลิก
+                  </button>
+
+                  <button
+                    type="submit"
+                    style={{ padding: '10px 24px', borderRadius: '8px', backgroundColor: '#E5A31E', color: '#122421', fontSize: '0.85rem', fontWeight: 'bold', border: 'none', cursor: 'pointer', boxShadow: '0 4px 15px rgba(229, 163, 30, 0.35)' }}
+                  >
+                    💾 บันทึกสัญลักษณ์ (Save)
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* MODAL: EDIT TIMELINE ERA */}
+        {/* ========================================================================= */}
+        {isTimelineModalOpen && editingTimelineYear && (
+          <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0, 0, 0, 0.82)', backdropFilter: 'blur(8px)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
+            <div style={{ width: '100%', maxWidth: '650px', maxHeight: '90vh', overflowY: 'auto', backgroundColor: '#122421', border: '1.5px solid rgba(229, 163, 30, 0.5)', borderRadius: '20px', padding: '28px', boxShadow: '0 25px 60px rgba(0, 0, 0, 0.8)' }}>
+              
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', paddingBottom: '12px', borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                <div>
+                  <span style={{ fontSize: '0.72rem', color: '#E5A31E', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 'bold', display: 'block' }}>
+                    📜 TIMELINE ERA & STORY EDITOR
+                  </span>
+                  <h3 style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#FFF', margin: 0 }}>
+                    แก้ไขประวัติศาสตร์ยุค: {timelineForm.badge_th || editingTimelineYear}
+                  </h3>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setIsTimelineModalOpen(false)}
+                  style={{ width: '32px', height: '32px', borderRadius: '50%', backgroundColor: 'rgba(255, 255, 255, 0.1)', border: 'none', color: '#FFF', fontSize: '1rem', cursor: 'pointer' }}
+                >
+                  ✕
+                </button>
+              </div>
+
+              <form onSubmit={handleSaveTimeline} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '14px' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                      ช่วงปี พ.ศ. (Badge TH) *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={timelineForm.badge_th || ''}
+                      onChange={e => setTimelineForm({ ...timelineForm, badge_th: e.target.value })}
+                      style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box' }}
+                    />
+                  </div>
+
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                      ช่วงปี ค.ศ. (Badge EN)
+                    </label>
+                    <input
+                      type="text"
+                      value={timelineForm.badge_en || ''}
+                      onChange={e => setTimelineForm({ ...timelineForm, badge_en: e.target.value })}
+                      style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box' }}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                    หัวข้อยุคสมัย (Title TH) *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={timelineForm.title_th || ''}
+                    onChange={e => setTimelineForm({ ...timelineForm, title_th: e.target.value })}
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box' }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                    หัวข้อยุคสมัยภาษาอังกฤษ (Title EN)
+                  </label>
+                  <input
+                    type="text"
+                    value={timelineForm.title_en || ''}
+                    onChange={e => setTimelineForm({ ...timelineForm, title_en: e.target.value })}
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box' }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                    คำบรรยายประวัติศาสตร์และเหตุการณ์สำคัญ (Description TH) *
+                  </label>
+                  <textarea
+                    rows={4}
+                    required
+                    value={timelineForm.desc_th || ''}
+                    onChange={e => setTimelineForm({ ...timelineForm, desc_th: e.target.value })}
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box', resize: 'vertical' }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E', marginBottom: '6px' }}>
+                    คำบรรยายภาพประวัติศาสตร์ (Caption TH)
+                  </label>
+                  <input
+                    type="text"
+                    value={timelineForm.caption_th || ''}
+                    onChange={e => setTimelineForm({ ...timelineForm, caption_th: e.target.value })}
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box' }}
+                  />
+                </div>
+
+                {/* Photo */}
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                    <label style={{ fontSize: '0.78rem', fontWeight: 'bold', color: '#E5A31E' }}>
+                      รูปภาพประกอบยุคสมัย
+                    </label>
+                    <label style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '4px 10px', borderRadius: '6px', backgroundColor: '#E5A31E', color: '#122421', fontSize: '0.75rem', fontWeight: 'bold', cursor: 'pointer' }}>
+                      <span>📁 เลือกรูปใหม่</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            handleFileImageUpload(file, (dataUrl) => {
+                              setTimelineForm(prev => ({ ...prev, photo: dataUrl }));
+                            });
+                          }
+                        }}
+                        style={{ display: 'none' }}
+                      />
+                    </label>
+                  </div>
+                  <input
+                    type="text"
+                    value={timelineForm.photo || ''}
+                    onChange={e => setTimelineForm({ ...timelineForm, photo: e.target.value })}
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#FFF', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box' }}
+                  />
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', paddingTop: '16px', borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                  <button
+                    type="button"
+                    onClick={() => setIsTimelineModalOpen(false)}
+                    style={{ padding: '10px 20px', borderRadius: '8px', backgroundColor: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255, 255, 255, 0.15)', color: '#FAF2DD', fontSize: '0.85rem', cursor: 'pointer' }}
+                  >
+                    ยกเลิก
+                  </button>
+
+                  <button
+                    type="submit"
+                    style={{ padding: '10px 24px', borderRadius: '8px', backgroundColor: '#E5A31E', color: '#122421', fontSize: '0.85rem', fontWeight: 'bold', border: 'none', cursor: 'pointer', boxShadow: '0 4px 15px rgba(229, 163, 30, 0.35)' }}
+                  >
+                    💾 บันทึกยุคสมัย (Save)
                   </button>
                 </div>
               </form>

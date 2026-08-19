@@ -1,10 +1,25 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '@/lib/store';
+import { clientDb, DEFAULT_SITE_COPY, SiteCopyData } from '@/lib/clientDb';
 
 export function HeroSection() {
   const { lang } = useApp();
+  const [copy, setCopy] = useState<SiteCopyData>(DEFAULT_SITE_COPY);
+
+  useEffect(() => {
+    const loadCopy = () => {
+      setCopy(clientDb.getSiteCopy());
+    };
+    loadCopy();
+    window.addEventListener('daoming_site_copy_updated', loadCopy);
+    window.addEventListener('storage', loadCopy);
+    return () => {
+      window.removeEventListener('daoming_site_copy_updated', loadCopy);
+      window.removeEventListener('storage', loadCopy);
+    };
+  }, []);
 
   const isEn = lang === 'en';
   const isZh = lang === 'zh';
@@ -20,10 +35,10 @@ export function HeroSection() {
             <span className="award-star">🏆</span>
             <span>
               {isZh
-                ? "泰國暹羅皇家建築師協會 (ASA) 2026年度傑出建築保護大獎"
+                ? (copy.hero_award_zh || DEFAULT_SITE_COPY.hero_award_zh)
                 : isEn 
-                  ? "Architectural Conservation Award 2026 · The Association of Siamese Architects (ASA)" 
-                  : "รางวัลอนุรักษ์ศิลปสถาปัตยกรรม ประจำปี ๒๕๖๙ · สมาคมสถาปนิกสยามฯ (ASA)"}
+                  ? (copy.hero_award_en || DEFAULT_SITE_COPY.hero_award_en) 
+                  : (copy.hero_award_th || DEFAULT_SITE_COPY.hero_award_th)}
             </span>
           </div>
 
@@ -31,31 +46,27 @@ export function HeroSection() {
             <span className="badge-dot"></span>
             <span>
               {isZh
-                ? "攀牙府首所也是唯一百年華校 · 1905年創辦 / 1922年建校舍"
+                ? (copy.hero_badge_zh || DEFAULT_SITE_COPY.hero_badge_zh)
                 : isEn 
-                  ? "First & Only Chinese School in Phang Nga · Founded 1905 / Building 1922" 
-                  : "โรงเรียนจีนแห่งแรกและแห่งเดียวของ จ.พังงา · ก่อตั้ง พ.ศ. ๒๔๔๘ / อาคาร พ.ศ. ๒๔๖๕"}
+                  ? (copy.hero_badge_en || DEFAULT_SITE_COPY.hero_badge_en) 
+                  : (copy.hero_badge_th || DEFAULT_SITE_COPY.hero_badge_th)}
             </span>
           </div>
 
           <h1 className="hero-title">
-            {isZh ? (
-              <>重煥百年 <span className="highlight-wood">明德指引之路</span><br />賦能老城文創 <span className="highlight-terracotta">永續未來</span></>
-            ) : isEn ? (
-              <>Revitalizing a Century-Old <span className="highlight-wood">Path of Light</span><br />Empowering a <span className="highlight-terracotta">Creative Future</span></>
-            ) : (
-              <>คืนชีวิตให้ <span className="highlight-wood">เส้นทางแห่งแสงสว่าง</span><br />เติมพลังสร้างสรรค์สู่ <span className="highlight-terracotta">อนาคต</span></>
-            )}
+            {isZh 
+              ? (copy.hero_title_zh || DEFAULT_SITE_COPY.hero_title_zh) 
+              : isEn 
+                ? (copy.hero_title_en || DEFAULT_SITE_COPY.hero_title_en) 
+                : (copy.hero_title_th || DEFAULT_SITE_COPY.hero_title_th)}
           </h1>
 
           <p className="hero-description">
-            {isZh ? (
-              <>從<strong>「卓明（โต๊ะเบ๋ง）」到「導明（導明學校）」</strong>——這所於1922年由華人礦商集資、閩南名匠包師傅親手築造的攀牙府開山華校，如今在基金會守護下全面活化，蛻變為凝聚跨世代情感與文創能量的<strong>「活態文化遺產（Living Heritage）」</strong>。</>
-            ) : isEn ? (
-              <>From <strong>"Toh Beng" to "Dao Ming" (導明)</strong>, the premier Chinese academy in Phang Nga founded by tin mining merchants and Master Pao in 1922, thoughtfully transformed into a <strong>Living Heritage</strong> cultural & creative hub for all generations.</>
-            ) : (
-              <>จาก <strong>"โต๊ะเบ๋ง" สู่ "เต้าหมิง"</strong> โรงเรียนจีนแห่งแรกของจังหวัดพังงาที่สร้างขึ้นโดยการลงขันของคหบดีเหมืองแร่และช่างผาวในปี 2465 สู่การเป็น <strong>มรดกที่มีชีวิต (Living Heritage)</strong> ภายใต้มูลนิธิโรงเรียนเต้าหมิง ตะกั่วป่า เพื่อการเรียนรู้ วัฒนธรรม และพื้นที่สร้างสรรค์ของทุกคน</>
-            )}
+            {isZh 
+              ? (copy.hero_desc_zh || DEFAULT_SITE_COPY.hero_desc_zh) 
+              : isEn 
+                ? (copy.hero_desc_en || DEFAULT_SITE_COPY.hero_desc_en) 
+                : (copy.hero_desc_th || DEFAULT_SITE_COPY.hero_desc_th)}
           </p>
 
           <div className="hero-cta-group">
@@ -72,15 +83,15 @@ export function HeroSection() {
           {/* Quick Stat Strip */}
           <div className="hero-stats-grid">
             <div className="stat-card">
-              <span className="stat-number">120+</span>
+              <span className="stat-number">{copy.hero_stat_1_val || "120+"}</span>
               <span className="stat-label">
-                {isZh ? "年歷史厚度 (自1905年創辦)" : isEn ? "Years of Legacy since 1905 (Toh Beng)" : "ปี นับแต่เริ่มก่อตั้ง พ.ศ. 2448 (โต๊ะเบ๋ง)"}
+                {isZh ? (copy.hero_stat_1_lbl_zh || DEFAULT_SITE_COPY.hero_stat_1_lbl_zh) : isEn ? (copy.hero_stat_1_lbl_en || DEFAULT_SITE_COPY.hero_stat_1_lbl_en) : (copy.hero_stat_1_lbl_th || DEFAULT_SITE_COPY.hero_stat_1_lbl_th)}
               </span>
             </div>
             <div className="stat-card">
-              <span className="stat-number">1922</span>
+              <span className="stat-number">{copy.hero_stat_2_val || "1922"}</span>
               <span className="stat-label">
-                {isZh ? "年包師傅掌墨興建紅毛樓校舍" : isEn ? "Year Schoolhouse Built by Master Pao" : "ปีสร้างอาคารอั้งม่อเหลา โดยนายผาว"}
+                {isZh ? (copy.hero_stat_2_lbl_zh || DEFAULT_SITE_COPY.hero_stat_2_lbl_zh) : isEn ? (copy.hero_stat_2_lbl_en || DEFAULT_SITE_COPY.hero_stat_2_lbl_en) : (copy.hero_stat_2_lbl_th || DEFAULT_SITE_COPY.hero_stat_2_lbl_th)}
               </span>
             </div>
           </div>

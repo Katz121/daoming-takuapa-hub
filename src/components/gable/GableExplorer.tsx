@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { useApp } from '@/lib/store';
-import { GABLE_SYMBOLS } from '@/data/gables';
+import { clientDb, DEFAULT_SITE_COPY, SiteCopyData } from '@/lib/clientDb';
+import { GableSymbol } from '@/types';
 
 const GABLE_SEALS: Record<string, string> = {
   tiangong: '天',
@@ -12,8 +13,12 @@ const GABLE_SEALS: Record<string, string> = {
   circles: '柱'
 };
 
+import { GABLE_SYMBOLS } from '@/data/gables';
+
 export function GableExplorer() {
   const { lang, t } = useApp();
+  const [symbols, setSymbols] = useState<GableSymbol[]>(GABLE_SYMBOLS);
+  const [copy, setCopy] = useState<SiteCopyData>(DEFAULT_SITE_COPY);
   const [activeSymbolId, setActiveSymbolId] = useState<string>('tiangong');
   const [isOverview, setIsOverview] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState<boolean>(false);
@@ -26,11 +31,28 @@ export function GableExplorer() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  useEffect(() => {
+    const loadData = () => {
+      setSymbols(clientDb.getGableSymbols());
+      setCopy(clientDb.getSiteCopy());
+    };
+    loadData();
+    window.addEventListener('daoming_gables_updated', loadData);
+    window.addEventListener('daoming_site_copy_updated', loadData);
+    window.addEventListener('storage', loadData);
+    return () => {
+      window.removeEventListener('daoming_gables_updated', loadData);
+      window.removeEventListener('daoming_site_copy_updated', loadData);
+      window.removeEventListener('storage', loadData);
+    };
+  }, []);
+
   const isEn = lang === 'en';
   const isZh = lang === 'zh';
-  const currentIndex = GABLE_SYMBOLS.findIndex(s => s.id === activeSymbolId);
+  const validSymbols = symbols && symbols.length > 0 ? symbols : GABLE_SYMBOLS;
+  const currentIndex = validSymbols.findIndex(s => s.id === activeSymbolId);
   const safeIndex = currentIndex >= 0 ? currentIndex : 0;
-  const symbol = GABLE_SYMBOLS[safeIndex];
+  const symbol = validSymbols[safeIndex] || validSymbols[0];
 
   const handleSelectSymbol = (id: string) => {
     setActiveSymbolId(id);
@@ -40,13 +62,13 @@ export function GableExplorer() {
 
   const handleNavigateStep = (delta: number) => {
     const nextIdx = safeIndex + delta;
-    if (nextIdx >= 0 && nextIdx < GABLE_SYMBOLS.length) {
-      handleSelectSymbol(GABLE_SYMBOLS[nextIdx].id);
+    if (nextIdx >= 0 && nextIdx < validSymbols.length) {
+      handleSelectSymbol(validSymbols[nextIdx].id);
     }
   };
 
   const getZoomStyle = () => {
-    if (isOverview) {
+    if (isOverview || !symbol) {
       return {
         transform: 'scale(1)',
         transformOrigin: 'center center'
@@ -54,13 +76,13 @@ export function GableExplorer() {
     }
 
     if (isMobile) {
-      const { top, left, scale } = symbol.mobile;
+      const { top, left, scale } = symbol.mobile || { top: 50, left: 50, scale: 1.5 };
       return {
         transform: `scale(${scale})`,
         transformOrigin: `${left}% ${top}%`
       };
     } else {
-      const { originX, originY, scale } = symbol.desktop;
+      const { originX, originY, scale } = symbol.desktop || { originX: 50, originY: 50, scale: 1.5 };
       return {
         transform: `scale(${scale})`,
         transformOrigin: `${originX}% ${originY}%`
@@ -69,10 +91,10 @@ export function GableExplorer() {
   };
 
   const getFocusRingStyle = () => {
-    if (isOverview) return { display: 'none' };
+    if (isOverview || !symbol) return { display: 'none' };
 
     if (isMobile) {
-      const { top, left, size } = symbol.mobile;
+      const { top, left, size } = symbol.mobile || { top: 50, left: 50, size: 60 };
       return {
         display: 'block',
         top: `${top}%`,
@@ -82,7 +104,7 @@ export function GableExplorer() {
         transform: 'translate(-50%, -50%)'
       };
     } else {
-      const { originX, originY } = symbol.desktop;
+      const { originX, originY } = symbol.desktop || { originX: 50, originY: 50 };
       return {
         display: 'block',
         top: `${originY}%`,
@@ -94,16 +116,20 @@ export function GableExplorer() {
     }
   };
 
-  const currentScaleLabel = isOverview ? '1.0x' : `${isMobile ? symbol.mobile.scale : symbol.desktop.scale}x`;
+  const currentScaleLabel = isOverview || !symbol ? '1.0x' : `${isMobile ? symbol.mobile?.scale || 1.5 : symbol.desktop?.scale || 1.5}x`;
   const currentNumStr = `0${safeIndex + 1}`;
 
   return (
     <section className="section section-gable" id="gable">
       <div className="container">
         <div className="section-heading text-center">
-          <div className="section-tag">{t('gable_tag')}</div>
-          <h2 className="section-title">{t('gable_title')}</h2>
-          <p className="section-subtitle">{t('gable_subtitle')}</p>
+          <div className="section-tag">{copy.gable_tag || t('gable_tag')}</div>
+          <h2 className="section-title">
+            {isZh ? (copy.gable_title_zh || t('gable_title')) : isEn ? (copy.gable_title_en || t('gable_title')) : (copy.gable_title_th || t('gable_title'))}
+          </h2>
+          <p className="section-subtitle">
+            {isZh ? (copy.gable_subtitle_zh || t('gable_subtitle')) : isEn ? (copy.gable_subtitle_en || t('gable_subtitle')) : (copy.gable_subtitle_th || t('gable_subtitle'))}
+          </p>
         </div>
 
         <div className="gable-explorer-layout">
@@ -116,7 +142,7 @@ export function GableExplorer() {
                   <span>
                     {isOverview 
                       ? (isZh ? "全景模式：全棟建築概貌" : isEn ? "Overview: Full Building" : "มุมมอง: ภาพรวมทั้งอาคาร") 
-                      : (isZh ? `聚焦：${symbol.name_zh || symbol.name_en}` : isEn ? `Focus: ${symbol.name_en}` : `โฟกัส: ${symbol.short_desc_th}`)}
+                      : (isZh ? `聚焦：${symbol?.name_zh || symbol?.name_en}` : isEn ? `Focus: ${symbol?.name_en}` : `โฟกัส: ${symbol?.short_desc_th}`)}
                   </span>
                 </span>
                 <span className="zoom-scale-badge">{currentScaleLabel}</span>
@@ -133,7 +159,7 @@ export function GableExplorer() {
                 <div className="gable-focus-ring" id="gableFocusRing" style={getFocusRingStyle()} />
 
                 {/* 5 Hotspot Pins */}
-                {GABLE_SYMBOLS.map((s, idx) => (
+                {symbols.map((s, idx) => (
                   <button
                     key={s.id}
                     className={`zoom-hotspot-pin pin-${idx + 1} ${activeSymbolId === s.id && !isOverview ? 'active' : ''}`}
@@ -160,83 +186,85 @@ export function GableExplorer() {
           </div>
 
           {/* Gable Symbol Details */}
-          <div className="gable-details-pane">
-            <div key={animKey} className="gable-symbol-card gable-animate-fade" id="gableSymbolCard">
-              <div className="gable-card-watermark">{currentNumStr}</div>
-              
-              <div className="gable-card-top-row">
-                <div className="gable-symbol-badge" id="gableBadge">
-                  <span className="gable-seal-mini">{isZh ? (GABLE_SEALS[symbol.id] || '道') : `#${safeIndex + 1}`}</span>
-                  <span>{isZh ? symbol.badge_zh : isEn ? symbol.badge_en : symbol.badge_th}</span>
+          {symbol && (
+            <div className="gable-details-pane">
+              <div key={animKey} className="gable-symbol-card gable-animate-fade" id="gableSymbolCard">
+                <div className="gable-card-watermark">{currentNumStr}</div>
+                
+                <div className="gable-card-top-row">
+                  <div className="gable-symbol-badge" id="gableBadge">
+                    <span className="gable-seal-mini">{isZh ? (GABLE_SEALS[symbol.id] || '道') : `#${safeIndex + 1}`}</span>
+                    <span>{isZh ? symbol.badge_zh : isEn ? symbol.badge_en : symbol.badge_th}</span>
+                  </div>
+                </div>
+
+                <h3 id="gableTitle">{isZh ? symbol.name_zh : isEn ? symbol.name_en : symbol.name_th}</h3>
+                <p id="gableDesc" className="gable-desc-text">
+                  {isZh ? symbol.desc_zh : isEn ? symbol.desc_en : symbol.desc_th}
+                </p>
+                
+                <div className="gable-meaning-box">
+                  <strong>{t('gable_meaning_lbl')}</strong>
+                  <span>{isZh ? symbol.meaning_zh : isEn ? symbol.meaning_en : symbol.meaning_th}</span>
                 </div>
               </div>
 
-              <h3 id="gableTitle">{isZh ? symbol.name_zh : isEn ? symbol.name_en : symbol.name_th}</h3>
-              <p id="gableDesc" className="gable-desc-text">
-                {isZh ? symbol.desc_zh : isEn ? symbol.desc_en : symbol.desc_th}
-              </p>
-              
-              <div className="gable-meaning-box">
-                <strong>{t('gable_meaning_lbl')}</strong>
-                <span>{isZh ? symbol.meaning_zh : isEn ? symbol.meaning_en : symbol.meaning_th}</span>
-              </div>
-            </div>
-
-            {/* 5 Smooth Modern Selector Cards */}
-            <div className="gable-selector-list">
-              {GABLE_SYMBOLS.map((s, idx) => {
-                const isActive = activeSymbolId === s.id && !isOverview;
-                return (
-                  <button
-                    key={s.id}
-                    className={`gable-item-btn ${isActive ? 'active' : ''}`}
-                    onClick={() => handleSelectSymbol(s.id)}
-                  >
-                    <div className="gable-item-left">
-                      <span className="gable-item-num">{idx + 1}</span>
-                      <div className="gable-item-title-group">
-                        <h4>{isZh ? s.name_zh : isEn ? s.name_en : s.name_th}</h4>
-                        <span>{isZh ? s.short_desc_zh : isEn ? s.short_desc_en : s.short_desc_th}</span>
+              {/* 5 Smooth Modern Selector Cards */}
+              <div className="gable-selector-list">
+                {symbols.map((s, idx) => {
+                  const isActive = activeSymbolId === s.id && !isOverview;
+                  return (
+                    <button
+                      key={s.id}
+                      className={`gable-item-btn ${isActive ? 'active' : ''}`}
+                      onClick={() => handleSelectSymbol(s.id)}
+                    >
+                      <div className="gable-item-left">
+                        <span className="gable-item-num">{idx + 1}</span>
+                        <div className="gable-item-title-group">
+                          <h4>{isZh ? s.name_zh : isEn ? s.name_en : s.name_th}</h4>
+                          <span>{isZh ? s.short_desc_zh : isEn ? s.short_desc_en : s.short_desc_th}</span>
+                        </div>
                       </div>
-                    </div>
-                    <span className="gable-item-arrow">→</span>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Step Navigation Bar */}
-            <div className="gable-step-nav">
-              <button
-                className="gable-step-btn"
-                disabled={safeIndex <= 0}
-                onClick={() => handleNavigateStep(-1)}
-              >
-                <span>←</span>
-                <span>{isZh ? "上一符號" : isEn ? "Previous Point" : "จุดก่อนหน้า"}</span>
-              </button>
-
-              <div className="gable-dots-group">
-                {GABLE_SYMBOLS.map((s, idx) => (
-                  <button
-                    key={s.id}
-                    className={`gable-dot ${idx === safeIndex && !isOverview ? 'active' : ''}`}
-                    onClick={() => handleSelectSymbol(s.id)}
-                    aria-label={`Point ${idx + 1}`}
-                  />
-                ))}
+                      <span className="gable-item-arrow">→</span>
+                    </button>
+                  );
+                })}
               </div>
 
-              <button
-                className="gable-step-btn"
-                disabled={safeIndex >= GABLE_SYMBOLS.length - 1}
-                onClick={() => handleNavigateStep(1)}
-              >
-                <span>{isZh ? "下一符號" : isEn ? "Next Point" : "จุดถัดไป"}</span>
-                <span>→</span>
-              </button>
+              {/* Step Navigation Bar */}
+              <div className="gable-step-nav">
+                <button
+                  className="gable-step-btn"
+                  disabled={safeIndex <= 0}
+                  onClick={() => handleNavigateStep(-1)}
+                >
+                  <span>←</span>
+                  <span>{isZh ? "上一符號" : isEn ? "Previous Point" : "จุดก่อนหน้า"}</span>
+                </button>
+
+                <div className="gable-dots-group">
+                  {symbols.map((s, idx) => (
+                    <button
+                      key={s.id}
+                      className={`gable-dot ${idx === safeIndex && !isOverview ? 'active' : ''}`}
+                      onClick={() => handleSelectSymbol(s.id)}
+                      aria-label={`Point ${idx + 1}`}
+                    />
+                  ))}
+                </div>
+
+                <button
+                  className="gable-step-btn"
+                  disabled={safeIndex >= symbols.length - 1}
+                  onClick={() => handleNavigateStep(1)}
+                >
+                  <span>{isZh ? "下一符號" : isEn ? "Next Point" : "จุดถัดไป"}</span>
+                  <span>→</span>
+                </button>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </section>

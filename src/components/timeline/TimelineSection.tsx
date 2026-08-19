@@ -1,82 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '@/lib/store';
-
-const TIMELINE_DATA = {
-  "1905": {
-    badge_th: "พ.ศ. ๒๔๔๘ - ๒๔๖๕",
-    badge_en: "1905 - 1922",
-    badge_zh: "1905 - 1922年",
-    title_th: 'กำเนิด "โต๊ะเบ๋ง" สู่การก่อสร้างอาคารเต้าหมิงโดยช่างผาว',
-    title_en: 'Origins of "Toh Beng" to Dao Ming Schoolhouse Construction by Master Pao',
-    title_zh: '從「卓明（โต๊ะเบ๋ง）」創立至「包師傅（ช่างผาว）」掌墨興築校舍',
-    desc_th: "เริ่มก่อตั้งอย่างไม่เป็นทางการในปี 2448 ในชื่อโต๊ะเบ๋ง ก่อนเปลี่ยนเป็นเต้าหมิง และจดทะเบียนโรงเรียนราษฎร์ในปี 2463 อาคารหลังปัจจุบันสร้างขึ้นในปี 2465 โดยนายผาว ช่างฝีมือชาวจีนฮกเกี้ยน จากเงินบริจาคของคหบดีเหมืองแร่ตะกั่วป่า ระนอง และภูเก็ต เดิมมุงหลังคากระเบื้องกาบกล้วยและเชิงชายไม้ฉลุ",
-    desc_en: "Founded informally in 1905 as Toh Beng, registered as a private academy in 1920. The current schoolhouse was built in 1922 by Hokkien master builder Pao through community donations from tin magnates in Takua Pa, Ranong, and Phuket.",
-    desc_zh: "1905年以閩南語「卓明」之名非正式創校，1920年正式更名為「導明」並註冊為私立學校。現存巍峨校舍於1922年由福建名匠「包師傅（นายผาว）」主持建造，資金源自德古巴、拉廊及普吉三地華人錫礦商賈鼎力集資，初建時鋪設芭蕉瓦屋頂並配有精美木雕花邊。",
-    photo: "/img/exhibit-zone1-school.jpg",
-    caption_th: '"ภาพประวัติศาสตร์: นักเรียนและครูถ่ายภาพร่วมกันหน้าอาคารเต้าหมิง ยุคหลังคากระเบื้องกาบกล้วยดั้งเดิม"',
-    caption_en: '"Historic Portrait: First generation students and scholars before the original banana-tile roof architecture"',
-    caption_zh: '「歷史珍影：首屆師生齊聚於芭蕉瓦原貌校舍前合影」',
-    chips_th: ["🏛️ ช่างผาว ฮกเกี้ยน", "📚 จดทะเบียนราษฎร์ 2463", "🤝 ลงขันเหมืองแร่ 3 เมือง"],
-    chips_en: ["🏛️ Master Builder Pao", "📚 Registered Academy 1920", "🤝 3-City Tin Merchant Donors"],
-    chips_zh: ["🏛️ 閩南名匠包師傅", "📚 1920年註冊立案", "🤝 三府華商集資興學"]
-  },
-  "1950": {
-    badge_th: "พ.ศ. ๒๔๘๐ - ๒๕๑๐",
-    badge_en: "1937 - 1967",
-    badge_zh: "1937 - 1967年",
-    title_th: "ยุคทองแห่งการศึกษา & กิจกรรมชุมชนตะกั่วป่า",
-    title_en: "The Golden Era: Vibrant Education, Sports & Diplomacy",
-    title_zh: "教育黃金時代 · 熱血籃球盛會與隆重接待中國總領事",
-    desc_th: "เป็นศูนย์กลางการศึกษาภาษาจีน มีนักเรียนหลายร้อยคน มีการจัดกิจกรรมกีฬาบาสเกตบอลเชื่อมความสัมพันธ์ชุมชน และได้รับเกียรติเป็นสถานที่ต้อนรับบุคคลสำคัญ เช่น กงสุลใหญ่สาธารณรัฐจีนประจำสงขลา ในปี พ.ศ. ๒๔๙๓",
-    desc_en: "Pioneered Chinese language and ethics education with hundreds of students, famous basketball tournament leagues, and hosted the Consul-General of the Republic of China in 1950.",
-    desc_zh: "作為全府華文教育核心，育才數百人，並建有老城最具人氣之紅土籃球場，舉辦盛大社區聯賽。1950年更榮膺全城最高禮遇，於校舍前廊隆重接待中華民國駐宋卡總領事，銘刻歷史外交高光時刻。",
-    photo: "/img/exhibit-zone2-consul.jpg",
-    caption_th: '"ภาพประวัติศาสตร์: พิธีต้อนรับกงสุลใหญ่ ณ มุขหน้าอาคารเต้าหมิง พ.ศ. ๒๔๙๓"',
-    caption_en: '"Historic Portrait: Reception ceremony for the Chinese Consul-General at Dao Ming in 1950"',
-    caption_zh: '「歷史珍影：1950年於導明學校前廊盛大接待中國總領事」',
-    chips_th: ["🏀 ทีมบาสเกตบอลชุมชน", "📜 ต้อนรับกงสุลจีน 2493", "🌱 ผลิตบุคลากรคุณภาพ"],
-    chips_en: ["🏀 Community Basketball", "📜 Chinese Consul Visit 1950", "🌱 Thousands of Alumni"],
-    chips_zh: ["🏀 導明熱血籃球隊", "📜 1950年接待總領事", "🌱 培育千百傑出校友"]
-  },
-  "1990": {
-    badge_th: "พ.ศ. ๒๕๓๓ - ๒๕๔๗",
-    badge_en: "1990 - 2004",
-    badge_zh: "1990 - 2004年",
-    title_th: "การจัดตั้งมูลนิธิโรงเรียนเต้าหมิง & การส่งมอบกรรมสิทธิ์",
-    title_en: "Establishment of Dao Ming Foundation & Ownership Handover",
-    title_zh: "成立導明學校基金會 · 地契全數無償移交為公共財產",
-    desc_th: "ปี 2533 จดทะเบียนจัดตั้ง 'มูลนิธิโรงเรียนเต้าหมิง ตะกั่วป่า' โดยมีคุณอนันต์ สวาทยานนท์ เป็นประธานคนแรก และในปี 2542 ทายาทผู้ถือครองที่ดิน สค.1 ทั้ง 3 ท่าน ได้ทำสัญญาประนีประนอมยอมความ ส่งมอบกรรมสิทธิ์ที่ดินและอาคารให้แก่มูลนิธิฯ อย่างถูกต้องตามกฎหมาย",
-    desc_en: "In 1990, the Dao Ming Foundation was officially incorporated. In 1999, the three trustee families officially transferred 100% legal ownership of the land and schoolhouse to the foundation for public benefit.",
-    desc_zh: "1990年依法註冊成立「德古巴導明學校基金會」，由阿南·沙瓦塔亞農先生出任首屆主席。1999年，原代持地契之三大家族後人秉持先賢奉獻精神，簽署和解協議，將地皮與整座校舍之100%合法產權無償移交基金會，成為德古巴永久公共遺產。",
-    photo: "/img/building-community.jpg",
-    caption_th: '"ภาพถ่ายอาคารเต้าหมิงคู่กับต้นจามจุรีใหญ่ใจกลางย่านเมืองเก่า"',
-    caption_en: '"Dao Ming schoolhouse standing gracefully alongside the ancient rain trees of Takua Pa"',
-    caption_zh: '「校舍與大雨樹：百年老校與老城老樹相伴相生之靜謐畫面」',
-    chips_th: ["⚖️ ส่งมอบกรรมสิทธิ์ 100%", "🏛️ ก่อตั้งมูลนิธิฯ 2533", "🌿 อนุรักษ์มรดกชุมชน"],
-    chips_en: ["⚖️ 100% Land Handover", "🏛️ Foundation Est. 1990", "🌿 Heritage Preservation"],
-    chips_zh: ["⚖️ 100%產權無償移交", "🏛️ 1990年成立基金會", "🌿 守護公眾文化資產"]
-  },
-  "2026": {
-    badge_th: "พ.ศ. ๒๕๖๙ (ปัจจุบัน)",
-    badge_en: "2026 (Present Day)",
-    badge_zh: "2026年 (當代新生)",
-    title_th: "บริบทใหม่ในเมืองตะกั่วป่า & รางวัลอนุรักษ์สถาปัตยกรรม ASA ๒๕๖๙",
-    title_en: "A New Context in Takua Pa & ASA Conservation Award 2026",
-    title_zh: "老城新生語境 · 榮獲2026年泰國暹羅建築師協會國家保護大獎",
-    desc_th: "ได้รับ 'รางวัลอนุรักษ์ศิลปสถาปัตยกรรม ประจำปี ๒๕๖๙' จากสมาคมสถาปนิกสยามฯ มุ่งพัฒนาพื้นที่ชั้นล่างเป็น Creative Living Space, ศูนย์เรียนรู้มรดกชุมชน, คราฟต์สตูดิโอ และคาเฟ่ โดยชั้นบนยังคงเป็นพื้นที่ปฏิบัติธรรมอันสงบเงียบ",
-    desc_en: "Awarded the National Architectural Conservation Award 2026 by ASA. Ground floors transformed into a living creative space, craft studios, and community cafe, with top floors preserved as a peaceful meditation sanctuary.",
-    desc_zh: "榮膺泰國暹羅建築師協會（ASA）「2026年度傑出建築保護大獎」。底層精心規劃為文創新空間、口述歷史展覽館、手作工坊與社區茶飲咖啡館；二樓則保留為清幽靜謐的禪修與交流聖所。",
-    photo: "/img/building-current.jpg",
-    caption_th: '"อาคารเต้าหมิงหลังการอนุรักษ์ ได้รับรางวัลอนุรักษ์ศิลปสถาปัตยกรรม ประจำปี ๒๕๖๙"',
-    caption_en: '"Revitalized Dao Ming Schoolhouse, recipient of the ASA Conservation Award 2026"',
-    caption_zh: '「活化後的導明學校：榮獲2026年國家級建築保護殊榮」',
-    chips_th: ["🏆 รางวัลอนุรักษ์ ASA 2569", "🎨 Creative Living Space", "☕ คาเฟ่ & ชุมชน"],
-    chips_en: ["🏆 ASA Conservation Award", "🎨 Creative Living Space", "☕ Community Cafe"],
-    chips_zh: ["🏆 榮獲ASA國家保護獎", "🎨 活態文創生活空間", "☕ 在地茶飲與社區對話"]
-  }
-};
+import { clientDb, DEFAULT_SITE_COPY, DEFAULT_TIMELINE_DATA, SiteCopyData } from '@/lib/clientDb';
 
 const YEARS = ["1905", "1950", "1990", "2026"] as const;
 
@@ -129,6 +55,8 @@ const AUDIO_CHAPTERS: Record<string, {
 
 export function TimelineSection() {
   const { lang, setAudioGuideOpen } = useApp();
+  const [timelineData, setTimelineData] = useState<Record<string, any>>(DEFAULT_TIMELINE_DATA);
+  const [copy, setCopy] = useState<SiteCopyData>(DEFAULT_SITE_COPY);
   const [activeYear, setActiveYear] = useState<(typeof YEARS)[number]>("1905");
   const [isNarrating, setIsNarrating] = useState<boolean>(false);
   const [narrateTime, setNarrateTime] = useState<number>(0);
@@ -137,9 +65,25 @@ export function TimelineSection() {
 
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
 
+  useEffect(() => {
+    const loadData = () => {
+      setTimelineData(clientDb.getTimelineData());
+      setCopy(clientDb.getSiteCopy());
+    };
+    loadData();
+    window.addEventListener('daoming_timeline_updated', loadData);
+    window.addEventListener('daoming_site_copy_updated', loadData);
+    window.addEventListener('storage', loadData);
+    return () => {
+      window.removeEventListener('daoming_timeline_updated', loadData);
+      window.removeEventListener('daoming_site_copy_updated', loadData);
+      window.removeEventListener('storage', loadData);
+    };
+  }, []);
+
   const isEn = lang === 'en';
   const isZh = lang === 'zh';
-  const data = TIMELINE_DATA[activeYear];
+  const data = timelineData[activeYear] || DEFAULT_TIMELINE_DATA[activeYear] || DEFAULT_TIMELINE_DATA["1905"];
   const audioTrack = AUDIO_CHAPTERS[activeYear];
   const activeIndex = YEARS.indexOf(activeYear);
 
@@ -219,16 +163,16 @@ export function TimelineSection() {
     <section className="section section-story" id="story">
       <div className="container">
         <div className="section-heading text-center">
-          <div className="section-tag">AUTHENTIC HISTORY & FOUNDATION</div>
+          <div className="section-tag">{copy.story_tag || "AUTHENTIC HISTORY & FOUNDATION"}</div>
           <h2 className="section-title">
-            {isZh ? "導明學校百年歷史淵源" : isEn ? "Authentic History of Dao Ming School" : 'ประวัติศาสตร์ความเป็นมา "โรงเรียนเต้าหมิง"'}
+            {isZh ? (copy.story_title_zh || "導明學校百年歷史淵源") : isEn ? (copy.story_title_en || "Authentic History of Dao Ming School") : (copy.story_title_th || 'ประวัติศาสตร์ความเป็นมา "โรงเรียนเต้าหมิง"')}
           </h2>
           <p className="section-subtitle">
             {isZh
-              ? "從攀牙府開山華文學校，到今日老城活態文化地標與榮獲國家建築保護大獎之百年殿堂"
+              ? (copy.story_subtitle_zh || "從攀牙府開山華文學校，到今日老城活態文化地標與榮獲國家建築保護大獎之百年殿堂")
               : isEn 
-                ? "From Phang Nga's pioneering Chinese academy to living architectural heritage and civic symbol of Takua Pa"
-                : "จากโรงเรียนจีนแห่งแรกของจังหวัดพังงา สู่มรดกทางสถาปัตยกรรมและจิตวิญญาณแห่งความสามัคคีของชุมชน"}
+                ? (copy.story_subtitle_en || "From Phang Nga's pioneering Chinese academy to living architectural heritage and civic symbol of Takua Pa")
+                : (copy.story_subtitle_th || "จากโรงเรียนจีนแห่งแรกของจังหวัดพังงา สู่มรดกทางสถาปัตยกรรมและจิตวิญญาณแห่งความสามัคคีของชุมชน")}
           </p>
         </div>
 
@@ -293,8 +237,8 @@ export function TimelineSection() {
         <div className="timeline-container">
           <div className="timeline-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
             <div>
-              <h3>{isZh ? "導明學校120年編年史 (120-Year Milestones)" : isEn ? "120-Year Chronological Milestones" : "ลำดับกาลเวลา ๑๒๐ ปี เต้าหมิง (Chronological Milestones)"}</h3>
-              <p>{isZh ? "點選各個時期，探索歷史文獻與珍貴原照" : isEn ? "Click through each era to study historical milestones and photographic evidence" : "คลิกเลือกยุคสมัยเพื่อศึกษาประวัติศาสตร์และหลักฐานที่บันทึกไว้"}</p>
+              <h3>{isZh ? (copy.story_title_zh || "導明學校120年編年史") : isEn ? (copy.story_title_en || "120-Year Chronological Milestones") : (copy.story_title_th || "ลำดับกาลเวลา ๑๒๐ ปี เต้าหมิง (Chronological Milestones)")}</h3>
+              <p>{isZh ? (copy.story_subtitle_zh || "點選各個時期，探索歷史文獻與珍貴原照") : isEn ? (copy.story_subtitle_en || "Click through each era to study historical milestones and photographic evidence") : (copy.story_subtitle_th || "คลิกเลือกยุคสมัยเพื่อศึกษาประวัติศาสตร์และหลักฐานที่บันทึกไว้")}</p>
             </div>
             <button
               className="btn btn-outline-sm"
@@ -332,7 +276,7 @@ export function TimelineSection() {
                 <h4 id="tlTitle">{isZh ? data.title_zh : isEn ? data.title_en : data.title_th}</h4>
                 <p id="tlDesc">{isZh ? data.desc_zh : isEn ? data.desc_en : data.desc_th}</p>
                 <div className="tl-meta-chips" id="tlChips">
-                  {(isZh ? data.chips_zh : isEn ? data.chips_en : data.chips_th).map((c, i) => (
+                  {((isZh ? data.chips_zh : isEn ? data.chips_en : data.chips_th) || []).map((c: string, i: number) => (
                     <span key={i} className="chip">{c}</span>
                   ))}
                 </div>

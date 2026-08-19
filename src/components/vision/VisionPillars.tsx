@@ -1,10 +1,26 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '@/lib/store';
+import { clientDb, DEFAULT_SITE_COPY, SiteCopyData } from '@/lib/clientDb';
 
 export function VisionPillars() {
   const { lang, t, setSelectedZone } = useApp();
+  const [copy, setCopy] = useState<SiteCopyData>(DEFAULT_SITE_COPY);
+
+  useEffect(() => {
+    const loadCopy = () => {
+      setCopy(clientDb.getSiteCopy());
+    };
+    loadCopy();
+    window.addEventListener('daoming_site_copy_updated', loadCopy);
+    window.addEventListener('storage', loadCopy);
+    return () => {
+      window.removeEventListener('daoming_site_copy_updated', loadCopy);
+      window.removeEventListener('storage', loadCopy);
+    };
+  }, []);
+
   const isEn = lang === 'en';
   const isZh = lang === 'zh';
 
@@ -18,9 +34,13 @@ export function VisionPillars() {
     <section className="section section-vision" id="vision">
       <div className="container">
         <div className="section-heading text-center">
-          <div className="section-tag">{t('vision_tag')}</div>
-          <h2 className="section-title">{t('vision_title')}</h2>
-          <p className="section-subtitle">{t('vision_subtitle')}</p>
+          <div className="section-tag">{copy.vision_tag || t('vision_tag')}</div>
+          <h2 className="section-title">
+            {isZh ? (copy.vision_title_zh || t('vision_title')) : isEn ? (copy.vision_title_en || t('vision_title')) : (copy.vision_title_th || t('vision_title'))}
+          </h2>
+          <p className="section-subtitle">
+            {isZh ? (copy.vision_subtitle_zh || t('vision_subtitle')) : isEn ? (copy.vision_subtitle_en || t('vision_subtitle')) : (copy.vision_subtitle_th || t('vision_subtitle'))}
+          </p>
         </div>
 
         <div className="pillars-grid">
